@@ -7,7 +7,7 @@ package matchplanner;
 
 /**
  *
- * @author Marcel
+ * @author Marcel, Marvin
  */
 public class Matchplanner extends javax.swing.JFrame {
 
