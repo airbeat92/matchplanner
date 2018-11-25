@@ -16,6 +16,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JLabel;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -41,7 +46,9 @@ public class Matchplanner extends javax.swing.JFrame {
 	}
 
 	public Matchplanner() {
-
+		/*
+		 * frame
+		 */
 		frame = new JFrame();
 		frame.setTitle("Matchplanner");
 		frame.setBounds(100, 100, 800, 400);
@@ -53,6 +60,50 @@ public class Matchplanner extends javax.swing.JFrame {
 		GridBagLayout gbl_panel = new GridBagLayout();
 		panel.setLayout(gbl_panel);
 
+		gbl_panel.columnWidths = new int[] { 12, 516, 232, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+
+		JLabel lbloutput = new JLabel("");
+		GridBagConstraints gbc_lbloutput = new GridBagConstraints();
+		gbc_lbloutput.gridheight = 5;
+		gbc_lbloutput.insets = new Insets(0, 0, 0, 5);
+		gbc_lbloutput.gridx = 1;
+		gbc_lbloutput.gridy = 1;
+		panel.add(lbloutput, gbc_lbloutput);
+
+		JLabel lblspiel1 = new JLabel("Spieltag 1");
+		lblspiel1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lbloutput.setText("Spieltag 1");
+			}
+		});
+		GridBagConstraints gbc_lblspiel1 = new GridBagConstraints();
+		gbc_lblspiel1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblspiel1.gridx = 2;
+		gbc_lblspiel1.gridy = 0;
+		panel.add(lblspiel1, gbc_lblspiel1);
+
+		JLabel lblspiel2 = new JLabel("Spieltag 2");
+		lblspiel2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lbloutput.setText("Spieltag 2");
+			}
+		});
+		GridBagConstraints gbc_lblspiel2 = new GridBagConstraints();
+		gbc_lblspiel2.insets = new Insets(0, 0, 5, 5);
+		gbc_lblspiel2.gridx = 2;
+		gbc_lblspiel2.gridy = 1;
+		panel.add(lblspiel2, gbc_lblspiel2);
+		
+		
+
+		/*
+		 * menubar with actionlisteners
+		 */
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 
@@ -68,14 +119,14 @@ public class Matchplanner extends javax.swing.JFrame {
 		});
 		mnDatei.add(mntmNeu);
 
-		JMenuItem mntmffnen = new JMenuItem("Öffnen");
-		mntmffnen.addActionListener(new ActionListener() {
+		JMenuItem mntmoffnen = new JMenuItem("Öffnen");
+		mntmoffnen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String message = "=> vorhandenen Spielplan öffnen";
 				JOptionPane.showMessageDialog(null, message);
 			}
 		});
-		mnDatei.add(mntmffnen);
+		mnDatei.add(mntmoffnen);
 
 		JMenuItem mntmSpeichern = new JMenuItem("Speichern");
 		mntmSpeichern.addActionListener(new ActionListener() {
@@ -87,6 +138,12 @@ public class Matchplanner extends javax.swing.JFrame {
 		mnDatei.add(mntmSpeichern);
 
 		JMenuItem mntmSpeichernUnter = new JMenuItem("Speichern unter");
+		mntmSpeichernUnter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String message = "=> geöffneten Spielplan als neue Datei speichern";
+				JOptionPane.showMessageDialog(null, message);
+			}
+		});
 		mnDatei.add(mntmSpeichernUnter);
 
 		JMenuItem mntmBeenden = new JMenuItem("Beenden");
@@ -101,9 +158,21 @@ public class Matchplanner extends javax.swing.JFrame {
 		menuBar.add(mnExtras);
 
 		JMenuItem mntmManschaften = new JMenuItem("Manschaften bearbeiten");
+		mntmManschaften.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String message = "=> Mannschaften verändern";
+				JOptionPane.showMessageDialog(null, message);
+			}
+		});
 		mnExtras.add(mntmManschaften);
 
 		JMenuItem mntmSpieltage = new JMenuItem("Spieltage bearbeiten");
+		mntmSpieltage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String message = "=> Spieltage festlegen/verändern";
+				JOptionPane.showMessageDialog(null, message);
+			}
+		});
 		mnExtras.add(mntmSpieltage);
 
 	}
