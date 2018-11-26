@@ -111,68 +111,65 @@ public class Matchplanner extends javax.swing.JFrame {
 		menuBar.add(mnDatei);
 
 		JMenuItem mntmNeu = new JMenuItem("Neu");
-		mntmNeu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		mntmNeu.addActionListener((e)-> {
 				String message = "=> neuen Spielplan anlegen";
 				JOptionPane.showMessageDialog(null, message);
 			}
-		});
+		);
 		mnDatei.add(mntmNeu);
 
 		JMenuItem mntmoffnen = new JMenuItem("Öffnen");
-		mntmoffnen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		mntmoffnen.addActionListener((e)-> {
 				String message = "=> vorhandenen Spielplan öffnen";
 				JOptionPane.showMessageDialog(null, message);
 			}
-		});
+		);
 		mnDatei.add(mntmoffnen);
 
 		JMenuItem mntmSpeichern = new JMenuItem("Speichern");
-		mntmSpeichern.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		mntmSpeichern.addActionListener(e -> {
 				String message = "=> Aenderungen am Spielplan öffnen";
 				JOptionPane.showMessageDialog(null, message);
 			}
-		});
+		);
+		
+		mnDatei.addSeparator();
 		mnDatei.add(mntmSpeichern);
 
 		JMenuItem mntmSpeichernUnter = new JMenuItem("Speichern unter");
-		mntmSpeichernUnter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		mntmSpeichernUnter.addActionListener((e)-> {
 				String message = "=> geöffneten Spielplan als neue Datei speichern";
 				JOptionPane.showMessageDialog(null, message);
 			}
-		});
+		);
 		mnDatei.add(mntmSpeichernUnter);
-
+		
+		mnDatei.addSeparator();
+		
 		JMenuItem mntmBeenden = new JMenuItem("Beenden");
-		mntmBeenden.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		mntmBeenden.addActionListener((e) ->{
 				System.exit(0);
 			}
-		});
+		);
 		mnDatei.add(mntmBeenden);
 
 		JMenu mnExtras = new JMenu("Extras");
 		menuBar.add(mnExtras);
 
 		JMenuItem mntmManschaften = new JMenuItem("Manschaften bearbeiten");
-		mntmManschaften.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		mntmManschaften.addActionListener((e)-> {
 				String message = "=> Mannschaften verändern";
 				JOptionPane.showMessageDialog(null, message);
 			}
-		});
+		);
 		mnExtras.add(mntmManschaften);
 
 		JMenuItem mntmSpieltage = new JMenuItem("Spieltage bearbeiten");
-		mntmSpieltage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		mntmSpieltage.addActionListener((e)-> {
 				String message = "=> Spieltage festlegen/verändern";
 				JOptionPane.showMessageDialog(null, message);
 			}
-		});
+		);
 		mnExtras.add(mntmSpieltage);
 
 	}
