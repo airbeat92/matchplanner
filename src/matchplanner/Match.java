@@ -5,17 +5,15 @@
 
 package matchplanner;
 
-import de.hft_stuttgart.unittest.annotations.Skeleton;
 
-@Skeleton
 public class Match {
 
     private int home;
     private int guest;
 
-    private Match(int guest, int arg03) {
+    private Match(int guest, int home) {
         this.guest = guest;
-        this.home = arg03;
+        this.home = home;
     }
 
     public int getHome() {
@@ -28,7 +26,7 @@ public class Match {
 
     public static Match getMatch(League league, int match) {
 
-        int count = league.getTeams() / 2 - 1;
+        int count = (league.getTeams() / 2) - 1;
 
         if (match > count) {
             throw new IllegalArgumentException("Invalid index");

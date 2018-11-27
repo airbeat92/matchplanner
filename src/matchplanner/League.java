@@ -5,10 +5,8 @@
 
 package matchplanner;
 
-import de.hft_stuttgart.unittest.annotations.Skeleton;
 import java.util.ArrayList;
 
-@Skeleton
 public class League {
 
     private int lower[];
