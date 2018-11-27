@@ -2,5 +2,44 @@ package matchplanner;
 
 public class Team {
 	
+	private String name;
+	private String shortname;
+	
+	
+	public Team(String name, String shortname) {
+		this.name = name;
+		this.shortname = shortname;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public String getShortname() {
+		return shortname;
+	}
+
+
+	public void setShortname(String shortname) {
+		this.shortname = shortname;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Team [name=" + name + ", shortname=" + shortname + "]";
+	}
+	
+	
+	
+	
+	
 
 }
