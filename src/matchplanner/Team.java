@@ -4,6 +4,7 @@ public class Team {
 	
 	private String name;
 	private String shortname;
+	private int id;
 	
 	
 	public Team(String name, String shortname) {
