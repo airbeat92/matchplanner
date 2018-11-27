@@ -128,7 +128,7 @@ public class Matchplanner extends javax.swing.JFrame {
 
 		JMenuItem mntmSpeichern = new JMenuItem("Speichern");
 		mntmSpeichern.addActionListener(e -> {
-				String message = "=> Aenderungen am Spielplan öffnen";
+				String message = "=> Aenderungen am Spielplan speichern";
 				JOptionPane.showMessageDialog(null, message);
 			}
 		);
