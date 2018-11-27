@@ -1,7 +1,6 @@
 package matchplanner;
 
-public class Matchplan {
-	
+public class Team {
 	
 
 }

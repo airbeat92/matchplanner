@@ -3,7 +3,7 @@
  * Creation Date: 06.11.2018 22:24:25
  */
 
-package league;
+package matchplanner;
 
 import de.hft_stuttgart.unittest.annotations.Skeleton;
 import java.util.ArrayList;
