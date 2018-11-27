@@ -112,9 +112,13 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		});
 		mnExtras.add(mntmSpieltage);
 
+		
+		//JTabbedPane hinzufügen
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 		this.add(tabbedPane, BorderLayout.CENTER);
-
+		
+		
+		//hier sollen die Einträge für die Spieltage rein
 		JLabel test = new JLabel("test");
 		JLabel test2 = new JLabel("test");
 		test.setHorizontalTextPosition(SwingConstants.RIGHT);
