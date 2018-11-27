@@ -24,28 +24,15 @@ import java.awt.event.MouseEvent;
 
 /**
  *
- * @author Marcel, Marvin
+ * @author Marcel, Marvin, Samet
  */
-public class Matchplanner extends javax.swing.JFrame {
+public class MatchplanerGUI extends javax.swing.JFrame {
 
 	private JFrame frame;
 
-	public static void main(String[] args) {
 
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Matchplanner window = new Matchplanner();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 
-	}
-
-	public Matchplanner() {
+	public MatchplanerGUI() {
 		/*
 		 * frame
 		 */
@@ -54,6 +41,7 @@ public class Matchplanner extends javax.swing.JFrame {
 		frame.setBounds(100, 100, 800, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		frame.setVisible(true);
 
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
@@ -155,6 +143,7 @@ public class Matchplanner extends javax.swing.JFrame {
 
 		JMenu mnExtras = new JMenu("Extras");
 		menuBar.add(mnExtras);
+		
 
 		JMenuItem mntmManschaften = new JMenuItem("Manschaften bearbeiten");
 		mntmManschaften.addActionListener((e)-> {
