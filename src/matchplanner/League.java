@@ -12,12 +12,17 @@ import java.util.ArrayList;
 public class League {
 
     private int lower[];
-    private int upper[];
-    private int head;
+    private int upper[]; 
+    private int head; 
     private int tail;
     private int teams;
     private int day;
 
+    
+    /*
+     * Konstruktor 
+     *@param i Anzahl der Manschaften 
+     */
     public League(int i) {
         int[] all = new int[i]; //1 2 3 4
 
@@ -25,11 +30,11 @@ public class League {
             all[j] = j;
         }
 
-        head = all[i - 1];
-        tail = (i / 2) - 1;
+        head = all[i - 1];	
+        tail = (i / 2) - 1; 
 
-        upper = new int[(i / 2) - 1];
-        for (int j = 0; j < ((i / 2) - 1); j++) {
+        upper = new int[tail];	
+        for (int j = 0; j < tail; j++) {
             upper[j] = all[j];
         }
 
