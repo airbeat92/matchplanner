@@ -3,12 +3,13 @@ package matchplanner;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.util.HashMap;
+
 
 public class Matchplan {
-	//Äußere Liste für einzelne Spieltage, innere Liste enthält einzelne Matches pro Tag
-	List<Matchday> season = new ArrayList();
+	
+	HashMap <Matchday, Date> season = new HashMap();
 	List<Team> teams = new ArrayList();
 	League mLeague;
 
