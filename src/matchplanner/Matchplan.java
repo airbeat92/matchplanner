@@ -3,9 +3,11 @@ package matchplanner;
 import java.util.ArrayList;
 import java.util.List;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 public class Matchplan {
-	
-	List<List<Match>> games = new ArrayList();
+	//Äußere Liste für einzelne Spieltage, innere Liste enthält einzelne Matches pro Tag
+	List<List<Match>> season = new ArrayList();
 	List<Team> teams = new ArrayList();
 	League mLeague;
 
@@ -45,7 +47,7 @@ public class Matchplan {
 				Match m = mLeague.getMatch(j);
 				tempM.add(m);
 			}
-			games.add(tempM);
+			season.add(tempM);
 			mLeague.shift();
 		}
 
@@ -57,11 +59,19 @@ public class Matchplan {
 				Match m = mLeague.getMatch(k);
 				tempM.add(m);
 			}
-			games.add(tempM);
+			season.add(tempM);
 			mLeague.shift();
 
 		}
 
+	}
+	
+	
+	//Jan
+	//Bitte Liste erzeugen, die die Datums nächsten Samstage ab dem aktuellen datum speichert
+	//anzahl der Samstag ist anzahl spieltage
+	public ArrayList<Date> createDates(int spieltage){
+		throw new NotImplementedException();
 	}
 	
 	
