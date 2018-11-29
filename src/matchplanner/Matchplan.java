@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Matchplan {
 	
-	List<List<Match>> games = new ArrayList();
+	List<Matchday> season = new ArrayList();
 	List<Team> teams = new ArrayList();
 	League mLeague;
 
