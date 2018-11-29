@@ -3,13 +3,13 @@ package matchplanner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Matchplanner {
+public class Matchplann {
 
 	List<List<Match>> games = new ArrayList();
 	List<Team> teams = new ArrayList();
 	League mLeague;
 
-	public Matchplanner(List<Team> teams) {
+	public Matchplann(List<Team> teams) {
 		this.mLeague = new League(teams.size());
 		createPlan();
 	}

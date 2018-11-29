@@ -31,7 +31,7 @@ import javax.swing.SwingConstants;
  */
 public class MatchplanerGUI extends javax.swing.JFrame {
 	
-	Matchplanner mp;
+	Matchplann mp;
 
 
 	public MatchplanerGUI() {

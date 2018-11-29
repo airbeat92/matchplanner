@@ -35,7 +35,7 @@ public class Main {
 		test1.add(new Team("FCB m", "fcb"));
 		test1.add(new Team("fck k", "fck"));
 
-		Matchplanner mtest = new Matchplanner(test1);
+		Matchplann mtest = new Matchplann(test1);
 
 //		League instance = new League(18);
 //		String teams[] = { "Arminia Bielefeld", "1. FSV Mainz 05", "VfB Stuttgart", "1. FC Kaiserslautern",
