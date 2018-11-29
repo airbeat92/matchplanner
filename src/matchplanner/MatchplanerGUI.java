@@ -6,23 +6,16 @@
 package matchplanner;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 /**
@@ -30,9 +23,8 @@ import javax.swing.SwingConstants;
  * @author Marcel, Marvin, Samet
  */
 public class MatchplanerGUI extends javax.swing.JFrame {
-	
-	Matchplan mp;
 
+	Matchplan mp;
 
 	public MatchplanerGUI() {
 		/*
@@ -53,14 +45,25 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		this.add(menuBar, BorderLayout.NORTH);
 
-		//Menuitem File
+		// Menuitem File
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
 
 		JMenuItem mntmNeu = new JMenuItem("Neu");
 		mntmNeu.addActionListener((e) -> {
-			String message = "=> neuen Spielplan anlegen";
-			JOptionPane.showMessageDialog(null, message);
+			Object[] options1 = { "Fertig", "Hinzufügen", "Abbrechen" };
+
+			JPanel panel = new JPanel();
+			panel.add(new JLabel("Bitte ein Team eingeben"));
+			JTextField textField = new JTextField(10);
+			panel.add(textField);
+
+			int result = JOptionPane.showOptionDialog(null, panel, "Enter a Number", JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE, null, options1, null);
+			if (result == JOptionPane.YES_OPTION) {
+				JOptionPane.showMessageDialog(null, textField.getText());
+			}
+
 		});
 		mnDatei.add(mntmNeu);
 
@@ -89,13 +92,12 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		mnDatei.addSeparator();
 
-		
 		/*
 		 * Enthält Abfrage über ungespeicherte Änderungen!
 		 */
 		JMenuItem mntmBeenden = new JMenuItem("Beenden");
 		mntmBeenden.addActionListener((a) -> {
-			//Bedingung für nicht gespeicherte Änderungen
+			// Bedingung für nicht gespeicherte Änderungen
 //			if (true) {
 //				JFrame closeFrame = new JFrame();
 //				closeFrame.setTitle("Close");
@@ -130,13 +132,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		});
 		mnExtras.add(mntmSpieltage);
 
-		
-		//JTabbedPane hinzufügen
+		// JTabbedPane hinzufügen
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 		this.add(tabbedPane, BorderLayout.CENTER);
-		
-		
-		//hier sollen die Einträge für die Spieltage rein
+
+		// hier sollen die Einträge für die Spieltage rein
 		JLabel test = new JLabel("test");
 		JLabel test2 = new JLabel("test");
 		test.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -144,11 +144,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		tabbedPane.addTab("testtitle2", test2);
 
 	}
-	
-	
-	
-	//Methoden
-	
-	
+
+	// Methoden
 
 }
