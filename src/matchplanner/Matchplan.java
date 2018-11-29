@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class Matchplan {
 	
-	HashMap <Matchday, Date> season = new HashMap();
+	HashMap <Date, Matchday> season = new HashMap();
 	List<Team> teams = new ArrayList();
 	League mLeague;
 
@@ -42,6 +42,7 @@ public class Matchplan {
 	 * Erstellt dein eigentlichen Matchplan
 	 */
 	public void createPlan() {
+		Date defaultDate = new Date(0000, 00 ,00);
 
 		for (int i = 0; i < mLeague.getTeams() - 1; i++) {
 			List <Match> tempM = new ArrayList();
@@ -49,7 +50,8 @@ public class Matchplan {
 				Match m = mLeague.getMatch(j);
 				tempM.add(m);
 			}
-			season.add(tempM);
+			season.put(defaultDate, new Matchday(tempM));
+			defaultDate.setDate(defaultDate.getDate()+1);
 			mLeague.shift();
 		}
 
@@ -61,7 +63,8 @@ public class Matchplan {
 				Match m = mLeague.getMatch(k);
 				tempM.add(m);
 			}
-			season.add(tempM);
+			season.put(defaultDate, new Matchday(tempM));
+			defaultDate.setDate(defaultDate.getDate()+1);
 			mLeague.shift();
 
 		}
