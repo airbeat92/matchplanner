@@ -25,14 +25,15 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
+
 /**
  *
  * @author Marcel, Marvin, Samet
  */
 public class MatchplanerGUI extends javax.swing.JFrame {
-	
-	Matchplan mp;
 
+	Matchplan mp;
 
 	public MatchplanerGUI() {
 		/*
@@ -43,7 +44,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		this.setSize(400, 300);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new BorderLayout(0, 0));
+		getContentPane().setLayout(new BorderLayout(0, 0));
 		this.setVisible(true);
 
 		/*
@@ -51,9 +52,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		 */
 
 		JMenuBar menuBar = new JMenuBar();
-		this.add(menuBar, BorderLayout.NORTH);
+		getContentPane().add(menuBar, BorderLayout.NORTH);
 
-		//Menuitem File
+		// Menuitem File
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
 
@@ -77,6 +78,24 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(null, message);
 		});
 
+		JMenuItem mntmClose = new JMenuItem("Schließen");
+		mnDatei.add(mntmClose);
+		mntmClose.setEnabled(mp != null);
+		mntmClose.addActionListener((e) -> {
+			// Bedingung für nicht gespeicherte Änderungen
+						if (true) {
+							JFrame closeConfirmFrame = new JFrame();
+							int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
+									"Ungespeicherte Änderungen, dennoch beenden?");
+							if (JOptionPane.YES_OPTION == result) {
+								mp = null;
+							}
+							if (JOptionPane.NO_OPTION == result) {
+								//Speichern aufrufen
+							}
+						}
+		});
+
 		mnDatei.addSeparator();
 		mnDatei.add(mntmSpeichern);
 
@@ -89,25 +108,13 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		mnDatei.addSeparator();
 
-		
 		/*
 		 * Enthält Abfrage über ungespeicherte Änderungen!
 		 */
 		JMenuItem mntmBeenden = new JMenuItem("Beenden");
 		mntmBeenden.addActionListener((a) -> {
-			//Bedingung für nicht gespeicherte Änderungen
-//			if (true) {
-//				JFrame closeFrame = new JFrame();
-//				closeFrame.setTitle("Close");
-//				closeFrame.setSize(300, 200);
-//				closeFrame.setLocationRelativeTo(null);
-//				closeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//				closeFrame.setLayout(new BorderLayout(0, 0));
-//				closeFrame.setVisible(true);
-//				
-//				
-//			}
 			System.exit(0);
+
 		});
 		mnDatei.add(mntmBeenden);
 
@@ -130,13 +137,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		});
 		mnExtras.add(mntmSpieltage);
 
-		
-		//JTabbedPane hinzufügen
+		// JTabbedPane hinzufügen
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
-		this.add(tabbedPane, BorderLayout.CENTER);
-		
-		
-		//hier sollen die Einträge für die Spieltage rein
+		getContentPane().add(tabbedPane, BorderLayout.CENTER);
+
+		// hier sollen die Einträge für die Spieltage rein
 		JLabel test = new JLabel("test");
 		JLabel test2 = new JLabel("test");
 		test.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -144,11 +149,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		tabbedPane.addTab("testtitle2", test2);
 
 	}
-	
-	
-	
-	//Methoden
-	
-	
+
+	// Methoden
 
 }
