@@ -19,7 +19,7 @@ public class Main {
 				}
 
 				try {
-					// new MatchplanerGUI();
+					 new MatchplanerGUI();
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -35,7 +35,7 @@ public class Main {
 		test1.add(new Team("FCB m", "fcb"));
 		test1.add(new Team("fck k", "fck"));
 
-		Matchplann mtest = new Matchplann(test1);
+		Matchplan mtest = new Matchplan(test1);
 
 //		League instance = new League(18);
 //		String teams[] = { "Arminia Bielefeld", "1. FSV Mainz 05", "VfB Stuttgart", "1. FC Kaiserslautern",
