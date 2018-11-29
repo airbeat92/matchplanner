@@ -6,23 +6,16 @@
 package matchplanner;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
@@ -60,8 +53,19 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		JMenuItem mntmNeu = new JMenuItem("Neu");
 		mntmNeu.addActionListener((e) -> {
-			String message = "=> neuen Spielplan anlegen";
-			JOptionPane.showMessageDialog(null, message);
+			Object[] options1 = { "Fertig", "Hinzufügen", "Abbrechen" };
+
+			JPanel panel = new JPanel();
+			panel.add(new JLabel("Bitte ein Team eingeben"));
+			JTextField textField = new JTextField(10);
+			panel.add(textField);
+
+			int result = JOptionPane.showOptionDialog(null, panel, "Enter a Number", JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE, null, options1, null);
+			if (result == JOptionPane.YES_OPTION) {
+				JOptionPane.showMessageDialog(null, textField.getText());
+			}
+
 		});
 		mnDatei.add(mntmNeu);
 
@@ -113,6 +117,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		 */
 		JMenuItem mntmBeenden = new JMenuItem("Beenden");
 		mntmBeenden.addActionListener((a) -> {
+			//Aufruf Close
 			System.exit(0);
 
 		});
@@ -140,6 +145,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		// JTabbedPane hinzufügen
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
+
 
 		// hier sollen die Einträge für die Spieltage rein
 		JLabel test = new JLabel("test");
