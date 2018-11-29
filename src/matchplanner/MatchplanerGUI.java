@@ -30,6 +30,8 @@ import javax.swing.SwingConstants;
  * @author Marcel, Marvin, Samet
  */
 public class MatchplanerGUI extends javax.swing.JFrame {
+	
+	Matchplanner mp;
 
 
 	public MatchplanerGUI() {
@@ -87,9 +89,25 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		mnDatei.addSeparator();
 
+		
+		/*
+		 * Enthält Abfrage über ungespeicherte Änderungen!
+		 */
 		JMenuItem mntmBeenden = new JMenuItem("Beenden");
-		mntmBeenden.addActionListener((e) -> {
-			System.exit(0);
+		mntmBeenden.addActionListener((a) -> {
+			//Bedingung für nicht gespeicherte Änderungen
+			if (true) {
+				JFrame closeFrame = new JFrame();
+				closeFrame.setTitle("Close");
+				closeFrame.setSize(300, 200);
+				closeFrame.setLocationRelativeTo(null);
+				closeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				closeFrame.setLayout(new BorderLayout(0, 0));
+				closeFrame.setVisible(true);
+				
+				
+			}
+			//System.exit(0);
 		});
 		mnDatei.add(mntmBeenden);
 
@@ -126,5 +144,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		tabbedPane.addTab("testtitle2", test2);
 
 	}
+	
+	
+	
+	//Methoden
+	
+	
 
 }

@@ -15,6 +15,7 @@ public class League {
     private int tail;
     private int teams;
     private int day;
+    
 
     
     /*
@@ -72,6 +73,7 @@ public class League {
         }
 
     }
+    
 
     public int getLower(int t) {
         return lower[t];
