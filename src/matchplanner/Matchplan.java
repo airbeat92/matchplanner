@@ -1,11 +1,15 @@
 package matchplanner;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import com.sun.javafx.collections.MappingChange.Map;
 
 public class Matchplan {
 	
-	List<Matchday> season = new ArrayList();
+	HashMap <Matchday, Date> season = new HashMap();
 	List<Team> teams = new ArrayList();
 	League mLeague;
 
