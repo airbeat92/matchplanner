@@ -12,10 +12,9 @@ public class Matchplan {
     List matchday = new ArrayList();
     League mLeague;
     //Day Today
-    GregorianCalendar calendar = new GregorianCalendar(TimeZone.getDefault());
+    Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
     Date date = calendar.getTime();
     // return: 1-7 (Saturday = 7)
-    //Wird nicht benutzt
     int day = calendar.get(Calendar.DAY_OF_WEEK);
 
     /*
@@ -85,7 +84,7 @@ public class Matchplan {
                 matchday.add(day);
                 i++;
             } else {
-
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
             }
         }
         return (ArrayList<Date>) matchday;
