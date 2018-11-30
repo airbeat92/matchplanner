@@ -15,6 +15,7 @@ public class Matchplan {
 	GregorianCalendar calendar = new GregorianCalendar(TimeZone.getDefault());
 	Date date = calendar.getTime();
 	// return: 1-7 (Saturday = 7)
+    //Wird nicht benutzt
 	int day = calendar.get(Calendar.DAY_OF_WEEK);
 
 	/*
@@ -77,10 +78,9 @@ public class Matchplan {
 	}
 
 
-	//Jan
-	//Bitte Liste erzeugen, die die Datums nächsten Samstage ab dem aktuellen datum speichert
-	//anzahl der Samstag ist anzahl spieltage
+
 	public ArrayList<Date> createDates(int spieltage) {
+	    //berechnung Samstage
 		for (int i = 0; i <= spieltage; i++) {
 			if (day == Calendar.SATURDAY) {
 				//System.out.println(day);
