@@ -7,6 +7,7 @@ package matchplanner;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -51,20 +52,51 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		JMenuItem mntmNeu = new JMenuItem("Neu");
 		mntmNeu.addActionListener((e) -> {
-			Object[] options1 = { "Fertig", "Hinzufügen", "Abbrechen" };
-
-			JPanel panel = new JPanel();
-			panel.add(new JLabel("Bitte ein Team eingeben"));
+			Object[] options = { "Abbrechen", "Hinzufügen", "Fertig" };
+			
+			JPanel panel = new JPanel(new BorderLayout());
+			JPanel inputpanel = new JPanel();
+			inputpanel.add(new JLabel("Bitte ein Team eingeben"));
 			JTextField textField = new JTextField(10);
-			panel.add(textField);
+			inputpanel.add(textField);
+			JPanel warning = new JPanel();
+			JLabel warningLabel = new JLabel();
+			warning.add(warningLabel);
+			panel.add(inputpanel,BorderLayout.CENTER);
+			panel.add(warning, BorderLayout.PAGE_END);
+			
+			
+			
+			int input = JOptionPane.showOptionDialog(null, panel, "Confirmation",
+			        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
 
-			int result = JOptionPane.showOptionDialog(null, panel, "Enter a Number", JOptionPane.YES_NO_CANCEL_OPTION,
-					JOptionPane.PLAIN_MESSAGE, null, options1, null);
-			if (result == JOptionPane.YES_OPTION) {
-				JOptionPane.showMessageDialog(null, textField.getText());
+			
+			do {
+				
+				
+				input = JOptionPane.showOptionDialog(null, panel, "Confirmation",
+				        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
+			//Fertig gedrückt
+			if(input==2) {
+				warningLabel.setText("Sie müssen eine gerade Anzahl an Teams hinzufügen");
+				input = JOptionPane.showOptionDialog(null, panel, "Confirmation",
+				        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
+				
+				
 			}
+			
+			//Hinzufügen gedrückt
+			if(input==1) {
+				
+			}
+			//Abbrechen gedrückt
+			if(input==0) {
+				
+			}
+			}while(input==1);
 
 		});
+		
 		mnDatei.add(mntmNeu);
 
 		JMenuItem mntmoffnen = new JMenuItem("Öffnen");
