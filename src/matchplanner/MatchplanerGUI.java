@@ -6,18 +6,20 @@
 package matchplanner;
 
 import java.awt.BorderLayout;
+import java.util.Date;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -27,8 +29,8 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 public class MatchplanerGUI extends javax.swing.JFrame {
 
-	Matchplan mp;
-	boolean save = true;
+	private Matchplan mp;
+	private boolean save = true;
 
 	public MatchplanerGUI() {
 		/*
@@ -146,6 +148,18 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmOffnen.setEnabled(mp == null);
 		mntmOffnen.addActionListener((e) -> {
 			String message = "=> vorhandenen Spielplan öffnen";
+			
+			//Bedingung später hinfällig, da auf das erfolgreiche Laden geprüft werden muss
+			//Erstellt Spieltag Tabs mit den Begegnungen als Liste
+			if (mp != null) {
+				JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
+				getContentPane().add(tabbedPane, BorderLayout.CENTER);
+				for (Date key : mp.season.keySet()) {
+					JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
+					tabbedPane.addTab(key.toGMTString(), new JScrollPane(displayMatches));
+					}
+			}
+			
 			JOptionPane.showMessageDialog(null, message);
 		});
 		mnDatei.add(mntmOffnen);
@@ -162,9 +176,18 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mnDatei.add(mntmClose);
 		mntmClose.setEnabled(mp == null);
 		mntmClose.addActionListener((e) -> {
-			closeDialog();
+			if (!save) {
+				JFrame closeConfirmFrame = new JFrame();
+				int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
+						"Ungespeicherte Änderungen, dennoch beenden?");
+				if (JOptionPane.YES_OPTION == result) {
+					mp = null;
+				}
+				if (JOptionPane.NO_OPTION == result) {
+					// Speichern aufrufen
+				}
+			}
 
-			
 		});
 
 		mnDatei.addSeparator();
@@ -214,35 +237,50 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		// JTabbedPane hinzufügen
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		JLabel test = new JLabel("test");
-
-		JLabel test2 = new JLabel("test");
-		test.setHorizontalTextPosition(SwingConstants.RIGHT);
-		tabbedPane.addTab("testtitle", test);
-		tabbedPane.addTab("testtitle2", test2);
-
+		
+		
+		
+		//Dummy Füllung
+		Object [] dummyMatchdays = new Object[15];
+		for (int i = 0; i < dummyMatchdays.length; i++) {
+			dummyMatchdays[i] = "1. HF Toll : FC Code";
+		}
+		
+		
+		for (int i = 0; i < 3; i++) {
+			JList displayGames = new JList(dummyMatchdays);		
+			tabbedPane.addTab("21.12.2018"  , new JScrollPane(displayGames));
+		}
+		
+		
+		
+		
+		
+		
 	}
 
 	// Frames
 
-	private void closeDialog() {
-		if (!save) {
-			JFrame closeConfirmFrame = new JFrame();
-			int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
-					"Ungespeicherte Änderungen, dennoch beenden?");
-			if (JOptionPane.YES_OPTION == result) {
-				mp = null;
-			}
-			if (JOptionPane.NO_OPTION == result) {
-				// Speichern aufrufen
-			}
-		}
-	}
+//	private void closeDialog() {
+//		if (!save) {
+//			JFrame closeConfirmFrame = new JFrame();
+//			closeConfirmFrame.setVisible(true);
+//			int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
+//					"Ungespeicherte Änderungen, dennoch beenden?");
+//			if (JOptionPane.YES_OPTION == result) {
+//				mp = null;
+//			}
+//			if (JOptionPane.NO_OPTION == result) {
+//				// Speichern aufrufen
+//			}
+//		}
+//	}
 
 	// Methoden
 
 	private void saveData() {
 		throw new NotImplementedException();
 	}
+	
 
 }

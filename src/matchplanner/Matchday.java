@@ -20,12 +20,21 @@ public class Matchday {
 	public void setMd(List<Match> md) {
 		this.md = md;
 	}
-
+	
+	public Object [] toObjectArray(Matchplan mp) {
+		Object [] result = new Object [mp.season.size()];
+		for (int i = 0; i < result.length; i++) {
+			result [i] = md.get(i).matchAsString(mp);
+		}
+		return result;
+		
+	}
+	
+	
 	@Override
 	public String toString() {
 		throw new NotImplementedException();
 	}
-	
 	
 	
 }

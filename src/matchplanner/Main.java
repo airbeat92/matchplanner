@@ -30,15 +30,15 @@ public class Main {
 
 //		 Hier wird getestet
 
-		List<Team> test1 = new ArrayList();
-		test1.add(new Team("Vfb S", "VFB",1));
-		test1.add(new Team("BVB d", "BVB",2));
-		test1.add(new Team("FCB m", "fcb",3));
-		test1.add(new Team("fck k", "fck",4));
-
-		Matchplan mtest = new Matchplan(test1);
-		
-		ArrayList <Date> testList= new ArrayList();
+//		List<Team> test1 = new ArrayList();
+//		test1.add(new Team("Vfb S", "VFB",1));
+//		test1.add(new Team("BVB d", "BVB",2));
+//		test1.add(new Team("FCB m", "fcb",3));
+//		test1.add(new Team("fck k", "fck",4));
+//
+//		Matchplan mtest = new Matchplan(test1);
+//		
+//		ArrayList <Date> testList= new ArrayList();
 	
 		
 		

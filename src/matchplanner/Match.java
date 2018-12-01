@@ -5,6 +5,7 @@
 
 package matchplanner;
 
+import com.sun.xml.internal.bind.v2.runtime.MarshallerImpl;
 
 public class Match {
 
@@ -23,8 +24,19 @@ public class Match {
     public int getGuest() {
         return this.guest;
     }
+    
+    /*
+     * Gibt ein Spiel mit den Klarnamen der Mannschaften aus
+     */
+    public String matchAsString (Matchplan mp) {
+    	String h = mp.teams.get(home).getName();
+    	String g = mp.teams.get(guest).getName();
+    	
+    	return h + " : " + g;
+    	
+    }
 
-    public static Match getMatch(League league, int match) {
+	public static Match getMatch(League league, int match) {
 
         int count = (league.getTeams() / 2) - 1;
 
