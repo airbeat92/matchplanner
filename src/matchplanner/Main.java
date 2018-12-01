@@ -1,11 +1,8 @@
 package matchplanner;
 
 import java.awt.EventQueue;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.UIManager;
@@ -23,7 +20,7 @@ public class Main {
 				}
 
 				try {
-					new MatchplanerGUI();
+					//new MatchplanerGUI();
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -33,19 +30,23 @@ public class Main {
 
 //		 Hier wird getestet
 
-//		List<Team> test1 = new ArrayList();
-//		test1.add(new Team("Vfb S", "VFB",1));
-//		test1.add(new Team("BVB d", "BVB",2));
-//		test1.add(new Team("FCB m", "fcb",3));
-//		test1.add(new Team("fck k", "fck",4));
-//
-//		Matchplan mtest = new Matchplan(test1);
+		List<Team> test1 = new ArrayList();
+		test1.add(new Team("Vfb S", "VFB",1));
+		test1.add(new Team("BVB d", "BVB",2));
+		test1.add(new Team("FCB m", "fcb",3));
+		test1.add(new Team("fck k", "fck",4));
+
+		Matchplan mtest = new Matchplan(test1);
 		
-//		ArrayList <Date> testList= new ArrayList();
+		LocalDate test = LocalDate.of(2000, 1, 1);
+		
+		
+		Matchday mdtest = mtest.season.get(test);
+		Object [] array = mdtest.toObjectArray(mtest);
+		for (int i = 0; i < array.length; i++) {
+			System.out.println(array[i]);
+		}
 	
-		
-		
-		
 		
 		
 

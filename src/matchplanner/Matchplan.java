@@ -50,7 +50,7 @@ public class Matchplan {
      * Erstellt dein eigentlichen Matchplan
      */
     public void createPlan() {
-        LocalDate defaultDate = LocalDate.of(0, 0, 0);
+        LocalDate defaultDate = LocalDate.of(2000, 1, 1);
 
         for (int i = 0; i < mLeague.getTeams() - 1; i++) {
             List<Match> tempM = new ArrayList();
@@ -59,7 +59,7 @@ public class Matchplan {
                 tempM.add(m);
             }
             season.put(defaultDate, new Matchday(tempM));
-            defaultDate.plusDays(1);
+            defaultDate = defaultDate.plusDays(1);
             mLeague.shift();
         }
 
@@ -72,7 +72,7 @@ public class Matchplan {
                 tempM.add(m);
             }
             season.put(defaultDate, new Matchday(tempM));
-            defaultDate.plusDays(1);
+            defaultDate = defaultDate.plusDays(1);
             mLeague.shift();
 
         }
