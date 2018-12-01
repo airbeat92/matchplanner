@@ -69,7 +69,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			JPanel inputpanel = new JPanel();
 			JLabel inputLabel = new JLabel();
 			inputpanel.add(inputLabel);
-			JTextField team = new JTextField();
+			JTextField team = new JTextField(10);
 			inputpanel.add(team);
 			JPanel info = new JPanel();
 			JLabel infoLabel = new JLabel();
@@ -78,8 +78,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			info.add(defaultValues);
 			panel.add(inputpanel, BorderLayout.CENTER);
 			panel.add(info, BorderLayout.PAGE_END);
-
-			Team addTeam = new Team();
+			mp=new Matchplan();
 
 			int input;
 
@@ -93,9 +92,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				// Checkbox selected
 				if (defaultValues.isSelected() && input == 2) {
 					for (int i = 0; i < 4; i++) {
-						addTeam.setId(i);
-						addTeam.setName("<Bitte ändern>");
-						mp.addNewTeam(addTeam);
+
+						mp.addNewTeam(new Team("<Bitte ändern>","",i));
+						inputCount=4;
 					}
 
 				}
@@ -126,9 +125,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					} else {
 						infoLabel.setText(team.getText() + " wurde hinzugefügt");
 
-						addTeam.setId(inputCount);
-						addTeam.setName(team.getText());
-						mp.addNewTeam(addTeam);
+//						mp.addNewTeam(new Team(team.getText(),"",inputCount));
 						inputCount++;
 					}
 				}
@@ -139,8 +136,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				team.setText("");
 			} while (input == 1 || (input == 2 && inputCount % 2 != 0) || (input == 2 && inputCount < 4));
 
-			for (int i = 0; i < inputCount; i++) {
-				System.out.println(mp.teams.get(i).getName());
+			for (int i = 0; i < mp.teams.size(); i++) {
+				System.out.println(mp.teams.get(i).getName() + mp.teams.get(i).getId());
 			}
 
 		});
