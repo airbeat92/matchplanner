@@ -25,8 +25,15 @@ public class Match {
         return this.guest;
     }
     
+    public void switchHomeGuest() {
+    	int tempInt;
+    	tempInt = home;
+    	home = guest;
+    	guest = tempInt;
+    }
+    
     /*
-     * Gibt ein Spiel mit den Klarnamen der Mannschaften aus
+     * Gibt ein Spiel mit den Klarnamen der Mannschaften aus.
      */
     public String matchAsString (Matchplan mp) {
     	String h = mp.teams.get(home).getName();

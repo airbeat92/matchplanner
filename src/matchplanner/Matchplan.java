@@ -69,6 +69,7 @@ public class Matchplan {
             List<Match> tempM = new ArrayList();
             for (int k = 0; k < mLeague.getTeams() / 2; k++) {
                 Match m = mLeague.getMatch(k);
+                m.switchHomeGuest();
                 tempM.add(m);
             }
             season.put(defaultDate, new Matchday(tempM));
