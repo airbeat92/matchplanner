@@ -6,6 +6,8 @@
 package matchplanner;
 
 import java.awt.BorderLayout;
+
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -16,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 
 /**
  *
@@ -52,7 +53,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JMenuItem mntmNeu = new JMenuItem("Neu");
 		mntmNeu.addActionListener((e) -> {
 			Object[] options = { "Abbrechen", "Hinzufügen", "Fertig" };
-			int inputCount=0;
+			int inputCount = 0;
 			JPanel panel = new JPanel(new BorderLayout());
 			JPanel inputpanel = new JPanel();
 			JLabel inputLabel = new JLabel();
@@ -61,61 +62,60 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			inputpanel.add(team);
 			JPanel info = new JPanel();
 			JLabel infoLabel = new JLabel();
+			JCheckBox defaultValues = new JCheckBox("Möchten sie vier Teams mit Standardwerten erzeugen?");
 			info.add(infoLabel);
-			panel.add(inputpanel,BorderLayout.CENTER);
+			info.add(defaultValues);
+			panel.add(inputpanel, BorderLayout.CENTER);
 			panel.add(info, BorderLayout.PAGE_END);
-			
-			int input;
-			
-			do {
-				
-				inputLabel.setText("Bitte das Team mit der ID "+inputCount+ "eingeben");
-				input = JOptionPane.showOptionDialog(null, panel, "Teams hinzufügen",
-				        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
-				
-			//Fertig gedrückt
 
-			
-			if(input==2 && inputCount<4) {
+			int input;
+
+			do {
+
+				inputLabel.setText("Bitte das Team mit der ID " + inputCount + "eingeben");
+				input = JOptionPane.showOptionDialog(null, panel, "Teams hinzufügen", JOptionPane.WARNING_MESSAGE, 0,
+						null, options, options[2]);
+				defaultValues.hide();
+				
+				//Checkbox selected
+				if(defaultValues.isSelected()) {
+					
+				}
+				// Fertig gedrückt
+				//Team Anzahl kleiner Vier
+				if (input == 2 && inputCount < 4) {
+					team.setText("");
+
+					infoLabel.setText("Sie müssen mindestens vier Teams hinzufügen!");
+					input = JOptionPane.showOptionDialog(null, panel, "Confirmation", JOptionPane.WARNING_MESSAGE, 0,
+							null, options, options[2]);
+
+				}
+				
+				//Ungerade Anzahl an Teams
+				if (input == 2 && inputCount % 2 != 0) {
+					team.setText("");
+					infoLabel.setText("Sie müssen eine gerade Anzahl an Teams hinzufügen!");
+					input = JOptionPane.showOptionDialog(null, panel, "Confirmation", JOptionPane.WARNING_MESSAGE, 0,
+							null, options, options[2]);
+
+				}
+
+				// Hinzufügen gedrückt
+				if (input == 1) {
+					infoLabel.setText(team.getText() + " wurde hinzugefügt");
+					inputCount++;
+
+				}
+				// Abbrechen gedrückt
+				if (input == 0) {
+
+				}
 				team.setText("");
-				infoLabel.setText("Sie müssen mindestens vier Teams hinzufügen!");
-				input = JOptionPane.showOptionDialog(null, panel, "Confirmation",
-				        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
-				
-				
-				
-				
-			}
-			
-			if(input==2 && inputCount%2 !=0) {
-				team.setText("");
-				infoLabel.setText("Sie müssen eine gerade Anzahl an Teams hinzufügen!");
-				input = JOptionPane.showOptionDialog(null, panel, "Confirmation",
-				        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
-				
-				
-				
-				
-			}
-			
-			//Hinzufügen gedrückt
-			if(input==1) {
-				infoLabel.setText(team.getText()+" hinzugefügt");
-				inputCount++;
-				
-			}
-			//Abbrechen gedrückt
-			if(input==0) {
-				
-			}
-			team.setText("");
-			}while(input==1 || (input==2 && inputCount%2 !=0) || (input==2 && inputCount<4) );
+			} while (input == 1 || (input == 2 && inputCount % 2 != 0) || (input == 2 && inputCount < 4));
 
 		});
-		
-		
-		
-		
+
 		mnDatei.add(mntmNeu);
 
 		JMenuItem mntmoffnen = new JMenuItem("Öffnen");
@@ -136,17 +136,17 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmClose.setEnabled(mp != null);
 		mntmClose.addActionListener((e) -> {
 			// Bedingung für nicht gespeicherte Änderungen
-						if (true) {
-							JFrame closeConfirmFrame = new JFrame();
-							int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
-									"Ungespeicherte Änderungen, dennoch beenden?");
-							if (JOptionPane.YES_OPTION == result) {
-								mp = null;
-							}
-							if (JOptionPane.NO_OPTION == result) {
-								//Speichern aufrufen
-							}
-						}
+			if (true) {
+				JFrame closeConfirmFrame = new JFrame();
+				int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
+						"Ungespeicherte Änderungen, dennoch beenden?");
+				if (JOptionPane.YES_OPTION == result) {
+					mp = null;
+				}
+				if (JOptionPane.NO_OPTION == result) {
+					// Speichern aufrufen
+				}
+			}
 		});
 
 		mnDatei.addSeparator();
@@ -166,7 +166,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		 */
 		JMenuItem mntmBeenden = new JMenuItem("Beenden");
 		mntmBeenden.addActionListener((a) -> {
-			//Aufruf Close
+			// Aufruf Close
 			System.exit(0);
 
 		});
@@ -194,7 +194,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		// JTabbedPane hinzufügen
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-
 
 		// hier sollen die Einträge für die Spieltage rein
 		JLabel test = new JLabel("test");
