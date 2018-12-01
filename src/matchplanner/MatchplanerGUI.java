@@ -6,6 +6,9 @@
 package matchplanner;
 
 import java.awt.BorderLayout;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
 
 import javax.swing.JCheckBox;
@@ -174,7 +177,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		JMenuItem mntmClose = new JMenuItem("Schließen");
 		mnDatei.add(mntmClose);
-		mntmClose.setEnabled(mp == null);
+		mntmClose.setEnabled(mp != null);
 		mntmClose.addActionListener((e) -> {
 			if (!save) {
 				JFrame closeConfirmFrame = new JFrame();
@@ -241,10 +244,14 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		// Dummy Füllung
 		Object[] dummyMatchdays = new Object[1];
 		dummyMatchdays[0] = "1. HF Toll : FC Code";
-
-		for (int i = 0; i < 3; i++) {
+		LocalDate date = LocalDate.now();
+		for (int i = 0; i < 4; i++) {
+			if (i != 0) {
+				date = date.plusDays(1);
+			}
+			DateTimeFormatter df = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
 			JList displayGames = new JList(dummyMatchdays);
-			tabbedPane.addTab("21.12.2018", new JScrollPane(displayGames));
+			tabbedPane.addTab(date.format(df), new JScrollPane(displayGames));
 		}
 
 	}
