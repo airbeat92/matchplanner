@@ -148,18 +148,18 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmOffnen.setEnabled(mp == null);
 		mntmOffnen.addActionListener((e) -> {
 			String message = "=> vorhandenen Spielplan öffnen";
-			
-			//Bedingung später hinfällig, da auf das erfolgreiche Laden geprüft werden muss
-			//Erstellt Spieltag Tabs mit den Begegnungen als Liste
+
+			// Bedingung später hinfällig, da auf das erfolgreiche Laden geprüft werden muss
+			// Erstellt Spieltag Tabs mit den Begegnungen als Liste
 			if (mp != null) {
 				JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 				getContentPane().add(tabbedPane, BorderLayout.CENTER);
 				for (Date key : mp.season.keySet()) {
 					JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
 					tabbedPane.addTab(key.toGMTString(), new JScrollPane(displayMatches));
-					}
+				}
 			}
-			
+
 			JOptionPane.showMessageDialog(null, message);
 		});
 		mnDatei.add(mntmOffnen);
@@ -237,26 +237,16 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		// JTabbedPane hinzufügen
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		
-		
-		
-		//Dummy Füllung
-		Object [] dummyMatchdays = new Object[15];
-		for (int i = 0; i < dummyMatchdays.length; i++) {
-			dummyMatchdays[i] = "1. HF Toll : FC Code";
-		}
-		
-		
+
+		// Dummy Füllung
+		Object[] dummyMatchdays = new Object[1];
+		dummyMatchdays[0] = "1. HF Toll : FC Code";
+
 		for (int i = 0; i < 3; i++) {
-			JList displayGames = new JList(dummyMatchdays);		
-			tabbedPane.addTab("21.12.2018"  , new JScrollPane(displayGames));
+			JList displayGames = new JList(dummyMatchdays);
+			tabbedPane.addTab("21.12.2018", new JScrollPane(displayGames));
 		}
-		
-		
-		
-		
-		
-		
+
 	}
 
 	// Frames
@@ -281,6 +271,5 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	private void saveData() {
 		throw new NotImplementedException();
 	}
-	
 
 }
