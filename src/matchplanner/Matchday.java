@@ -20,7 +20,10 @@ public class Matchday {
 	public void setMd(List<Match> md) {
 		this.md = md;
 	}
-
+	
+	/*
+	 * Gibt alle Partien eines Spieltages als Object Array zurück.
+	 */
 	public Object[] toObjectArray(Matchplan mp) {
 		Object[] result = new Object[mp.teams.size() / 2];
 		for (int i = 0; i < result.length; i++) {
