@@ -3,6 +3,7 @@ package matchplanner;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.UIManager;
@@ -19,7 +20,7 @@ public class Main {
 				}
 
 				try {
-					 new MatchplanerGUI();
+					new MatchplanerGUI();
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -36,6 +37,14 @@ public class Main {
 		test1.add(new Team("fck k", "fck"));
 
 		Matchplan mtest = new Matchplan(test1);
+		
+		ArrayList <Date> testList= new ArrayList();
+		testList = mtest.createDates(4);
+		
+		
+		
+		
+		
 
 
 	}

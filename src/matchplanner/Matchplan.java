@@ -8,13 +8,8 @@ public class Matchplan {
 
     HashMap<Date, Matchday> season = new HashMap();
     List<Team> teams = new ArrayList();
-    List matchday = new ArrayList();
-    League mLeague;
-    //Day Today
-    Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
-    Date date = calendar.getTime();
-    // return: 1-7 (Saturday = 7)
-    int day = calendar.get(Calendar.DAY_OF_WEEK);
+    private League mLeague;
+    
 
     /*
      * Für import aus CSV datei
@@ -77,6 +72,14 @@ public class Matchplan {
 
 
     public ArrayList<Date> createDates(int spieltage) {
+    	//Variablen
+    	List matchday = new ArrayList();
+    	//Day Today
+        Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
+        Date date = calendar.getTime();
+        // return: 1-7 (Saturday = 7)
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+    	
         //berechnung Samstage
         for (int i = 0; i <= spieltage; i++) {
             if (day == Calendar.SATURDAY) {
@@ -88,4 +91,21 @@ public class Matchplan {
         }
         return (ArrayList<Date>) matchday;
      }
+
+    
+    //Getter und Setter
+    
+    public League getmLeague() {
+		return mLeague;
+	}
+
+	public void setmLeague(League mLeague) {
+		this.mLeague = mLeague;
+	}
+    
+    
+    
+    
+    
+    
 }
