@@ -67,6 +67,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			info.add(defaultValues);
 			panel.add(inputpanel, BorderLayout.CENTER);
 			panel.add(info, BorderLayout.PAGE_END);
+			Team addTeam=null;
 
 			int input;
 
@@ -78,7 +79,12 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				defaultValues.hide();
 				
 				//Checkbox selected
-				if(defaultValues.isSelected()) {
+				if(defaultValues.isSelected() &&input==2) {
+					for (int i = 0; i < 4; i++) {
+						addTeam.setId(i);
+						addTeam.setName("<Bitte ändern>");
+						mp.addNewTeam(addTeam);
+					}
 					
 				}
 				// Fertig gedrückt
@@ -105,6 +111,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				if (input == 1) {
 					infoLabel.setText(team.getText() + " wurde hinzugefügt");
 					inputCount++;
+					addTeam.setId(inputCount);
+					addTeam.setName(team.getText());
+					mp.addNewTeam(addTeam);
 
 				}
 				// Abbrechen gedrückt
