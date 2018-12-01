@@ -25,7 +25,7 @@ import javax.swing.SwingConstants;
  */
 public class MatchplanerGUI extends javax.swing.JFrame {
 
-	Matchplan mp;
+	Matchplan mp = new Matchplan();
 
 	public MatchplanerGUI() {
 		/*
@@ -50,6 +50,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
 
+		
+		
 		JMenuItem mntmNeu = new JMenuItem("Neu");
 		mntmNeu.addActionListener((e) -> {
 			Object[] options = { "Abbrechen", "Hinzufügen", "Fertig" };
@@ -58,7 +60,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			JPanel inputpanel = new JPanel();
 			JLabel inputLabel = new JLabel();
 			inputpanel.add(inputLabel);
-			JTextField team = new JTextField(10);
+			JTextField team = new JTextField();
 			inputpanel.add(team);
 			JPanel info = new JPanel();
 			JLabel infoLabel = new JLabel();
@@ -67,7 +69,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			info.add(defaultValues);
 			panel.add(inputpanel, BorderLayout.CENTER);
 			panel.add(info, BorderLayout.PAGE_END);
-			Team addTeam=null;
+			Team addTeam= new Team();
 
 			int input;
 
@@ -109,12 +111,17 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 				// Hinzufügen gedrückt
 				if (input == 1) {
+					if(team.getText().equals("")) {
+						infoLabel.setText("Eingabe darf nicht leer sein");
+					}
+					else {
 					infoLabel.setText(team.getText() + " wurde hinzugefügt");
-					inputCount++;
+					
 					addTeam.setId(inputCount);
 					addTeam.setName(team.getText());
 					mp.addNewTeam(addTeam);
-
+					inputCount++;
+					}
 				}
 				// Abbrechen gedrückt
 				if (input == 0) {
@@ -122,6 +129,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				}
 				team.setText("");
 			} while (input == 1 || (input == 2 && inputCount % 2 != 0) || (input == 2 && inputCount < 4));
+			
+			for (int i = 0; i < inputCount; i++) {
+				System.out.println(mp.teams.get(i).getName());
+			}
+			
 
 		});
 
@@ -200,12 +212,13 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		});
 		mnExtras.add(mntmSpieltage);
 
+		
+		
 		// JTabbedPane hinzufügen
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-
-		// hier sollen die Einträge für die Spieltage rein
 		JLabel test = new JLabel("test");
+
 		JLabel test2 = new JLabel("test");
 		test.setHorizontalTextPosition(SwingConstants.RIGHT);
 		tabbedPane.addTab("testtitle", test);

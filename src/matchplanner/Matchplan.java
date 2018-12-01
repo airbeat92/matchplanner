@@ -21,7 +21,11 @@ public class Matchplan {
 
     }
 
-    /*
+    public Matchplan() {
+		// TODO Auto-generated constructor stub
+	}
+
+	/*
      * Fügt einzelne Teams zu einem neuen oder bestehenden Matchplan hinzu
      */
     public int addNewTeam(Team t) {
