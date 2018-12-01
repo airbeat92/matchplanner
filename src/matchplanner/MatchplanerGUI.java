@@ -6,8 +6,6 @@
 package matchplanner;
 
 import java.awt.BorderLayout;
-
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -19,7 +17,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
 /**
  *
@@ -55,49 +52,69 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JMenuItem mntmNeu = new JMenuItem("Neu");
 		mntmNeu.addActionListener((e) -> {
 			Object[] options = { "Abbrechen", "Hinzufügen", "Fertig" };
-			
+			int inputCount=0;
 			JPanel panel = new JPanel(new BorderLayout());
 			JPanel inputpanel = new JPanel();
-			inputpanel.add(new JLabel("Bitte ein Team eingeben"));
-			JTextField textField = new JTextField(10);
-			inputpanel.add(textField);
-			JPanel warning = new JPanel();
-			JLabel warningLabel = new JLabel();
-			warning.add(warningLabel);
+			JLabel inputLabel = new JLabel();
+			inputpanel.add(inputLabel);
+			JTextField team = new JTextField(10);
+			inputpanel.add(team);
+			JPanel info = new JPanel();
+			JLabel infoLabel = new JLabel();
+			info.add(infoLabel);
 			panel.add(inputpanel,BorderLayout.CENTER);
-			panel.add(warning, BorderLayout.PAGE_END);
+			panel.add(info, BorderLayout.PAGE_END);
 			
-			
-			
-			int input = JOptionPane.showOptionDialog(null, panel, "Confirmation",
-			        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
-
+			int input;
 			
 			do {
 				
+				inputLabel.setText("Bitte das Team mit der ID "+inputCount+ "eingeben");
+				input = JOptionPane.showOptionDialog(null, panel, "Teams hinzufügen",
+				        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
 				
-				input = JOptionPane.showOptionDialog(null, panel, "Confirmation",
-				        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
 			//Fertig gedrückt
-			if(input==2) {
-				warningLabel.setText("Sie müssen eine gerade Anzahl an Teams hinzufügen");
+
+			
+			if(input==2 && inputCount<4) {
+				team.setText("");
+				infoLabel.setText("Sie müssen mindestens vier Teams hinzufügen!");
 				input = JOptionPane.showOptionDialog(null, panel, "Confirmation",
 				        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
+				
+				
+				
+				
+			}
+			
+			if(input==2 && inputCount%2 !=0) {
+				team.setText("");
+				infoLabel.setText("Sie müssen eine gerade Anzahl an Teams hinzufügen!");
+				input = JOptionPane.showOptionDialog(null, panel, "Confirmation",
+				        JOptionPane.WARNING_MESSAGE, 0, null, options, options[2]);
+				
+				
 				
 				
 			}
 			
 			//Hinzufügen gedrückt
 			if(input==1) {
+				infoLabel.setText(team.getText()+" hinzugefügt");
+				inputCount++;
 				
 			}
 			//Abbrechen gedrückt
 			if(input==0) {
 				
 			}
-			}while(input==1);
+			team.setText("");
+			}while(input==1 || (input==2 && inputCount%2 !=0) || (input==2 && inputCount<4) );
 
 		});
+		
+		
+		
 		
 		mnDatei.add(mntmNeu);
 
