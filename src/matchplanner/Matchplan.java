@@ -28,7 +28,8 @@ public class Matchplan {
 
     }
 
-    /*
+
+	/*
      * Fügt einzelne Teams zu einem neuen oder bestehenden Matchplan hinzu
      */
     public int addNewTeam(Team t) {
