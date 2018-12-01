@@ -1,6 +1,7 @@
 package matchplanner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -29,6 +30,7 @@ public class Matchday {
 		for (int i = 0; i < result.length; i++) {
 			result[i] = md.get(i).matchAsString(mp);
 		}
+		
 		return result;
 
 	}

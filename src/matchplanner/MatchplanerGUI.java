@@ -9,6 +9,8 @@ import java.awt.BorderLayout;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -108,7 +110,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					mp.createPlan();
 					tabbedPane.removeAll();
 					
-					for (LocalDate key : mp.season.keySet()) {
+					SortedSet <LocalDate> keyTree = new TreeSet(mp.season.keySet());
+					for (LocalDate key : keyTree) {
+						
 						JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
 						tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
 					}
