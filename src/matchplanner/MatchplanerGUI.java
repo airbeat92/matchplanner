@@ -46,6 +46,14 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		this.setVisible(true);
+		
+
+		// JTabbedPane hinzufügen
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
+		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		
+		
 
 		/*
 		 * menubar with actionlisteners
@@ -95,6 +103,14 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 						mp.addNewTeam(new Team("<Bitte ändern>","",i));
 						inputCount=4;
+					}
+					mp.createLeague(mp.teams.size());
+					mp.createPlan();
+					tabbedPane.removeAll();
+					
+					for (LocalDate key : mp.season.keySet()) {
+						JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
+						tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
 					}
 
 				}
@@ -152,8 +168,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			// Bedingung später hinfällig, da auf das erfolgreiche Laden geprüft werden muss
 			// Erstellt Spieltag Tabs mit den Begegnungen als Liste
 			if (mp != null) {
-				JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
-				getContentPane().add(tabbedPane, BorderLayout.CENTER);
+				tabbedPane.removeAll();
 				for (LocalDate key : mp.season.keySet()) {
 					JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
 					tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
@@ -234,9 +249,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		});
 		mnExtras.add(mntmSpieltage);
 
-		// JTabbedPane hinzufügen
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
-		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
 		// Dummy Füllung
 		Object[] dummyMatchdays = new Object[1];

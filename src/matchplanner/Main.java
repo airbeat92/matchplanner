@@ -20,7 +20,7 @@ public class Main {
 				}
 
 				try {
-					//new MatchplanerGUI();
+					new MatchplanerGUI();
 
 				} catch (Exception e) {
 					e.printStackTrace();
