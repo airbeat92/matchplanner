@@ -34,6 +34,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 	private Matchplan mp;
 	private boolean save = true;
+	public static final DateTimeFormatter DF = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
 
 	public MatchplanerGUI() {
 		/*
@@ -157,9 +158,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			if (mp != null) {
 				JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 				getContentPane().add(tabbedPane, BorderLayout.CENTER);
-				for (Date key : mp.season.keySet()) {
+				for (LocalDate key : mp.season.keySet()) {
 					JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
-					tabbedPane.addTab(key.toGMTString(), new JScrollPane(displayMatches));
+					tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
 				}
 			}
 
@@ -249,9 +250,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			if (i != 0) {
 				date = date.plusDays(1);
 			}
-			DateTimeFormatter df = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
 			JList displayGames = new JList(dummyMatchdays);
-			tabbedPane.addTab(date.format(df), new JScrollPane(displayGames));
+			tabbedPane.addTab(date.format(DF), new JScrollPane(displayGames));
 		}
 
 	}

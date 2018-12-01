@@ -1,12 +1,13 @@
 package matchplanner;
 
+import java.time.LocalDate;
 import java.util.*;
 
 
 
 public class Matchplan {
 
-    HashMap<Date, Matchday> season = new HashMap();
+    HashMap<LocalDate, Matchday> season = new HashMap();
     List<Team> teams = new ArrayList();
     private League mLeague;
     
@@ -49,7 +50,7 @@ public class Matchplan {
      * Erstellt dein eigentlichen Matchplan
      */
     public void createPlan() {
-        Date defaultDate = new Date(0000, 00, 00);
+        LocalDate defaultDate = LocalDate.of(0, 0, 0);
 
         for (int i = 0; i < mLeague.getTeams() - 1; i++) {
             List<Match> tempM = new ArrayList();
@@ -58,7 +59,7 @@ public class Matchplan {
                 tempM.add(m);
             }
             season.put(defaultDate, new Matchday(tempM));
-            defaultDate.setDate(defaultDate.getDate() + 1);
+            defaultDate.plusDays(1);
             mLeague.shift();
         }
 
@@ -71,7 +72,7 @@ public class Matchplan {
                 tempM.add(m);
             }
             season.put(defaultDate, new Matchday(tempM));
-            defaultDate.setDate(defaultDate.getDate() + 1);
+            defaultDate.plusDays(1);
             mLeague.shift();
 
         }
@@ -79,7 +80,7 @@ public class Matchplan {
     }
 
 
-    public ArrayList<Date> createDates(int spieltage) {
+    public ArrayList<LocalDate> createDates(int spieltage) {
     	//Variablen
     	List matchday = new ArrayList();
     	//Day Today
@@ -97,7 +98,7 @@ public class Matchplan {
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
             }
         }
-        return (ArrayList<Date>) matchday;
+        return (ArrayList<LocalDate>) matchday;
      }
 
     
