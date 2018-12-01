@@ -39,7 +39,7 @@ public class Main {
 		Matchplan mtest = new Matchplan(test1);
 		
 		ArrayList <Date> testList= new ArrayList();
-		testList = mtest.createDates(4);
+	
 		
 		
 		
