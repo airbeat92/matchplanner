@@ -19,6 +19,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 /**
  *
  * @author Marcel, Marvin, Samet
@@ -26,6 +28,7 @@ import javax.swing.SwingConstants;
 public class MatchplanerGUI extends javax.swing.JFrame {
 
 	Matchplan mp;
+	boolean save = true;
 
 	public MatchplanerGUI() {
 		/*
@@ -50,7 +53,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
 
+		// Setze boolean save auf false wenn das neue Team erstellt wurde
 		JMenuItem mntmNeu = new JMenuItem("Neu");
+		mntmNeu.setEnabled(mp == null);
 		mntmNeu.addActionListener((e) -> {
 			Object[] options = { "Abbrechen", "Hinzufügen", "Fertig" };
 			int inputCount = 0;
@@ -67,7 +72,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			info.add(defaultValues);
 			panel.add(inputpanel, BorderLayout.CENTER);
 			panel.add(info, BorderLayout.PAGE_END);
-			Team addTeam=null;
+			Team addTeam = null;
 
 			int input;
 
@@ -77,18 +82,18 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				input = JOptionPane.showOptionDialog(null, panel, "Teams hinzufügen", JOptionPane.WARNING_MESSAGE, 0,
 						null, options, options[2]);
 				defaultValues.hide();
-				
-				//Checkbox selected
-				if(defaultValues.isSelected() &&input==2) {
+
+				// Checkbox selected
+				if (defaultValues.isSelected() && input == 2) {
 					for (int i = 0; i < 4; i++) {
 						addTeam.setId(i);
 						addTeam.setName("<Bitte ändern>");
 						mp.addNewTeam(addTeam);
 					}
-					
+
 				}
 				// Fertig gedrückt
-				//Team Anzahl kleiner Vier
+				// Team Anzahl kleiner Vier
 				if (input == 2 && inputCount < 4) {
 					team.setText("");
 
@@ -97,8 +102,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 							null, options, options[2]);
 
 				}
-				
-				//Ungerade Anzahl an Teams
+
+				// Ungerade Anzahl an Teams
 				if (input == 2 && inputCount % 2 != 0) {
 					team.setText("");
 					infoLabel.setText("Sie müssen eine gerade Anzahl an Teams hinzufügen!");
@@ -127,17 +132,20 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		mnDatei.add(mntmNeu);
 
-		JMenuItem mntmoffnen = new JMenuItem("Öffnen");
-		mntmoffnen.addActionListener((e) -> {
+		JMenuItem mntmOffnen = new JMenuItem("Öffnen");
+		mntmOffnen.setEnabled(mp == null);
+		mntmOffnen.addActionListener((e) -> {
 			String message = "=> vorhandenen Spielplan öffnen";
 			JOptionPane.showMessageDialog(null, message);
 		});
-		mnDatei.add(mntmoffnen);
+		mnDatei.add(mntmOffnen);
 
 		JMenuItem mntmSpeichern = new JMenuItem("Speichern");
 		mntmSpeichern.addActionListener(e -> {
 			String message = "=> Aenderungen am Spielplan speichern";
 			JOptionPane.showMessageDialog(null, message);
+
+			save = true;
 		});
 
 		JMenuItem mntmClose = new JMenuItem("Schließen");
@@ -187,6 +195,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		menuBar.add(mnExtras);
 
 		JMenuItem mntmManschaften = new JMenuItem("Manschaften bearbeiten");
+		mntmManschaften.setEnabled(mp != null);
 		mntmManschaften.addActionListener((e) -> {
 			String message = "=> Mannschaften verändern";
 			JOptionPane.showMessageDialog(null, message);
@@ -194,6 +203,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mnExtras.add(mntmManschaften);
 
 		JMenuItem mntmSpieltage = new JMenuItem("Spieltage bearbeiten");
+		mntmSpieltage.setEnabled(mp != null);
 		mntmSpieltage.addActionListener((e) -> {
 			String message = "=> Spieltage festlegen/verändern";
 			JOptionPane.showMessageDialog(null, message);
@@ -214,5 +224,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	}
 
 	// Methoden
+
+	private void saveData() {
+		throw new NotImplementedException();
+	}
 
 }

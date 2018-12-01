@@ -10,6 +10,13 @@ public class Matchplan {
     List<Team> teams = new ArrayList();
     private League mLeague;
     
+    /*
+     * StandardKonsrtuktor
+     */
+    public Matchplan() {
+    	
+    }
+    
 
     /*
      * Für import aus CSV datei
