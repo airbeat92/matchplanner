@@ -37,7 +37,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	private Matchplan mp;
 	private boolean save = true;
 	public static final DateTimeFormatter DF = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
-	
+
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 	JTabbedPane outerPane = new JTabbedPane();
 
@@ -59,24 +59,21 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		JMenuBar menuBar = new JMenuBar();
 		getContentPane().add(menuBar, BorderLayout.NORTH);
-		
-		
-		
+
 		// Menuitem File
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
-		
-		
-		//Liste für Mannschaftsanzeige
+
+		// Liste für Mannschaftsanzeige
 		DefaultListModel teamModel = new DefaultListModel();
 		JList teamList = new JList(teamModel);
-		
+
 		// JTabbedPane hinzufügen
-		
+
 		outerPane.addTab("Spiele", tabbedPane);
 		outerPane.addTab("Manschaften", teamList);
 		getContentPane().add(outerPane, BorderLayout.CENTER);
-		
+
 		// Setze boolean save auf false wenn das neue Team erstellt wurde
 
 		JMenuItem mntmNeu = new JMenuItem("Neu");
@@ -111,43 +108,39 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			do {
 				pane.createDialog("Teams hinzufügen").setVisible(true);
 				Object selectedValue = pane.getValue();
-				
-				
+
 				validData = true;
 
 				if (!inputField.getText().matches("[0-9]")) {
 					failLabel.setText("Sie müssen eine Zahl eingeben!");
-					
+
 					validData = false;
-				}else {
+				} else {
 					if (Integer.parseInt(inputField.getText()) % 2 != 0) {
 						failLabel.setText("Sie müssen eine gerade Anzahl an Teams eingeben!");
-						
+
 						validData = false;
 					}
-					
+
 					if (Integer.parseInt(inputField.getText()) < 4) {
 						failLabel.setText("Sie müssen mindestens vier Teams erzeugen!");
-						
+
 						validData = false;
 					}
-				
-
 
 				}
-				if(inputField.getText().equals("")) {
+				if (inputField.getText().equals("")) {
 					failLabel.setText("Das Eingabefeld darf nicht leer sein");
 				}
-				//Abbrechen gedrückt
-				if (selectedValue.equals(options[0])){
-					
-					
+				// Abbrechen gedrückt
+				if (selectedValue.equals(options[0])) {
+
 				}
 				// Teams mit default Werten erzeugen
 				if (selectedValue.equals(options[1]) && defaultValues.isSelected() && validData) {
 					for (int i = 0; i < Integer.parseInt(inputField.getText()); i++) {
-						mp.addNewTeam(new Team("< "+i+" Bitte ändern>", "", i));
-						teamModel.addElement("< "+i+" Bitte ändern>");
+						mp.addNewTeam(new Team("< " + i + " Bitte ändern>", "", i));
+						teamModel.addElement("< " + i + " Bitte ändern>");
 
 					}
 					save = false;
@@ -170,7 +163,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 							mp.addNewTeam(new Team(inputField.getText(), "", i));
 							teamModel.addElement(inputField.getText());
 						}
-						
+
 						if (selectedValue.equals(options[0])) {
 
 							// hier brauchen wir noch eine methode um teams wieder zurückzusetzen, wenn
@@ -178,20 +171,18 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 							break;
 						}
-						
+
 					}
 					refreshTabbedPane();
 					save = false;
-					
 
 				}
-				
+
 				inputField.setText("");
 			} while (!validData);
 
 			/*
-			 * Alte Eingabe 
-			 * do {
+			 * Alte Eingabe do {
 			 * 
 			 * 
 			 * 
@@ -248,7 +239,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			 */
 			// hier ein ausgabe Test von Teams
 
-
 		});
 
 		mnDatei.add(mntmNeu);
@@ -282,20 +272,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		JMenuItem mntmClose = new JMenuItem("Schließen");
 		mnDatei.add(mntmClose);
-		mntmClose.setEnabled(mp != null);
+		mntmClose.setEnabled(true);
 		mntmClose.addActionListener((e) -> {
-			if (!save) {
-				JFrame closeConfirmFrame = new JFrame();
-				int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
-						"Ungespeicherte Änderungen, dennoch beenden?");
-				if (JOptionPane.YES_OPTION == result) {
-					mp = null;
-				}
-				if (JOptionPane.NO_OPTION == result) {
-					// Speichern aufrufen
-				}
-			}
-
+			
+			closeDialog();
+			
 		});
 
 		mnDatei.addSeparator();
@@ -341,12 +322,41 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(null, message);
 		});
 		mnExtras.add(mntmSpieltage);
+		
+		dummyFill();
+		
 
-		
-		
-		// Dummy Füllung
-		Object[] dummyMatchdays = new Object[1];
-		dummyMatchdays[0] = "1. HF Toll : FC Code";
+
+	}
+
+	// Frames
+
+	private void closeDialog() {
+		if (!save) {
+			JFrame closeConfirmFrame = new JFrame();
+			closeConfirmFrame.setVisible(true);
+			int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
+					"Ungespeicherte Änderungen, dennoch beenden?");
+			if (JOptionPane.YES_OPTION == result) {
+				mp = null;
+				tabbedPane.removeAll();
+				dummyFill();
+			}
+			if (JOptionPane.NO_OPTION == result) {
+				// Speichern aufrufen
+			}
+		}
+	}
+
+	// Methoden
+
+	/*
+	 * Befüllt Pane mit Dummys
+	 */
+	private void dummyFill() {
+		Object[] dummyMatchdays = new Object[2];
+		dummyMatchdays[0] = "---Dummy---";
+		dummyMatchdays[1] = "1. HF Toll : FC Code";
 		LocalDate date = LocalDate.now();
 		for (int i = 0; i < 4; i++) {
 			if (i != 0) {
@@ -358,25 +368,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 	}
 
-	// Frames
-
-//	private void closeDialog() {
-//		if (!save) {
-//			JFrame closeConfirmFrame = new JFrame();
-//			closeConfirmFrame.setVisible(true);
-//			int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
-//					"Ungespeicherte Änderungen, dennoch beenden?");
-//			if (JOptionPane.YES_OPTION == result) {
-//				mp = null;
-//			}
-//			if (JOptionPane.NO_OPTION == result) {
-//				// Speichern aufrufen
-//			}
-//		}
-//	}
-
-	// Methoden
-	
 	private void refreshTabbedPane() {
 		mp.refreshPlan();
 		tabbedPane.removeAll();
