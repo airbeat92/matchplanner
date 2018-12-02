@@ -125,7 +125,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					} else {
 						infoLabel.setText(team.getText() + " wurde hinzugefügt");
 
-//						mp.addNewTeam(new Team(team.getText(),"",inputCount));
+						mp.addNewTeam(new Team(team.getText(),"",inputCount));
 						inputCount++;
 					}
 				}
