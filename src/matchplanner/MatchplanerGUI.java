@@ -70,7 +70,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmNeu.setEnabled(mp == null);
 		mntmNeu.addActionListener((e) -> {
 			Object[] options = { "Abbrechen", "Erzeugen" };
-			int inputCount = 0;
 			JPanel panel = new JPanel(new BorderLayout());
 			JPanel inputPanel = new JPanel();
 			JPanel failPanel = new JPanel();
@@ -90,39 +89,49 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			panel.add(failPanel, BorderLayout.NORTH);
 			panel.add(inputPanel, BorderLayout.CENTER);
 			panel.add(info, BorderLayout.SOUTH);
-			
+
 			JOptionPane pane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, 0, null, options, options[1]);
 			mp = new Matchplan();
-			int input;
 			inputLabel.setText("Bitte Anzahl an Teams eingeben:");
-			boolean validData = true;	
+			boolean validData = true;
 
 			do {
 				pane.createDialog("Teams hinzufügen").setVisible(true);
 				Object selectedValue = pane.getValue();
 				System.out.println(selectedValue);
+				
 				validData = true;
+
 				if (!inputField.getText().matches("[0-9]")) {
 					failLabel.setText("Sie müssen eine Zahl eingeben!");
-					inputField.setText("");
+					
 					validData = false;
-				} else {
-					if (Integer.parseInt(inputField.getText()) < 4) {
-						failLabel.setText("Sie müssen mindestens vier Teams erzeugen!");
-						inputField.setText("");
-						validData = false;
-					}
-
+				}else {
 					if (Integer.parseInt(inputField.getText()) % 2 != 0) {
 						failLabel.setText("Sie müssen eine gerade Anzahl an Teams eingeben!");
-						inputField.setText("");
+						
 						validData = false;
 					}
+					
+					if (Integer.parseInt(inputField.getText()) < 4) {
+						failLabel.setText("Sie müssen mindestens vier Teams erzeugen!");
+						
+						validData = false;
+					}
+				
+
 
 				}
-
+				if(inputField.getText().equals("")) {
+					failLabel.setText("Das Eingabefeld darf nicht leer sein");
+				}
+				//Abbrechen gedrückt
+				if (selectedValue.equals(options[0])){
+					System.exit(0);
+					
+				}
 				// Teams mit default Werten erzeugen
-				if (selectedValue.equals(options[1])&& defaultValues.isSelected() && validData) {
+				if (selectedValue.equals(options[1]) && defaultValues.isSelected() && validData) {
 					for (int i = 0; i < Integer.parseInt(inputField.getText()); i++) {
 						System.out.println("default");
 						mp.addNewTeam(new Team("<Bitte ändern>", "", i));
@@ -146,11 +155,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					int count = Integer.parseInt(inputField.getText());
 					System.out.println(count);
 					for (int i = 0; i < count; i++) {
-						
+
 						inputField.setText("");
 						inputLabel.setText("Bitte das Team mit der ID " + i + " eingeben");
 						pane.createDialog("Teams hinzufügen").setVisible(true);
-						selectedValue= pane.getValue();
+						selectedValue = pane.getValue();
 						if (selectedValue.equals(options[1])) {
 							infoLabel.setText(inputField.getText() + " wurde hinzugefügt");
 							mp.addNewTeam(new Team(inputField.getText(), "", i));
@@ -159,7 +168,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 							// hier brauchen wir noch eine methode um teams wieder zurückzusetzen, wenn
 							// abbrechen gedrückt wurde
-							
+
 							break;
 						}
 					}
@@ -174,7 +183,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					}
 
 				}
-
+				
+				inputField.setText("");
 			} while (!validData);
 
 			/*
