@@ -38,6 +38,13 @@ public class Main {
 
 		Matchplan mtest = new Matchplan(test1);
 		
+		mtest.teams.add(new Team("Lang", "Kurz", 5 ));
+		mtest.teams.add(new Team("Lang1", "Kurz1", 6 ));
+		
+		mtest.createLeague(mtest.teams.size());
+		mtest.createPlan();
+		
+		
 		LocalDate test = LocalDate.of(2000, 1, 1);
 		LocalDate test2 = LocalDate.of(2000, 1, 2);
 		LocalDate test3 = LocalDate.of(2000, 1, 3);

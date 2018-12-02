@@ -38,6 +38,13 @@ public class Matchplan {
         return teams.size();
     }
 
+    /*
+     * Wenn neue Teams hizugefüt wurden muss zum Abschluss der Plan aktualisiert werden!
+     */
+    public void refreshPlan() {
+    	this.createLeague(this.teams.size());
+		this.createPlan();
+    }
 
     /*
      * Erstellt eine Liga für die angegebene Anzahl von Teams
