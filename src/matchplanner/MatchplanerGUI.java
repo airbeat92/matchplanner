@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.TreeSet;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -58,6 +59,10 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
 
+		// JTabbedPane hinzufügen
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
+		getContentPane().add(tabbedPane, BorderLayout.CENTER);
+
 		// Setze boolean save auf false wenn das neue Team erstellt wurde
 
 		JMenuItem mntmNeu = new JMenuItem("Neu");
@@ -78,7 +83,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			info.add(defaultValues);
 			panel.add(inputpanel, BorderLayout.CENTER);
 			panel.add(info, BorderLayout.PAGE_END);
-			mp=new Matchplan();
+			mp = new Matchplan();
 
 			int input;
 
@@ -93,8 +98,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				if (defaultValues.isSelected() && input == 2) {
 					for (int i = 0; i < 4; i++) {
 
-						mp.addNewTeam(new Team("<Bitte ändern>","",i));
-						inputCount=4;
+						mp.addNewTeam(new Team("<Bitte ändern>", "", i));
+						inputCount = 4;
 					}
 
 				}
@@ -117,16 +122,20 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 							null, options, options[2]);
 
 				}
-				
-				//Fertig gedrückt & alle Eingaben korrekt
-				if (input==2 && inputCount%2== 0 && inputCount>3) {
-					save=false;
+
+				// Fertig gedrückt & alle Eingaben korrekt
+				if (input == 2 && inputCount % 2 == 0 && inputCount > 3) {
+					save = false;
 					mp.refreshPlan();
-				System.out.println("es wird refresht");
+					tabbedPane.removeAll();
+					TreeSet<LocalDate> keyTree= new TreeSet(mp.season.keySet());
+					for (LocalDate key : keyTree) {
+						JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
+						tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
+					}
+
+					System.out.println("es wird refresht");
 				}
-						
-				
-				
 
 				// Hinzufügen gedrückt
 				if (input == 1) {
@@ -135,27 +144,23 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					} else {
 						infoLabel.setText(team.getText() + " wurde hinzugefügt");
 
-						mp.addNewTeam(new Team(team.getText(),"",inputCount));
+						mp.addNewTeam(new Team(team.getText(), "", inputCount));
 						inputCount++;
 					}
 				}
-				
+
 				// Abbrechen gedrückt
 				if (input == 0) {
 
 				}
 				team.setText("");
 			} while (input == 1 || (input == 2 && inputCount % 2 != 0) || (input == 2 && inputCount < 4));
-			
-			
-			//hier ein ausgabe Test von Teams
-			
+
+			// hier ein ausgabe Test von Teams
+
 			for (int i = 0; i < mp.teams.size(); i++) {
 				System.out.println(mp.teams.get(i).toString());
 			}
-			
-
-			
 
 		});
 
@@ -169,8 +174,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			// Bedingung später hinfällig, da auf das erfolgreiche Laden geprüft werden muss
 			// Erstellt Spieltag Tabs mit den Begegnungen als Liste
 			if (mp != null) {
-				JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
-				getContentPane().add(tabbedPane, BorderLayout.CENTER);
+
 				for (LocalDate key : mp.season.keySet()) {
 					JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
 					tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
@@ -250,10 +254,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(null, message);
 		});
 		mnExtras.add(mntmSpieltage);
-
-		// JTabbedPane hinzufügen
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
-		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
 		// Dummy Füllung
 		Object[] dummyMatchdays = new Object[1];
