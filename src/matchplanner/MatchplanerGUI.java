@@ -47,7 +47,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		 */
 		super();
 		this.setTitle("Matchplanner");
-		this.setSize(400, 300);
+		this.setSize(500, 400);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -61,9 +61,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		getContentPane().add(menuBar, BorderLayout.NORTH);
 		
 		
-		//TEST
-		
-		String [] test = {"test1", "test2"};
 		
 		// Menuitem File
 		JMenu mnDatei = new JMenu("Datei");
@@ -181,9 +178,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 							break;
 						}
-						refreshTabbedPane();
+						
 					}
-					
+					refreshTabbedPane();
 					save = false;
 					
 
@@ -251,9 +248,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			 */
 			// hier ein ausgabe Test von Teams
 
-			for (int i = 0; i < mp.teams.size(); i++) {
-				System.out.println(mp.teams.get(i).toString());
-			}
 
 		});
 
