@@ -36,6 +36,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	private Matchplan mp;
 	private boolean save = true;
 	public static final DateTimeFormatter DF = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
+	
+	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 
 	public MatchplanerGUI() {
 		/*
@@ -61,7 +63,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		menuBar.add(mnDatei);
 
 		// JTabbedPane hinzufügen
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
+		
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
 		// Setze boolean save auf false wenn das neue Team erstellt wurde
@@ -98,7 +100,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			do {
 				pane.createDialog("Teams hinzufügen").setVisible(true);
 				Object selectedValue = pane.getValue();
-				System.out.println(selectedValue);
+				
 				
 				validData = true;
 
@@ -127,33 +129,24 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				}
 				//Abbrechen gedrückt
 				if (selectedValue.equals(options[0])){
-					System.exit(0);
+					
 					
 				}
 				// Teams mit default Werten erzeugen
 				if (selectedValue.equals(options[1]) && defaultValues.isSelected() && validData) {
 					for (int i = 0; i < Integer.parseInt(inputField.getText()); i++) {
-						System.out.println("default");
-						mp.addNewTeam(new Team("<Bitte ändern>", "", i));
+						mp.addNewTeam(new Team("< "+i+" Bitte ändern>", "", i));
 
 					}
 					save = false;
-					mp.refreshPlan();
-					tabbedPane.removeAll();
-					TreeSet<LocalDate> keyTree = new TreeSet(mp.season.keySet());
-					for (LocalDate key : keyTree) {
-						JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
-						tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
-					}
+					refreshTabbedPane();
 				}
 
 				// Teams von Hand erzeugen
 				if (selectedValue.equals(options[1]) && !defaultValues.isSelected() && validData) {
 					options[1] = "Hinzufügen";
 					defaultValues.setVisible(false);
-					System.out.println("handerzeugen");
 					int count = Integer.parseInt(inputField.getText());
-					System.out.println(count);
 					for (int i = 0; i < count; i++) {
 
 						inputField.setText("");
@@ -164,6 +157,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 							infoLabel.setText(inputField.getText() + " wurde hinzugefügt");
 							mp.addNewTeam(new Team(inputField.getText(), "", i));
 						}
+						
 						if (selectedValue.equals(options[0])) {
 
 							// hier brauchen wir noch eine methode um teams wieder zurückzusetzen, wenn
@@ -171,16 +165,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 							break;
 						}
+						refreshTabbedPane();
 					}
 					
 					save = false;
-					mp.refreshPlan();
-					tabbedPane.removeAll();
-					TreeSet<LocalDate> keyTree = new TreeSet(mp.season.keySet());
-					for (LocalDate key : keyTree) {
-						JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
-						tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
-					}
+					
 
 				}
 				
@@ -188,7 +177,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			} while (!validData);
 
 			/*
-			 * Alte Eingabe do {
+			 * Alte Eingabe 
+			 * do {
 			 * 
 			 * 
 			 * 
@@ -374,6 +364,16 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 //	}
 
 	// Methoden
+	
+	private void refreshTabbedPane() {
+		mp.refreshPlan();
+		tabbedPane.removeAll();
+		TreeSet<LocalDate> keyTree = new TreeSet(mp.season.keySet());
+		for (LocalDate key : keyTree) {
+			JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
+			tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
+		}
+	}
 
 	private void saveData() {
 		throw new NotImplementedException();
