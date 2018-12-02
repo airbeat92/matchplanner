@@ -6,6 +6,7 @@
 package matchplanner;
 
 import java.awt.BorderLayout;
+import java.awt.event.ItemEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -68,94 +69,164 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JMenuItem mntmNeu = new JMenuItem("Neu");
 		mntmNeu.setEnabled(mp == null);
 		mntmNeu.addActionListener((e) -> {
-			Object[] options = { "Abbrechen", "Hinzufügen", "Fertig" };
+			Object[] options = { "Abbrechen", "Erzeugen" };
 			int inputCount = 0;
 			JPanel panel = new JPanel(new BorderLayout());
-			JPanel inputpanel = new JPanel();
-			JLabel inputLabel = new JLabel();
-			inputpanel.add(inputLabel);
-			JTextField team = new JTextField(10);
-			inputpanel.add(team);
+			JPanel inputPanel = new JPanel();
+			JPanel failPanel = new JPanel();
+			JTextField inputField = new JTextField(10);
+
 			JPanel info = new JPanel();
+			JLabel inputLabel = new JLabel();
 			JLabel infoLabel = new JLabel();
-			JCheckBox defaultValues = new JCheckBox("Möchten sie vier Teams mit Standardwerten erzeugen?");
+			JLabel failLabel = new JLabel();
+			JCheckBox defaultValues = new JCheckBox("Möchten Sie die Teams mit Standardwerten erzeugen?");
+
+			failPanel.add(failLabel);
+			inputPanel.add(inputLabel);
+			inputPanel.add(inputField);
 			info.add(infoLabel);
 			info.add(defaultValues);
-			panel.add(inputpanel, BorderLayout.CENTER);
-			panel.add(info, BorderLayout.PAGE_END);
-			mp = new Matchplan();
+			panel.add(failPanel, BorderLayout.NORTH);
+			panel.add(inputPanel, BorderLayout.CENTER);
+			panel.add(info, BorderLayout.SOUTH);
 
+			mp = new Matchplan();
 			int input;
+			inputLabel.setText("Bitte Anzahl an Teams eingeben:");
+			boolean validData = true;
 
 			do {
+				input = JOptionPane.showOptionDialog(null, panel, "Teams hinzufügen", JOptionPane.PLAIN_MESSAGE, 0,
+						null, options, options[1]);
+				validData = true;
+				if (!inputField.getText().matches("[0-9]")) {
+					failLabel.setText("Sie müssen eine Zahl eingeben!");
+					validData = false;
+				} else {
+					if (Integer.parseInt(inputField.getText()) < 4) {
+						failLabel.setText("Sie müssen mindestens vier Teams erzeugen!");
+						validData = false;
+					}
 
-				inputLabel.setText("Bitte das Team mit der ID " + inputCount + " eingeben");
-				input = JOptionPane.showOptionDialog(null, panel, "Teams hinzufügen", JOptionPane.WARNING_MESSAGE, 0,
-						null, options, options[2]);
-				defaultValues.hide();
-
-				// Checkbox selected
-				if (defaultValues.isSelected() && input == 2) {
-					for (int i = 0; i < 4; i++) {
-
-						mp.addNewTeam(new Team("<Bitte ändern>", "", i));
-						inputCount = 4;
+					if (Integer.parseInt(inputField.getText()) % 2 != 0) {
+						failLabel.setText("Sie müssen eine gerade Anzahl an Teams eingeben!");
+						validData = false;
 					}
 
 				}
-				// Fertig gedrückt
-				// Team Anzahl kleiner Vier
-				if (input == 2 && inputCount < 4) {
-					team.setText("");
 
-					infoLabel.setText("Sie müssen mindestens vier Teams hinzufügen!");
-					input = JOptionPane.showOptionDialog(null, panel, "Confirmation", JOptionPane.WARNING_MESSAGE, 0,
-							null, options, options[2]);
+				// Teams mit default Werten erzeugen
+				if (input == 1 && defaultValues.isSelected() && validData) {
+					for (int i = 0; i < Integer.parseInt(inputField.getText()); i++) {
+						System.out.println("default");
+						mp.addNewTeam(new Team("<Bitte ändern>", "", i));
 
-				}
-
-				// Ungerade Anzahl an Teams
-				if (input == 2 && inputCount % 2 != 0) {
-					team.setText("");
-					infoLabel.setText("Sie müssen eine gerade Anzahl an Teams hinzufügen!");
-					input = JOptionPane.showOptionDialog(null, panel, "Confirmation", JOptionPane.WARNING_MESSAGE, 0,
-							null, options, options[2]);
-
-				}
-
-				// Fertig gedrückt & alle Eingaben korrekt
-				if (input == 2 && inputCount % 2 == 0 && inputCount > 3) {
+					}
 					save = false;
 					mp.refreshPlan();
 					tabbedPane.removeAll();
-					TreeSet<LocalDate> keyTree= new TreeSet(mp.season.keySet());
+					TreeSet<LocalDate> keyTree = new TreeSet(mp.season.keySet());
+					for (LocalDate key : keyTree) {
+						JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
+						tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
+					}
+				}
+
+				// Teams von Hand erzeugen
+				if (input == 1 && !defaultValues.isSelected() && validData) {
+					options[1] = "Hinzufügen";
+					defaultValues.setVisible(false);
+					
+					int count = Integer.parseInt(inputField.getText());
+					
+					for (int i = 0; i < count; i++) {
+						inputField.setText("");
+						inputLabel.setText("Bitte das Team mit der ID " + i + " eingeben");
+						input = JOptionPane.showOptionDialog(null, panel, "Teams hinzufügen", JOptionPane.PLAIN_MESSAGE,
+								0, null, options, options[1]);
+						if (input == 1) {
+							infoLabel.setText(inputField.getText() + " wurde hinzugefügt");
+							mp.addNewTeam(new Team(inputField.getText(), "", i));
+						}
+						if (input == 0) {
+
+							// hier brauchen wir noch eine methode um teams wieder zurückzusetzen, wenn
+							// abbrechen gedrückt wurde
+							
+							break;
+						}
+					}
+					
+					save = false;
+					mp.refreshPlan();
+					tabbedPane.removeAll();
+					TreeSet<LocalDate> keyTree = new TreeSet(mp.season.keySet());
 					for (LocalDate key : keyTree) {
 						JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
 						tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
 					}
 
-					System.out.println("es wird refresht");
 				}
 
-				// Hinzufügen gedrückt
-				if (input == 1) {
-					if (team.getText().equals("")) {
-						infoLabel.setText("Eingabe darf nicht leer sein");
-					} else {
-						infoLabel.setText(team.getText() + " wurde hinzugefügt");
+			} while (!validData);
 
-						mp.addNewTeam(new Team(team.getText(), "", inputCount));
-						inputCount++;
-					}
-				}
-
-				// Abbrechen gedrückt
-				if (input == 0) {
-
-				}
-				team.setText("");
-			} while (input == 1 || (input == 2 && inputCount % 2 != 0) || (input == 2 && inputCount < 4));
-
+			/*
+			 * Alte Eingabe do {
+			 * 
+			 * 
+			 * 
+			 * 
+			 * inputLabel.setText("Bitte das Team mit der ID " + inputCount + " eingeben");
+			 * input = JOptionPane.showOptionDialog(null, panel, "Teams hinzufügen",
+			 * JOptionPane.PLAIN_MESSAGE, 0, null, options, options[2]);
+			 * defaultValues.hide(); defaultValues.addItemListener( l ->{
+			 * if(l.getStateChange() == ItemEvent.SELECTED) {
+			 * inputLabel.setText("Anzahl zu erzeugender Teams eingeben:"); }
+			 * 
+			 * 
+			 * }); // Checkbox selected if (defaultValues.isSelected() && input == 2) { for
+			 * (int i = 0; i < 4; i++) {
+			 * 
+			 * mp.addNewTeam(new Team("<Bitte ändern>", "", i)); inputCount = 4; }
+			 * 
+			 * } // Fertig gedrückt // Team Anzahl kleiner Vier if (input == 2 && inputCount
+			 * < 4) { team.setText("");
+			 * 
+			 * infoLabel.setText("Sie müssen mindestens vier Teams hinzufügen!"); input =
+			 * JOptionPane.showOptionDialog(null, panel, "Neuen Matchplan erstellen",
+			 * JOptionPane.PLAIN_MESSAGE, 0, null, options, options[1]);
+			 * 
+			 * }
+			 * 
+			 * // Ungerade Anzahl an Teams if (input == 2 && inputCount % 2 != 0) {
+			 * team.setText("");
+			 * infoLabel.setText("Sie müssen eine gerade Anzahl an Teams hinzufügen!");
+			 * input = JOptionPane.showOptionDialog(null, panel, "Confirmation",
+			 * JOptionPane.PLAIN_MESSAGE, 0, null, options, options[2]);
+			 * 
+			 * }
+			 * 
+			 * // Fertig gedrückt & alle Eingaben korrekt if (input == 2 && inputCount % 2
+			 * == 0 && inputCount > 3) { save = false; mp.refreshPlan();
+			 * tabbedPane.removeAll(); TreeSet<LocalDate> keyTree= new
+			 * TreeSet(mp.season.keySet()); for (LocalDate key : keyTree) { JList
+			 * displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
+			 * tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches)); }
+			 * 
+			 * System.out.println("es wird refresht"); }
+			 * 
+			 * // Hinzufügen gedrückt if (input == 1) { if (team.getText().equals("")) {
+			 * infoLabel.setText("Eingabe darf nicht leer sein"); } else {
+			 * infoLabel.setText(team.getText() + " wurde hinzugefügt");
+			 * 
+			 * mp.addNewTeam(new Team(team.getText(), "", inputCount)); inputCount++; } }
+			 * 
+			 * // Abbrechen gedrückt if (input == 0) {
+			 * 
+			 * } team.setText(""); } while (input == 1 || (input == 2 && inputCount % 2 !=
+			 * 0) || (input == 2 && inputCount < 4));
+			 */
 			// hier ein ausgabe Test von Teams
 
 			for (int i = 0; i < mp.teams.size(); i++) {
