@@ -44,7 +44,7 @@ public class Team {
 
 	@Override
 	public String toString() {
-		return "Team [name=" + name + ", shortname=" + shortname + "]";
+		return "Team [name=" + name + ", shortname=" + shortname +  ", id=" + id +"]";
 	}
 
 }
