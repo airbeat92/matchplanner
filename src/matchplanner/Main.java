@@ -20,7 +20,7 @@ public class Main {
 				}
 
 				try {
-					new MatchplanerGUI();
+					//new MatchplanerGUI();
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -45,29 +45,37 @@ public class Main {
 		mtest.createPlan();
 		
 		
-		LocalDate test = LocalDate.of(2000, 1, 1);
-		LocalDate test2 = LocalDate.of(2000, 1, 2);
-		LocalDate test3 = LocalDate.of(2000, 1, 3);
+		ArrayList<LocalDate> datesC = new ArrayList(mtest.createDates(4));
 		
-		System.out.println("---Spieltag 1---");
-		Object [] array = mtest.season.get(test).toObjectArray(mtest);
-		for (int i = 0; i < array.length; i++) {
-			System.out.println(array[i]);
-		}
-		System.out.println();
+//		
+//		
+//		LocalDate test = LocalDate.now();
+//		LocalDate test2 = test;
+//		test2.plusDays(1);
+//		LocalDate test3 = test;
+//		test2.plusDays(2);
+//		
+//		System.out.println("---Spieltag 1---");
+//		Object [] array = mtest.season.get(test).toObjectArray(mtest);
+//		for (int i = 0; i < array.length; i++) {
+//			System.out.println(array[i]);
+//		}
+//		System.out.println();
+//		
+//		System.out.println("---Spieltag 2---");
+//		Object [] array1 = mtest.season.get(test2).toObjectArray(mtest);
+//		for (int i = 0; i < array.length; i++) {
+//			System.out.println(array1[i]);
+//		}
+//		System.out.println();
+//		
+//		System.out.println("---Spieltag 3---");
+//		Object [] array2 = mtest.season.get(test3).toObjectArray(mtest);
+//		for (int i = 0; i < array.length; i++) {
+//			System.out.println(array2[i]);
+//		}
 		
-		System.out.println("---Spieltag 2---");
-		Object [] array1 = mtest.season.get(test2).toObjectArray(mtest);
-		for (int i = 0; i < array.length; i++) {
-			System.out.println(array1[i]);
-		}
-		System.out.println();
 		
-		System.out.println("---Spieltag 3---");
-		Object [] array2 = mtest.season.get(test3).toObjectArray(mtest);
-		for (int i = 0; i < array.length; i++) {
-			System.out.println(array2[i]);
-		}
 		
 		
 
