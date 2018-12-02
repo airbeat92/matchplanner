@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.TreeSet;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -38,6 +39,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	public static final DateTimeFormatter DF = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
 	
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
+	JTabbedPane outerPane = new JTabbedPane();
 
 	public MatchplanerGUI() {
 		/*
@@ -57,15 +59,27 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		JMenuBar menuBar = new JMenuBar();
 		getContentPane().add(menuBar, BorderLayout.NORTH);
-
+		
+		
+		//TEST
+		
+		String [] test = {"test1", "test2"};
+		
 		// Menuitem File
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
-
+		
+		
+		//Liste für Mannschaftsanzeige
+		DefaultListModel teamModel = new DefaultListModel();
+		JList teamList = new JList(teamModel);
+		
 		// JTabbedPane hinzufügen
 		
-		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-
+		outerPane.addTab("Spiele", tabbedPane);
+		outerPane.addTab("Manschaften", teamList);
+		getContentPane().add(outerPane, BorderLayout.CENTER);
+		
 		// Setze boolean save auf false wenn das neue Team erstellt wurde
 
 		JMenuItem mntmNeu = new JMenuItem("Neu");
@@ -136,6 +150,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				if (selectedValue.equals(options[1]) && defaultValues.isSelected() && validData) {
 					for (int i = 0; i < Integer.parseInt(inputField.getText()); i++) {
 						mp.addNewTeam(new Team("< "+i+" Bitte ändern>", "", i));
+						teamModel.addElement("< "+i+" Bitte ändern>");
 
 					}
 					save = false;
@@ -156,6 +171,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 						if (selectedValue.equals(options[1])) {
 							infoLabel.setText(inputField.getText() + " wurde hinzugefügt");
 							mp.addNewTeam(new Team(inputField.getText(), "", i));
+							teamModel.addElement(inputField.getText());
 						}
 						
 						if (selectedValue.equals(options[0])) {
@@ -332,6 +348,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		});
 		mnExtras.add(mntmSpieltage);
 
+		
+		
 		// Dummy Füllung
 		Object[] dummyMatchdays = new Object[1];
 		dummyMatchdays[0] = "1. HF Toll : FC Code";
