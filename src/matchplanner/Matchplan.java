@@ -57,7 +57,7 @@ public class Matchplan {
      * Erstellt dein eigentlichen Matchplan
      */
     public void createPlan() {
-        LocalDate defaultDate = LocalDate.of(2000, 1, 1);
+        LocalDate defaultDate = LocalDate.now();
 
         for (int i = 0; i < mLeague.getTeams() - 1; i++) {
             List<Match> tempM = new ArrayList();
