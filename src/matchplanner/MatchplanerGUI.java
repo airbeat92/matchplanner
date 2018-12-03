@@ -285,7 +285,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmClose.addActionListener((e) -> {
 
 			closeDialog();
-			changeMenu(false);
 
 		});
 
@@ -354,6 +353,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				tabbedPane.removeAll();
 				dummyFill();
 				save = true;
+				changeMenu(false);
 			}
 			if (JOptionPane.NO_OPTION == result) {
 				// Speichern aufrufen
