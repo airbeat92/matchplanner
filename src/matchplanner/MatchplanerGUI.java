@@ -87,7 +87,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		
 		
 		
-		//Neues Team �ber Men�option "Neu" hinzuf�gen
+		//Neues Team �ber Men�option "Neu" hinzuf�gen
 		//todo:
 		// Setze boolean save auf false wenn das neue Team erstellt wurde
 		mntmNeu.setEnabled(mp == null);
@@ -123,7 +123,10 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				Object selectedValue = pane.getValue();
 
 				validData = true;
-
+				// Abbrechen gedrückt bei Zahleneingabe
+				if (selectedValue.equals(options[0])) {
+					break;
+				}
 				if (inputField.getText().replaceAll("[0-9]","").length()>0) {
 					failLabel.setText("Sie müssen eine Zahl eingeben!");
 
@@ -145,13 +148,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				if (inputField.getText().equals("")) {
 					failLabel.setText("Das Eingabefeld darf nicht leer sein");
 				}
-				// Abbrechen gedrückt
-				if (selectedValue.equals(options[0])) {
 
-				}
 				// Teams mit default Werten erzeugen
 				if (selectedValue.equals(options[1]) && defaultValues.isSelected() && validData) {
 					for (int i = 0; i < Integer.parseInt(inputField.getText()); i++) {
+						
 						mp.addNewTeam(new Team("< " + i + " Bitte ändern>", "", i));
 						teamModel.addElement("< " + i + " Bitte ändern>");
 
@@ -179,17 +180,20 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 						}
 
 						if (selectedValue.equals(options[0])) {
-
+							mp.teams.clear();
+							teamModel.removeAllElements();
 							// hier brauchen wir noch eine methode um teams wieder zurückzusetzen, wenn
 							// abbrechen gedrückt wurde
 
 							break;
 						}
-
+						if(i==count-1) {
+							refreshTabbedPane();
+							changeMenu(true);
+							save = false;
+						}
 					}
-					refreshTabbedPane();
-					changeMenu(true);
-					save = false;
+					
 
 				}
 
