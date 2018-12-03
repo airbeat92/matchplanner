@@ -6,6 +6,9 @@
 package matchplanner;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -24,6 +27,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
+
+
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -37,8 +44,15 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	private boolean save = true;
 	public static final DateTimeFormatter DF = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
 
+
+	
+    JTabbedPane outerPane = new JTabbedPane();
+		
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
-	JTabbedPane outerPane = new JTabbedPane();
+	
+	
+	
+
 
 // MenuItems hinzufügen
 	//Datei
@@ -62,7 +76,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		this.setVisible(true);
-
+		
 		/*
 		 * menubar with actionlisteners
 		 */
@@ -79,7 +93,10 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JList teamList = new JList(teamModel);
 
 		// JTabbedPane hinzufügen
-
+		outerPane.setUI(new FlatTabbedUI());
+		outerPane.setBackground(Color.white);
+		outerPane.setBackground(new Color(255, 50, 0));
+		outerPane.setOpaque(true);
 		outerPane.addTab("Spiele", tabbedPane);
 		outerPane.addTab("Manschaften", teamList);
 		getContentPane().add(outerPane, BorderLayout.CENTER);
