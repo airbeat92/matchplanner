@@ -84,8 +84,12 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		outerPane.addTab("Manschaften", teamList);
 		getContentPane().add(outerPane, BorderLayout.CENTER);
 
+		
+		
+		
+		//Neues Team über Menüoption "Neu" hinzufügen
+		//todo:
 		// Setze boolean save auf false wenn das neue Team erstellt wurde
-
 		mntmNeu.setEnabled(mp == null);
 		mntmNeu.addActionListener((e) -> {
 			Object[] options = { "Abbrechen", "Erzeugen" };
@@ -120,7 +124,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 				validData = true;
 
-				if (!inputField.getText().matches("[0-9]")) {
+				if (inputField.getText().replaceAll("[0-9]","").length()>0) {
 					failLabel.setText("Sie mÃ¼ssen eine Zahl eingeben!");
 
 					validData = false;
