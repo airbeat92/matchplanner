@@ -83,8 +83,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		// Menuitem File
 		menuBar.add(mnDatei);
 		menuBar.add(mnExtras);
+		//Setzt das nächste MenuItem nach Rechts
 		menuBar.add(Box.createHorizontalGlue());
 		menuBar.add(saveFlag);
+		
+		//Menu und Flag auf korrekten Wert setzen
 		setDataSave(true);
 		changeMenu(false);
 		
@@ -300,6 +303,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(null, message);
 
 		});
+		mnDatei.add(mntmSpeichern);
 
 		// MenuItem Schließen
 		mnDatei.add(mntmClose);
@@ -310,9 +314,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		});
 
 		mnDatei.addSeparator();
-
-		// MenuItem Speichern
-		mnDatei.add(mntmSpeichern);
+		
 
 		// MenuItem Speichern unter
 		mntmSpeichernUnter.addActionListener((e) -> {
