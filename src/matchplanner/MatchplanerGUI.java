@@ -6,11 +6,14 @@
 package matchplanner;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.TreeSet;
 
+import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -24,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -40,16 +44,23 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 	JTabbedPane outerPane = new JTabbedPane();
 
-// MenuItems hinzufügen
+// Menu hinzufügen
 	//Datei
+	JMenu mnDatei = new JMenu("Datei");
+	
 	JMenuItem mntmNeu = new JMenuItem("Neu");
 	JMenuItem mntmOffnen = new JMenuItem("Öffnen");
 	JMenuItem mntmClose = new JMenuItem("Schließen");
 	JMenuItem mntmSpeichern = new JMenuItem("Speichern");
 	JMenuItem mntmSpeichernUnter = new JMenuItem("Speichern unter");
 	//Extras
+	JMenu mnExtras = new JMenu("Extras");
+	
 	JMenuItem mntmManschaften = new JMenuItem("Mannschaften bearbeiten");
 	JMenuItem mntmSpieltage = new JMenuItem("Spieltage bearbeiten");
+	
+	//Flag Label
+	JLabel saveFlag = new JLabel();
 
 	public MatchplanerGUI() {
 		/*
@@ -70,27 +81,30 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		getContentPane().add(menuBar, BorderLayout.NORTH);
 
 		// Menuitem File
-		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
+		menuBar.add(mnExtras);
+		menuBar.add(Box.createHorizontalGlue());
+		menuBar.add(saveFlag);
+		setDataSave(true);
 		changeMenu(false);
+		
+
 
 		// Liste für Mannschaftsanzeige
 		DefaultListModel teamModel = new DefaultListModel();
 		JList teamList = new JList(teamModel);
 
 		// JTabbedPane hinzufügen
-
 		outerPane.addTab("Spiele", tabbedPane);
 		outerPane.addTab("Manschaften", teamList);
 		getContentPane().add(outerPane, BorderLayout.CENTER);
 
 		
 		
-		
+//Menu Datei
 		//Neues Team �ber Men�option "Neu" hinzuf�gen
 		//todo:
 		// Setze boolean save auf false wenn das neue Team erstellt wurde
-		mntmNeu.setEnabled(mp == null);
 		mntmNeu.addActionListener((e) -> {
 			Object[] options = { "Abbrechen", "Erzeugen" };
 			JPanel panel = new JPanel(new BorderLayout());
@@ -157,7 +171,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 						teamModel.addElement("< " + i + " Bitte ändern>");
 
 					}
-					save = false;
+					setDataSave(false);
 					changeMenu(true);
 					refreshTabbedPane();
 				}
@@ -190,7 +204,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 						if(i==count-1) {
 							refreshTabbedPane();
 							changeMenu(true);
-							save = false;
+							setDataSave(false);
 						}
 					}
 					
@@ -285,7 +299,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			String message = "=> Aenderungen am Spielplan speichern";
 			JOptionPane.showMessageDialog(null, message);
 
-			save = true;
 		});
 
 		// MenuItem Schließen
@@ -327,9 +340,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 //		menuitem Extras
 
-		JMenu mnExtras = new JMenu("Extras");
-		menuBar.add(mnExtras);
-
 		// MenuItem Mannschaften bearbeiten
 		mntmManschaften.addActionListener((e) -> {
 			String message = "=> Mannschaften verändern";
@@ -360,7 +370,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				mp = null;
 				tabbedPane.removeAll();
 				dummyFill();
-				save = true;
+				setDataSave(true);
 				changeMenu(false);
 			}
 			if (JOptionPane.NO_OPTION == result) {
@@ -370,11 +380,23 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	}
 
 	// Methoden
+	
+	/*
+	 * Setzt save auf false und zeigt ein Flag in der GUI.
+	 */
+	private void setDataSave(boolean save) {
+		saveFlag.setVisible(!save);
+		saveFlag.setForeground(Color.RED);
+		saveFlag.setText("Ungespeicherte Änderungen!");
+		this.save = (save);
+	}
+	
+	
 
 	/*
 	 * Stell das Menü um. Parameter ob Spieltag geöffnet ist übergeben.
 	 */
-	public void changeMenu(boolean fileOpen) {
+	private void changeMenu(boolean fileOpen) {
 		mntmNeu.setEnabled(!fileOpen);
 		mntmOffnen.setEnabled(!fileOpen);
 		mntmClose.setEnabled(fileOpen);
