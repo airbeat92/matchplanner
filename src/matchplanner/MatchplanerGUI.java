@@ -127,7 +127,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				if (selectedValue.equals(options[0])) {
 					break;
 				}
-				if (inputField.getText().replaceAll("[0-9]","").length()>0) {
+				if (inputField.getText().replaceAll("[0-9]", "").length()>0 || inputField.getText().equals("")) {
 					failLabel.setText("Sie müssen eine Zahl eingeben!");
 
 					validData = false;
