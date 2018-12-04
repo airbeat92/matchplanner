@@ -149,7 +149,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JTextField teamCountField = new JTextField();
 		JButton deleteTeamButton = new JButton("-");
 		deleteTeamButton.addActionListener(l->{
-			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText())+2)));
+			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText())-2)));
 		});
 		JButton addTeamButton = new JButton("+");
 		addTeamButton.addActionListener(l->{
@@ -164,12 +164,14 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				boolean validData =true;
+				
 				if(teamCountField.getText().equals(""))
 					validData=false;
 				if(!teamCountField.getText().equals("")) {
 				if (teamCountField.getText().replaceAll("[0-9]", "").length() > 0) {
 					failLabelNew.setText("Sie müssen eine Zahl eingeben!");
 					validData=false;
+					
 
 					
 				} else {
@@ -187,7 +189,12 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 //
 				}
 				}
+				
+				addTeamButton.setEnabled(validData);
+				deleteTeamButton.setEnabled(validData);
 				if(validData) {
+					if(Integer.parseInt(teamCountField.getText())==4)
+						deleteTeamButton.setEnabled(false);
 					teamModel.removeAllElements();
 					failLabelNew.setText("");
 					for (int i = 0; i < Integer.parseInt(teamCountField.getText()); i++) {
@@ -216,6 +223,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			
 		});
 		teamCountField.getDocument().putProperty("name", "Text Field");
+		
+		
 		if (mpIsOpen)
 			headlineLabelnew.setText("Spielplan bearbeiten");
 		else
@@ -228,6 +237,33 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		teamNameEditField.addFocusListener(new DefaultTextFocusListener(teamNameEditField,"Teamname"));
 		teamShortnameEditField.addFocusListener(new DefaultTextFocusListener(teamShortnameEditField,"Kürzel"));
 		teamIDEditField.addFocusListener(new DefaultTextFocusListener(teamIDEditField,"ID"));
+		teamIDEditField.setEnabled(false);
+		
+		
+		
+		teamNameEditField.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if(!teamNameEditField.getText().equals("Teamname")) {
+				int selected =teamList.getSelectedIndex();
+				teamModel.setElementAt(teamNameEditField.getText(), selected);
+				}
+				
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 
 		
