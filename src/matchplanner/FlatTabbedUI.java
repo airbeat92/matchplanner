@@ -28,7 +28,9 @@ public class FlatTabbedUI extends BasicTabbedPaneUI {
 		tempColor = SELECTED_BG;
 	}
 	
-	
+	public void setColor(Color c) {
+		tempColor = c;
+	}
 	
 
 	@Override

@@ -7,8 +7,6 @@ package matchplanner;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -20,17 +18,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.plaf.basic.BasicTabbedPaneUI;
-
-
+import javax.swing.UIManager;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -80,12 +74,22 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		/*
 		 * menubar with actionlisteners
 		 */
-		JMenuBar menuBar = new JMenuBar();
+		DarkMenuBar menuBar = new DarkMenuBar();
+		menuBar.setOpaque(true);
+		menuBar.setColor(Color.DARK_GRAY);
+		menuBar.setForeground(Color.WHITE);
+		
+		
+		menuBar.setBackground(Color.DARK_GRAY);
 		getContentPane().add(menuBar, BorderLayout.NORTH);
 
 		// Menuitem File
 		JMenu mnDatei = new JMenu("Datei");
+		mnDatei.setForeground(Color.WHITE);
 		menuBar.add(mnDatei);
+		JMenu mnExtras = new JMenu("Extras");
+		mnExtras.setForeground(Color.WHITE);
+		menuBar.add(mnExtras);
 		changeMenu(false);
 
 		// Liste für Mannschaftsanzeige
@@ -340,8 +344,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 //		menuitem Extras
 
-		JMenu mnExtras = new JMenu("Extras");
-		menuBar.add(mnExtras);
+		
 
 		// MenuItem Mannschaften bearbeiten
 		mntmManschaften.addActionListener((e) -> {
