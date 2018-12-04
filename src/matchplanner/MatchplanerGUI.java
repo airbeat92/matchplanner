@@ -95,6 +95,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		// Liste für Mannschaftsanzeige
 		DefaultListModel teamModel = new DefaultListModel();
 		JList teamList = new JList(teamModel);
+		teamList.setBackground(Color.GRAY);
+		teamList.setForeground(Color.WHITE);
 
 		// JTabbedPane hinzufügen
 		outerPane.setUI(new FlatTabbedUI());
@@ -414,6 +416,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				date = date.plusDays(1);
 			}
 			JList displayGames = new JList(dummyMatchdays);
+			displayGames.setBackground(Color.GRAY);
+			displayGames.setForeground(Color.WHITE);
 			tabbedPane.addTab(date.format(DF), new JScrollPane(displayGames));
 		}
 
@@ -425,6 +429,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		TreeSet<LocalDate> keyTree = new TreeSet(mp.season.keySet());
 		for (LocalDate key : keyTree) {
 			JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
+			displayMatches.setBackground(Color.GRAY);
+			displayMatches.setForeground(Color.WHITE);
 			tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
 		}
 	}
