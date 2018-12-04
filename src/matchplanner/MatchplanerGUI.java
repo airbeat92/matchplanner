@@ -14,6 +14,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -55,6 +57,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	JTextField teamNameEditField = new JTextField();
 	JTextField teamShortnameEditField = new JTextField();
 	JTextField teamIDEditField = new JTextField();
+	JLabel headlineLabeledit = new JLabel("Mannschaft bearbeiten");
 
 // Menu hinzufügen
 	// Datei
@@ -102,23 +105,34 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		// Menu und Flag auf korrekten Wert setzen
 		setDataSave(true);
 		changeMenu(false);
+		setTeamEditVisible(false);
 
 		// befüllt Dummy Werte
 //		dummyFill();
 
-		// POINTER
 
 		// MannschaftenTab
 
 		// Liste für Mannschaftsanzeige
 		DefaultListModel teamModel = new DefaultListModel();
 		JList teamList = new JList(teamModel);
-
+		teamList.addListSelectionListener(l ->{
+			setTeamEditVisible(true);
+			teamNameEditField.setText("Teamname");
+			teamNameEditField.setForeground(Color.LIGHT_GRAY);
+			teamShortnameEditField.setText("Kürzel");
+			teamShortnameEditField.setForeground(Color.LIGHT_GRAY);
+			teamIDEditField.setText("ID");
+			teamIDEditField.setForeground(Color.LIGHT_GRAY);
+		});
+		
+		
+		
 		JPanel teamPanel = new JPanel();
+		
+		
+		
 		JPanel addMatchplanPanel = new JPanel();
-
-		
-		
 		addMatchplanPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		addMatchplanPanel.setPreferredSize(new Dimension((int) (this.getWidth() * 0.3), this.getHeight()));
@@ -134,6 +148,60 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JButton deleteTeamButton = new JButton("-");
 		JButton addTeamButton = new JButton("+");
 		JLabel failLabelNew = new JLabel("Fail");
+		
+		teamCountField.addKeyListener(new KeyListener() {
+			boolean validData =true;
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				boolean validData =true;
+				if(teamCountField.getText().equals(""))
+					validData=false;
+				if(!teamCountField.getText().equals("")) {
+				if (teamCountField.getText().replaceAll("[0-9]", "").length() > 0) {
+					failLabelNew.setText("Sie müssen eine Zahl eingeben!");
+					validData=false;
+
+					
+				} else {
+					if (Integer.parseInt(teamCountField.getText()) % 2 != 0) {
+						failLabelNew.setText("Sie müssen eine gerade Anzahl an Teams eingeben!");
+						validData=false;
+						
+					}
+
+					if (Integer.parseInt(teamCountField.getText()) < 4) {
+						failLabelNew.setText("Sie müssen mindestens vier Teams erzeugen!");
+						validData=false;
+						
+					}
+//
+				}
+				}
+				if(validData) {
+					teamModel.removeAllElements();
+					failLabelNew.setText("");
+					for (int i = 0; i < Integer.parseInt(teamCountField.getText()); i++) {
+						
+//						mp.addNewTeam(new Team("< " + i + " Bitte ändern>", "", i));
+						teamModel.addElement("< " + i + " Bitte ändern>");
+					}
+				}
+
+				
+			}
+			
+		});
+		
 		if (mpIsOpen)
 			headlineLabelnew.setText("Spielplan bearbeiten");
 		else
@@ -141,32 +209,13 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JButton createMatchplanButton = new JButton("Spielplan erstellen");
 		
 		//teamEdit
-		JLabel headlineLabeledit = new JLabel("Mannschaft bearbeiten");
+		
 		headlineLabeledit.setFont(new Font("Helvetica", Font.BOLD, 14));
-		teamNameEditField.setText("Teamname");
-		teamNameEditField.setForeground(Color.LIGHT_GRAY);
-		teamNameEditField.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				if(teamNameEditField.getText().equals(""));{
-				teamNameEditField.setText("Teamname");
-				teamNameEditField.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				if(teamNameEditField.getText().equals("Teamname"));
-				teamNameEditField.setText("");
-				teamNameEditField.setForeground(Color.BLACK);
-				
-			}
-		});
-		teamNameEditField.setToolTipText("Kürzel");
-		teamNameEditField.setToolTipText("ID");
+		teamNameEditField.addFocusListener(new DefaultTextFocusListener(teamNameEditField,"Teamname"));
+		teamShortnameEditField.addFocusListener(new DefaultTextFocusListener(teamShortnameEditField,"Kürzel"));
+		teamIDEditField.addFocusListener(new DefaultTextFocusListener(teamIDEditField,"ID"));
 		
-		
+
 		
 		c.insets = new Insets(20,0,0,0);
 		c.gridx = 0;
@@ -239,7 +288,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		teamPanel.add(addMatchplanPanel, BorderLayout.EAST);
 
 		// JTabbedPane
-		outerPane.addTab("mannschaften", teamPanel);
+		outerPane.addTab("Mannschaften", teamPanel);
 		outerPane.addTab("Spiele", tabbedPane);
 		getContentPane().add(outerPane, BorderLayout.CENTER);
 
@@ -382,6 +431,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmClose.addActionListener((e) -> {
 
 			closeDialog();
+			
 
 		});
 		mnDatei.add(mntmClose);
@@ -456,6 +506,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				dummyFill();
 				setDataSave(true);
 				changeMenu(false);
+				headlineLabelnew.setText("Spielplan erstellen");
 			}
 			if (JOptionPane.NO_OPTION == result) {
 				// Speichern aufrufen
@@ -486,7 +537,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmSpeichernUnter.setEnabled(fileOpen);
 		mntmMannschaften.setEnabled(fileOpen);
 		mntmSpieltage.setEnabled(fileOpen);
-		headlineLabelnew.setText("Spieplan bearbeiten");
+		headlineLabelnew.setText("Spielplan bearbeiten");
 		
 
 	}
@@ -529,6 +580,13 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		setDataSave(true);
 		changeMenu(false);
 
+	}
+	
+	private void setTeamEditVisible(boolean bool) {
+		headlineLabeledit.setVisible(bool);
+		teamNameEditField.setVisible(bool);
+		teamShortnameEditField.setVisible(bool);
+		teamIDEditField.setVisible(bool);
 	}
 
 }
