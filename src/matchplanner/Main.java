@@ -36,16 +36,7 @@ public class Main {
 		Matchplan testPlan = new Matchplan();
 		testPlan.createLeague(18);
 	
-		CSVReader test1 = new CSVReader("/Users/marvin/Downloads/Bundesliga-Wiest.csv");
-		try {
-			Matchplan testM = test1.importCSV();
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 
 	}
 }

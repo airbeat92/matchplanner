@@ -49,7 +49,7 @@ public class CSVReader {
 
 			if (line.contains("# Teams")) {
 				br.readLine();
-				while (!(line = br.readLine()).equals("")) {
+				while ((line = br.readLine()).contains(csvSplitBy) ) {
 					line = line.replaceAll(" ", "");
 					String[] team = line.split(csvSplitBy);
 					mp.addNewTeam(new Team(team[2], team[1], Integer.parseInt(team[0])));
@@ -57,7 +57,7 @@ public class CSVReader {
 			}
 
 			if (line.contains("# MatchDates")) {
-				while ((!((line = br.readLine()) == null)) && line.length() > 0) {
+				while ((!((line = br.readLine()) == null)) && line.replaceAll(" ", "").length() > 0) {
 					
 					dates.add(line);
 				}

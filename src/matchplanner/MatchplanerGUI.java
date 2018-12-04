@@ -15,6 +15,7 @@ import java.time.format.FormatStyle;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -217,17 +218,23 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		// MenuItem Öffnen
 		mntmOffnen.addActionListener((e) -> {
-//			String message = "=> vorhandenen Spielplan öffnen";
 
-			// Bedingung später hinfällig, da auf das erfolgreiche Laden geprüft werden muss
-			// Erstellt Spieltag Tabs mit den Begegnungen als Liste
+			
+			// JFileChooser-Objekt erstellen
+	        JFileChooser chooser = new JFileChooser();
+	        // Dialog zum Oeffnen von Dateien anzeigen
+	        int select = chooser.showDialog(null, "Öffnen");
+	        if(select == JFileChooser.APPROVE_OPTION)
+	        {
+	        	String filePath = chooser.getSelectedFile().getAbsolutePath();
+	        	openFile(filePath);
+	        	changeMenu(true);
+	        	setDataSave(false);
 
-			openFile();
-			changeMenu(true);
-			setDataSave(false);
-
-//
-//			JOptionPane.showMessageDialog(null, message);
+	        }
+			
+			
+			
 		});
 		mnDatei.add(mntmOffnen);
 
@@ -385,10 +392,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 	}
 
-	private void openFile() {
-		CSVReader test1 = new CSVReader("/Users/marvin/Downloads/Bundesliga-Wiest.csv");
+	private void openFile(String path) {
+		CSVReader reader = new CSVReader(path);
 		try {
-			mp = test1.importCSV();
+			mp = reader.importCSV();
+			refreshTabbedPane(false);
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -396,7 +404,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		refreshTabbedPane(false);
+		
 	}
 
 }
