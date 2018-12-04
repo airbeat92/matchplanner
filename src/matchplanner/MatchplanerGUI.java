@@ -249,6 +249,10 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmSpeichern.addActionListener(e -> {
 			String message = "=> Aenderungen am Spielplan speichern";
 			JOptionPane.showMessageDialog(null, message);
+			
+			saveData();
+			
+			
 
 		});
 		mnDatei.add(mntmSpeichern);
@@ -257,6 +261,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmSpeichernUnter.addActionListener((e) -> {
 			String message = "=> geöffneten Spielplan als neue Datei speichern";
 			JOptionPane.showMessageDialog(null, message);
+			
+			saveData();
 		});
 		mnDatei.add(mntmSpeichernUnter);
 
@@ -371,7 +377,12 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	}
 
 	private void saveData() {
-		throw new NotImplementedException();
+		mp = null;
+		tabbedPane.removeAll();
+		dummyFill();
+		setDataSave(true);
+		changeMenu(false);
+		
 	}
 
 }
