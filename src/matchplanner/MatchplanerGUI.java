@@ -94,10 +94,14 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		// JTabbedPane hinzufügen
 		outerPane.setUI(new FlatTabbedUI());
-		outerPane.setBackground(Color.white);
-		outerPane.setBackground(new Color(255, 50, 0));
+		outerPane.setBackground(Color.DARK_GRAY);
 		outerPane.setOpaque(true);
+		tabbedPane.setUI(new FlatTabbedUI(true));
+		
+		
 		outerPane.addTab("Spiele", tabbedPane);
+		tabbedPane.setBackground(Color.DARK_GRAY);
+		tabbedPane.setOpaque(true);
 		outerPane.addTab("Manschaften", teamList);
 		getContentPane().add(outerPane, BorderLayout.CENTER);
 
