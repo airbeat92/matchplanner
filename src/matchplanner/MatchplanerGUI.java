@@ -37,6 +37,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -146,23 +148,21 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		JTextField teamCountField = new JTextField();
 		JButton deleteTeamButton = new JButton("-");
+		deleteTeamButton.addActionListener(l->{
+			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText())+2)));
+		});
 		JButton addTeamButton = new JButton("+");
+		addTeamButton.addActionListener(l->{
+			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText())+2)));
+		});
 		JLabel failLabelNew = new JLabel();
 		
-		teamCountField.addKeyListener(new KeyListener() {
+		teamCountField.getDocument().addDocumentListener(new DocumentListener() {
 			boolean validData =true;
-			@Override
-			public void keyTyped(KeyEvent e) {
-				
-			}
+			
 
 			@Override
-			public void keyPressed(KeyEvent e) {
-				
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
+			public void insertUpdate(DocumentEvent e) {
 				boolean validData =true;
 				if(teamCountField.getText().equals(""))
 					validData=false;
@@ -196,12 +196,26 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 						teamModel.addElement("< " + i + " Bitte ändern>");
 					}
 				}
-
 				
 			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+
+				}
+				
+
+				
+			
 			
 		});
-		
+		teamCountField.getDocument().putProperty("name", "Text Field");
 		if (mpIsOpen)
 			headlineLabelnew.setText("Spielplan bearbeiten");
 		else
