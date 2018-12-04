@@ -1,7 +1,10 @@
 package matchplanner;
 
 import java.awt.EventQueue;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,23 +32,20 @@ public class Main {
 		});
 
 //		 Hier wird getestet
-
-		List<Team> test1 = new ArrayList();
-		test1.add(new Team("Vfb Stuttgart", "VFB",1));
-		test1.add(new Team("BVB Dortmund", "BVB",2));
-		test1.add(new Team("FCB München", "FCB",3));
-		test1.add(new Team("RB Leipzig", "RBL",4));
-
-		Matchplan mtest = new Matchplan(test1);
 		
-		mtest.teams.add(new Team("Lang", "Kurz", 5 ));
-		mtest.teams.add(new Team("Lang1", "Kurz1", 6 ));
-		
-		mtest.createLeague(mtest.teams.size());
-		mtest.createPlan();
-		
-		
-		ArrayList<LocalDate> datesC = new ArrayList(mtest.createDates(4));
+		Matchplan testPlan = new Matchplan();
+		testPlan.createLeague(18);
+	
+		CSVReader test1 = new CSVReader("/Users/marvin/Downloads/Bundesliga-Wiest.csv");
+		try {
+			Matchplan testM = test1.importCSV();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 }

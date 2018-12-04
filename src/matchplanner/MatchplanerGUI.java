@@ -7,10 +7,10 @@ package matchplanner;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.TreeSet;
 
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
@@ -26,8 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -90,7 +88,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		changeMenu(false);
 
 		// befüllt Dummy Werte
-		dummyFill();
+		// dummyFill();
 
 		// Liste für Mannschaftsanzeige
 		DefaultListModel teamModel = new DefaultListModel();
@@ -173,7 +171,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					}
 					setDataSave(false);
 					changeMenu(true);
-					refreshTabbedPane();
+					refreshTabbedPane(true);
 				}
 
 				// Teams von Hand erzeugen
@@ -202,7 +200,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 							break;
 						}
 						if (i == count - 1) {
-							refreshTabbedPane();
+							refreshTabbedPane(true);
 							changeMenu(true);
 							setDataSave(false);
 						}
@@ -219,19 +217,17 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		// MenuItem Öffnen
 		mntmOffnen.addActionListener((e) -> {
-			String message = "=> vorhandenen Spielplan öffnen";
+//			String message = "=> vorhandenen Spielplan öffnen";
 
 			// Bedingung später hinfällig, da auf das erfolgreiche Laden geprüft werden muss
 			// Erstellt Spieltag Tabs mit den Begegnungen als Liste
-			if (mp != null) {
 
-				for (LocalDate key : mp.season.keySet()) {
-					JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
-					tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
-				}
-			}
+			openFile();
+			changeMenu(true);
+			setDataSave(false);
 
-			JOptionPane.showMessageDialog(null, message);
+//
+//			JOptionPane.showMessageDialog(null, message);
 		});
 		mnDatei.add(mntmOffnen);
 
@@ -249,10 +245,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmSpeichern.addActionListener(e -> {
 			String message = "=> Aenderungen am Spielplan speichern";
 			JOptionPane.showMessageDialog(null, message);
-			
+
 			saveData();
-			
-			
 
 		});
 		mnDatei.add(mntmSpeichern);
@@ -261,7 +255,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmSpeichernUnter.addActionListener((e) -> {
 			String message = "=> geöffneten Spielplan als neue Datei speichern";
 			JOptionPane.showMessageDialog(null, message);
-			
+
 			saveData();
 		});
 		mnDatei.add(mntmSpeichernUnter);
@@ -366,14 +360,20 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 	}
 
-	private void refreshTabbedPane() {
-		mp.refreshPlan();
-		tabbedPane.removeAll();
-		TreeSet<LocalDate> keyTree = new TreeSet(mp.season.keySet());
-		for (LocalDate key : keyTree) {
-			JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
-			tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
+	/*
+	 * Parameter gibt an ob der Plan refreshed werden soll. Nur bei Änderungen am
+	 * Plan.
+	 */
+	private void refreshTabbedPane(boolean refresh) {
+		if (refresh) {
+			mp.refreshPlan();
 		}
+		tabbedPane.removeAll();
+		mp.season.forEach(a -> {
+			JList displayMatches = new JList(a.toObjectArray(mp));
+			tabbedPane.addTab(a.getMatchDate().format(DF), new JScrollPane(displayMatches));
+		});
+
 	}
 
 	private void saveData() {
@@ -382,7 +382,21 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		dummyFill();
 		setDataSave(true);
 		changeMenu(false);
-		
+
+	}
+
+	private void openFile() {
+		CSVReader test1 = new CSVReader("/Users/marvin/Downloads/Bundesliga-Wiest.csv");
+		try {
+			mp = test1.importCSV();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		refreshTabbedPane(false);
 	}
 
 }
