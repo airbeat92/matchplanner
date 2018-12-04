@@ -147,7 +147,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JTextField teamCountField = new JTextField();
 		JButton deleteTeamButton = new JButton("-");
 		JButton addTeamButton = new JButton("+");
-		JLabel failLabelNew = new JLabel("Fail");
+		JLabel failLabelNew = new JLabel();
 		
 		teamCountField.addKeyListener(new KeyListener() {
 			boolean validData =true;
