@@ -102,7 +102,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		outerPane.setUI(new FlatTabbedUI());
 		outerPane.setBackground(Color.DARK_GRAY);
 		outerPane.setOpaque(true);
-		tabbedPane.setUI(new FlatTabbedUI(true));
+		tabbedPane.setUI(new FlatTabbedUI(Color.GRAY));
+		
 		
 		
 		outerPane.addTab("Spiele", tabbedPane);
@@ -147,7 +148,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 				validData = true;
 
-				if (!inputField.getText().matches("[0-9]")) {
+				if (inputField.getText().replaceAll("[0-9]","").length()>0 ) {
 					failLabel.setText("Sie müssen eine Zahl eingeben!");
 
 					validData = false;

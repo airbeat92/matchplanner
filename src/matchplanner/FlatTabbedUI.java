@@ -24,14 +24,18 @@ public class FlatTabbedUI extends BasicTabbedPaneUI {
 
 	}
 	
-	public FlatTabbedUI(boolean b) {
-		tempColor = SELECTED_BG;
+	public FlatTabbedUI(Color b) {
+		tempColor = b;
 	}
 	
-	public void setColor(Color c) {
-		tempColor = c;
-	}
 	
+	
+	
+
+	@Override
+	protected void paintContentBorder(Graphics g, int tabPlacement, int selectedIndex) {
+		// Do not paint anything
+	}
 
 	@Override
 	protected void paintFocusIndicator(Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex,
