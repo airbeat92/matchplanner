@@ -231,7 +231,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			if(mp==null) {
 				mp = new Matchplan();
 			}
-			//
+		
 				refreshMpTeams();
 				setDataSave(false);
 				mpIsOpen = true;
