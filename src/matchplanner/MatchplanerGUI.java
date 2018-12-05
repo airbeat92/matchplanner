@@ -64,6 +64,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	JLabel headlineLabelnew = new JLabel();
 	JLabel infoLabelNew = new JLabel();
 	JTextField teamCountField = new JTextField();
+	JButton createMatchplanButton = new JButton();
 
 	// edit Panel
 	JTextField teamNameEditField = new JTextField();
@@ -225,7 +226,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			headlineLabelnew.setText("Spielplan bearbeiten");
 		else
 			headlineLabelnew.setText("Spielplan erstellen");
-		JButton createMatchplanButton = new JButton("Spielplan erstellen");
+		createMatchplanButton.setText("Spielplan erstellen");
 		createMatchplanButton.addActionListener(l->{
 			
 			if(mp==null) {
@@ -236,7 +237,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				setDataSave(false);
 				mpIsOpen = true;
 				changeMenu(true);
-				refreshTabbedPane(true);
+//				refreshTabbedPane(true);
 			
 			
 		});
@@ -592,6 +593,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmMannschaften.setEnabled(fileOpen);
 		mntmSpieltage.setEnabled(fileOpen);
 		headlineLabelnew.setText("Spielplan bearbeiten");
+		createMatchplanButton.setText("Spielplan erneuern");
 
 	}
 
