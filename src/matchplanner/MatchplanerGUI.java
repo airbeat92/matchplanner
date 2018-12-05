@@ -38,6 +38,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import design.DarkModeTabbedPane;
 import listeners.DefaultTextFocusListener;
 import listeners.EditFieldDocumentListener;
 import listeners.TeamCountFieldDocumentListener;
@@ -56,6 +57,8 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT); // für Spieltage
 	JTabbedPane outerPane = new JTabbedPane(); // für Mannschaften und Spiele
+	
+	
 
 	// Liste für Mannschaftsanzeige
 	DefaultListModel teamModel = new DefaultListModel();
@@ -95,6 +98,8 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 
 	public MatchplanerGUI() {
 		
+		
+		tabbedPane.setUI(new DarkModeTabbedPane(Color.LIGHT_GRAY,tabbedPane));
 		
 		/*
 		 * frame
