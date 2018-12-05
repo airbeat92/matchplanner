@@ -38,6 +38,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import listeners.DefaultTextFocusListener;
+
 /**
  *
  * @author Marcel, Marvin, Samet
@@ -48,25 +50,32 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	private boolean save = true;
 	private boolean mpIsOpen = false;
 	public static final DateTimeFormatter DF = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
-
-	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
-	JTabbedPane outerPane = new JTabbedPane();
+	
+	
+	
+	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT); //für Spieltage
+	JTabbedPane outerPane = new JTabbedPane(); //für Mannschaften und Spiele
 
 	// Liste für Mannschaftsanzeige
-	public DefaultListModel teamModel = new DefaultListModel();
+	DefaultListModel teamModel = new DefaultListModel();
 	JList teamList = new JList(teamModel);
 	
 	//Components für MatchplanPanel
+	JPanel teamPanel = new JPanel(); //Gesamtes Panel
+	//new/add Panel
 	JLabel headlineLabelnew = new JLabel();
+	JLabel infoLabelNew = new JLabel();
+	
+	//edit Panel
 	JTextField teamNameEditField = new JTextField();
 	JTextField teamShortnameEditField = new JTextField();
 	JTextField teamIDEditField = new JTextField();
 	JLabel headlineLabeledit = new JLabel("Mannschaft bearbeiten");
+	
 
-// Menu hinzufügen
+	// Menu hinzufügen
 	// Datei
 	JMenu mnDatei = new JMenu("Datei");
-
 	JMenuItem mntmNeu = new JMenuItem("Neu");
 	JMenuItem mntmOffnen = new JMenuItem("Öffnen");
 	JMenuItem mntmClose = new JMenuItem("Schließen");
@@ -74,7 +83,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	JMenuItem mntmSpeichernUnter = new JMenuItem("Speichern unter");
 	// Extras
 	JMenu mnExtras = new JMenu("Extras");
-
 	JMenuItem mntmMannschaften = new JMenuItem("Mannschaften bearbeiten");
 	JMenuItem mntmSpieltage = new JMenuItem("Spieltage bearbeiten");
 
@@ -113,8 +121,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		// MannschaftenTab
 
-		
-
+		//ManschaftenEdit anzeigen, wenn Mannschaft ausgewählt
 		teamList.addListSelectionListener(l -> {
 			setTeamEditVisible(true);
 			teamNameEditField.setText("Teamname");
@@ -125,10 +132,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			teamIDEditField.setForeground(Color.LIGHT_GRAY);
 		});
 
-		JPanel teamPanel = new JPanel();
-
-		JPanel addMatchplanPanel = new JPanel();
-		addMatchplanPanel.setLayout(new GridBagLayout());
+		
+		//Panel für bearbeiten und hinzufügen
+		JPanel addMatchplanPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		addMatchplanPanel.setPreferredSize(new Dimension((int) (this.getWidth() * 0.3), this.getHeight()));
 
@@ -139,16 +145,23 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		teamCountLabel.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
 		JTextField teamCountField = new JTextField();
+		
+		
+		
+		
+		
+		
+		
 		JButton deleteTeamButton = new JButton("-");
 		deleteTeamButton.addActionListener(l -> {
 			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) - 2)));
 		});
 		JButton addTeamButton = new JButton("+");
 		addTeamButton.addActionListener(l -> {
+			
 			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) + 2)));
 		});
-		JLabel failLabelNew = new JLabel();
-
+		
 		teamCountField.getDocument().addDocumentListener(new DocumentListener() {
 			boolean validData = true;
 
@@ -160,18 +173,18 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					validData = false;
 				if (!teamCountField.getText().equals("")) {
 					if (teamCountField.getText().replaceAll("[0-9]", "").length() > 0) {
-						failLabelNew.setText("Sie müssen eine Zahl eingeben!");
+						infoLabelNew.setText("Sie müssen eine Zahl eingeben!");
 						validData = false;
 
 					} else {
 						if (Integer.parseInt(teamCountField.getText()) % 2 != 0) {
-							failLabelNew.setText("Sie müssen eine gerade Anzahl an Teams eingeben!");
+							infoLabelNew.setText("Sie müssen eine gerade Anzahl an Teams eingeben!");
 							validData = false;
 
 						}
 
 						if (Integer.parseInt(teamCountField.getText()) < 4) {
-							failLabelNew.setText("Sie müssen mindestens vier Teams erzeugen!");
+							infoLabelNew.setText("Sie müssen mindestens vier Teams erzeugen!");
 							validData = false;
 
 						}
@@ -184,14 +197,28 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				if (validData) {
 					if (Integer.parseInt(teamCountField.getText()) == 4)
 						deleteTeamButton.setEnabled(false);
-					teamModel.removeAllElements();
-					failLabelNew.setText("");
-					for (int i = 0; i < Integer.parseInt(teamCountField.getText()); i++) {
-
+					int size=teamModel.getSize();
+					int newSize=Integer.parseInt(teamCountField.getText());
+					int sizediff=newSize-size;
+					infoLabelNew.setText("");
+					if (sizediff>0) {
+					while (size < newSize) {
+						
 //						mp.addNewTeam(new Team("< " + i + " Bitte ändern>", "", i));
-						teamModel.addElement("1 name kurz");
+						teamModel.addElement(size + " <Name> <Kürzel>");
+						size++;
 					}
-				}
+					}
+					else {
+						while(size>newSize) {
+						teamList.setSelectedIndex(0);
+						teamModel.removeElementAt(size-1);
+						size--;
+						}
+						
+					}
+					}
+				
 
 			}
 
@@ -207,7 +234,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			}
 
 		});
-		teamCountField.getDocument().putProperty("name", "Text Field");
+		
+		
+
+
+//		teamCountField.getDocument().putProperty("name", "Text Field");
 
 		if (mpIsOpen)
 			headlineLabelnew.setText("Spielplan bearbeiten");
@@ -222,48 +253,19 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		teamShortnameEditField.addFocusListener(new DefaultTextFocusListener(teamShortnameEditField, "Kürzel"));
 		teamIDEditField.addFocusListener(new DefaultTextFocusListener(teamIDEditField, "ID"));
 		teamIDEditField.setEnabled(false);
-		teamModel.addListDataListener(new ListDataListener() {
-			public void addJListToTeams() {
-				for (int i = 0; i < teamModel.size(); i++) {
-					String[] temp = teamModel.getElementAt(i).toString().split(" ");
-					mp.teams.add(new Team(temp[1], temp[2], Integer.parseInt(temp[0])));
-					
-				}
-			}
-			@Override
-			public void intervalRemoved(ListDataEvent e) {
-				System.out.println("REMOVED");	
-				
-			}
-			
-			@Override
-			public void intervalAdded(ListDataEvent e) {
-				mp.teams = null;
-				addJListToTeams();	
-				
-				for (int i = 0; i < teamModel.size(); i++)
-				System.out.println(teamModel.getElementAt(i));
-			}
-			
-			@Override
-			public void contentsChanged(ListDataEvent e) {
-				addJListToTeams();
-				
-			}
-			
-		});
 		teamNameEditField.getDocument().addDocumentListener(new DocumentListener() {
+					
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
+				int selected = teamList.getSelectedIndex();
+				String[] listElement = teamModel.getElementAt(selected).toString().split(" ");
 				if (!teamNameEditField.getText().equals("Teamname")) {
-					int selected = teamList.getSelectedIndex();
-					teamModel.setElementAt(teamNameEditField.getText(), selected);
+					teamModel.setElementAt(listElement[0]+ " " +teamNameEditField.getText()+ " "+ listElement[2], selected);
 				}
 
 			}
@@ -312,7 +314,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		c.gridwidth = 3;
 		c.weighty = 0;
 		c.fill = GridBagConstraints.NONE;
-		addMatchplanPanel.add(failLabelNew, c);
+		addMatchplanPanel.add(infoLabelNew, c);
 		c.gridx = 0;
 		c.gridy = c.gridy + 1;
 		c.weighty = 0.5;
@@ -327,8 +329,10 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		c.gridy = c.gridy + 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(0, 20, 0, 20);
-
+		JLabel testLabel=new JLabel("Test");
+		
 		addMatchplanPanel.add(teamNameEditField, c);
+		addMatchplanPanel.add(testLabel,c);
 		c.gridx = 0;
 		c.gridy = c.gridy + 1;
 
