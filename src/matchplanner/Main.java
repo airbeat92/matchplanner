@@ -30,6 +30,7 @@ public class Main {
 //		 Hier wird getestet
 		Matchplan testPlan = new Matchplan();
 		testPlan.createLeague(18);
+
 		List<Team> test1 = new ArrayList();
 		test1.add(new Team("Vfb Stuttgart", "VFB",1));
 		test1.add(new Team("BVB Dortmund", "BVB",2));
@@ -37,7 +38,6 @@ public class Main {
 		test1.add(new Team("RB Leipzig", "RBL",4));
 
 		Matchplan mtest = new Matchplan(test1);
-		
 
 
 	}

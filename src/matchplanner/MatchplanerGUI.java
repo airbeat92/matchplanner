@@ -21,6 +21,7 @@ import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -34,6 +35,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 /**
  *
@@ -49,6 +52,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 	JTabbedPane outerPane = new JTabbedPane();
 
+	// Liste für Mannschaftsanzeige
+	public DefaultListModel teamModel = new DefaultListModel();
+	JList teamList = new JList(teamModel);
+	
+	//Components für MatchplanPanel
 	JLabel headlineLabelnew = new JLabel();
 	JTextField teamNameEditField = new JTextField();
 	JTextField teamShortnameEditField = new JTextField();
@@ -105,9 +113,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		// MannschaftenTab
 
-		// Liste für Mannschaftsanzeige
-		DefaultListModel teamModel = new DefaultListModel();
-		JList teamList = new JList(teamModel);
+		
+
 		teamList.addListSelectionListener(l -> {
 			setTeamEditVisible(true);
 			teamNameEditField.setText("Teamname");
@@ -182,7 +189,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					for (int i = 0; i < Integer.parseInt(teamCountField.getText()); i++) {
 
 //						mp.addNewTeam(new Team("< " + i + " Bitte ändern>", "", i));
-						teamModel.addElement("< " + i + " Bitte ändern>");
+						teamModel.addElement("1 name kurz");
 					}
 				}
 
@@ -215,9 +222,37 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		teamShortnameEditField.addFocusListener(new DefaultTextFocusListener(teamShortnameEditField, "Kürzel"));
 		teamIDEditField.addFocusListener(new DefaultTextFocusListener(teamIDEditField, "ID"));
 		teamIDEditField.setEnabled(false);
-
+		teamModel.addListDataListener(new ListDataListener() {
+			public void addJListToTeams() {
+				for (int i = 0; i < teamModel.size(); i++) {
+					String[] temp = teamModel.getElementAt(i).toString().split(" ");
+					mp.teams.add(new Team(temp[1], temp[2], Integer.parseInt(temp[0])));
+					
+				}
+			}
+			@Override
+			public void intervalRemoved(ListDataEvent e) {
+				System.out.println("REMOVED");	
+				
+			}
+			
+			@Override
+			public void intervalAdded(ListDataEvent e) {
+				mp.teams = null;
+				addJListToTeams();	
+				
+				for (int i = 0; i < teamModel.size(); i++)
+				System.out.println(teamModel.getElementAt(i));
+			}
+			
+			@Override
+			public void contentsChanged(ListDataEvent e) {
+				addJListToTeams();
+				
+			}
+			
+		});
 		teamNameEditField.getDocument().addDocumentListener(new DocumentListener() {
-
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				// TODO Auto-generated method stub
@@ -380,8 +415,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				if (selectedValue.equals(options[1]) && defaultValues.isSelected() && validData) {
 					for (int i = 0; i < Integer.parseInt(inputField.getText()); i++) {
 
-						mp.addNewTeam(new Team("< " + i + " Bitte ändern>", "", i));
-						teamModel.addElement("< " + i + " Bitte ändern>");
+						mp.addNewTeam(new Team("< Bitte ändern>", "", i));
+						
 
 					}
 					setDataSave(false);
@@ -434,17 +469,23 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		// MenuItem Öffnen
 		mntmOffnen.addActionListener((e) -> {
-//			String message = "=> vorhandenen Spielplan öffnen";
 
-			// Bedingung später hinfällig, da auf das erfolgreiche Laden geprüft werden muss
-			// Erstellt Spieltag Tabs mit den Begegnungen als Liste
+			
+			// JFileChooser-Objekt erstellen
+	        JFileChooser chooser = new JFileChooser();
+	        // Dialog zum Oeffnen von Dateien anzeigen
+	        int select = chooser.showDialog(null, "Öffnen");
+	        if(select == JFileChooser.APPROVE_OPTION)
+	        {
+	        	String filePath = chooser.getSelectedFile().getAbsolutePath();
+	        	openFile(filePath);
+	        	changeMenu(true);
+	        	setDataSave(false);
 
-			openFile();
-			changeMenu(true);
-			setDataSave(false);
-
-//
-//			JOptionPane.showMessageDialog(null, message);
+	        }
+			
+			
+			
 		});
 		mnDatei.add(mntmOffnen);
 
@@ -591,9 +632,19 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		tabbedPane.removeAll();
 		mp.season.forEach(a -> {
 			JList displayMatches = new JList(a.toObjectArray(mp));
+			
 			tabbedPane.addTab(a.getMatchDate().format(DF), new JScrollPane(displayMatches));
 		});
 
+		
+
+	}
+
+	public void refreshJList() {
+		teamModel.removeAllElements();
+		mp.teams.forEach(o -> {
+			teamModel.addElement(o.getId()+ " "+ o.getName()+" "+o.getShortname());
+		});
 	}
 
 	private void saveData() {
@@ -605,6 +656,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 	}
 
+
 	private void setTeamEditVisible(boolean bool) {
 		headlineLabeledit.setVisible(bool);
 		teamNameEditField.setVisible(bool);
@@ -612,10 +664,13 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		teamIDEditField.setVisible(bool);
 	}
 
-	private void openFile() {
-		CSVReader test1 = new CSVReader("/Users/marvin/Downloads/Bundesliga-Wiest.csv");
+	private void openFile(String path) {
+		CSVReader reader = new CSVReader(path);
 		try {
-			mp = test1.importCSV();
+			mp = reader.importCSV();
+			refreshJList();
+			
+			
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -624,7 +679,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			e.printStackTrace();
 		}
 		refreshTabbedPane(false);
-
 	}
 
 }
