@@ -37,8 +37,18 @@ for ( LocalDate ld : mp.getSeason()) {
   fileWirter.append("#matchdate");
   for ( LocalDate ld : dateList)
  // fileWirter.append(); // Datum entsprechend ausgeben
+} catch (Exception e) {
+e.printStackTrace();
+} finally {
+    try {
+        fileWriter.flush();
+        fileWriter.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
 }
-
+ 
+}
 
 
 
