@@ -39,6 +39,7 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import listeners.DefaultTextFocusListener;
+import listeners.EditFieldDocumentListener;
 
 /**
  *
@@ -133,7 +134,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			teamIDEditField.setText("ID");
 			teamIDEditField.setForeground(Color.LIGHT_GRAY);
 		});
-
 		// Panel für bearbeiten und hinzufügen
 		JPanel addMatchplanPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -198,14 +198,12 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					infoLabelNew.setText("");
 					if (sizediff > 0) {
 						while (size < newSize) {
-
-//						mp.addNewTeam(new Team("< " + i + " Bitte ändern>", "", i));
 							teamModel.addElement(size + " <Name> <Kürzel>");
 							size++;
 						}
 					} else {
 						while (size > newSize) {
-							teamList.setSelectedIndex(0);
+							teamList.clearSelection();
 							teamModel.removeElementAt(size - 1);
 							size--;
 						}
@@ -240,7 +238,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			
 				
 				refreshMpTeams();
-				mp.teams.forEach(System.out::println);
 				setDataSave(false);
 				mpIsOpen = true;
 				changeMenu(true);
@@ -256,31 +253,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		teamShortnameEditField.addFocusListener(new DefaultTextFocusListener(teamShortnameEditField, "Kürzel"));
 		teamIDEditField.addFocusListener(new DefaultTextFocusListener(teamIDEditField, "ID"));
 		teamIDEditField.setEnabled(false);
-		teamNameEditField.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				if(mpIsOpen) {
-				String[] listElement = teamModel.getElementAt(teamList.getSelectedIndex()).toString().split(" ");
-				if (!teamNameEditField.getText().equals("Teamname")) {
-					teamModel.setElementAt(listElement[0] + " " + teamNameEditField.getText() + " " + listElement[2],
-							teamList.getSelectedIndex());
-				}
-				}
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
+		teamNameEditField.getDocument().addDocumentListener(new EditFieldDocumentListener(teamNameEditField, mpIsOpen, teamList, teamModel,1));
+		teamShortnameEditField.getDocument().addDocumentListener(new EditFieldDocumentListener(teamShortnameEditField, mpIsOpen, teamList, teamModel,2));
+						
 		c.insets = new Insets(20, 0, 0, 0);
 		c.gridx = 0;
 		c.gridy = 0;
