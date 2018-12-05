@@ -2,11 +2,9 @@ package design;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Insets;
 import java.awt.Rectangle;
 
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.View;
@@ -25,10 +23,11 @@ public class DarkModeTabbedPane extends BasicTabbedPaneUI {
 
 
 		
-		public DarkModeTabbedPane(Color b, JTabbedPane tabbedPane) {
-			tempColor = b;
+		public DarkModeTabbedPane(JTabbedPane tabbedPane) {
+			
 			this.tabbedPane=tabbedPane;
-			tabbedPane.setBackground(Color.LIGHT_GRAY);
+			this.tabbedPane.setBackground(Color.LIGHT_GRAY);
+			this.tabbedPane.setOpaque(true);
 		}
 		
 		

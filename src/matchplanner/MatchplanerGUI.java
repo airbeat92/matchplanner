@@ -99,7 +99,7 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 	public MatchplanerGUI() {
 		
 		
-		tabbedPane.setUI(new DarkModeTabbedPane(Color.LIGHT_GRAY,tabbedPane));
+		
 		
 		/*
 		 * frame
@@ -111,7 +111,7 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(new BorderLayout(0, 0));
 		this.setVisible(true);
-
+		darkModeOn(true);
 		/*
 		 * Menubar with actionlisteners
 		 */
@@ -635,6 +635,15 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 			e.printStackTrace();
 		}
 		refreshTabbedPane(false);
+	}
+	
+	
+	
+	public void darkModeOn(boolean enable) {
+		if(enable) {
+		outerPane.setUI(new DarkModeTabbedPane(outerPane));
+		tabbedPane.setUI(new DarkModeTabbedPane(outerPane));
+		}
 	}
 
 }
