@@ -64,6 +64,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	JLabel headlineLabelnew = new JLabel();
 	JLabel infoLabelNew = new JLabel();
 	JTextField teamCountField = new JTextField();
+	JButton deleteTeamButton = new JButton("-");
+	JButton addTeamButton = new JButton("+");
+	
 	JButton createMatchplanButton = new JButton();
 
 	// edit Panel
@@ -142,15 +145,17 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JLabel teamCountLabel = new JLabel("Anzahl Teams");
 		teamCountLabel.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
-		JButton deleteTeamButton = new JButton("-");
+
 		deleteTeamButton.addActionListener(l -> {
 			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) - 2)));
 		});
-		JButton addTeamButton = new JButton("+");
+
 		addTeamButton.addActionListener(l -> {
 			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) + 2)));
 		});
-
+		createMatchplanButton.setEnabled(false);
+		addTeamButton.setEnabled(false);
+		deleteTeamButton.setEnabled(false);
 		teamCountField.getDocument().addDocumentListener(new DocumentListener() {
 			boolean validData = true;
 
@@ -159,6 +164,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				boolean validData = true;
 
 				if (teamCountField.getText().equals(""))
+					
 					validData = false;
 				if (!teamCountField.getText().equals("")) {
 					if (teamCountField.getText().replaceAll("[0-9]", "").length() > 0) {
@@ -180,7 +186,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 //
 					}
 				}
-
+				createMatchplanButton.setEnabled(validData);
 				addTeamButton.setEnabled(validData);
 				deleteTeamButton.setEnabled(validData);
 				if (validData) {
@@ -234,10 +240,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			}
 		
 				refreshMpTeams();
+				mp.teams.forEach(System.out::println);
 				setDataSave(false);
 				mpIsOpen = true;
 				changeMenu(true);
-//				refreshTabbedPane(true);
+				refreshTabbedPane(true);
 			
 			
 		});
@@ -341,7 +348,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		addMatchplanPanel.add(new JPanel(), c);
 
 		teamPanel.setLayout(new BorderLayout(0, 0));
-		teamPanel.add(teamList, BorderLayout.CENTER);
+		teamPanel.add(new JScrollPane(teamList), BorderLayout.CENTER);
 		teamPanel.add(addMatchplanPanel, BorderLayout.EAST);
 
 		// JTabbedPane
@@ -443,8 +450,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 						if (selectedValue.equals(options[0])) {
 							mp.teams.clear();
 							teamModel.removeAllElements();
-							// hier brauchen wir noch eine methode um teams wieder zurückzusetzen, wenn
-							// abbrechen gedrückt wurde
+
 
 							break;
 						}
@@ -562,6 +568,10 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				setDataSave(true);
 				changeMenu(false);
 				headlineLabelnew.setText("Spielplan erstellen");
+				createMatchplanButton.setText("Spielplan erstellen");
+				createMatchplanButton.setEnabled(false);
+				addTeamButton.setEnabled(false);
+				deleteTeamButton.setEnabled(false);
 			}
 			if (JOptionPane.NO_OPTION == result) {
 				// Speichern aufrufen
@@ -632,7 +642,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		});
 
 	}
-	
+	/*
+	 * füllt die Matchplan teams neu mit den Werten aus der JList Teams
+	 */
 	public void refreshMpTeams() {
 		mp.teams.clear();
 		for (int i = 0; i < teamModel.size(); i++) {
