@@ -1,0 +1,10 @@
+Commit of Evaluation: 757c4bb604b607125f624367d437e3c791ad71a9
+Tag: none
+
+1.1	Teams und Dates edit sind nur die Dummy funktionen drin, wodurch
+	man beides nicht mehr nachträglich verändern kann.
+
+1.2	in der Mannschaftsliste wird mit jedem Neuen Matchplan immer
+	nur angehängt
+
+1.3	speichern/speichern unter löst einen close aus
