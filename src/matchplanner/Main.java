@@ -1,7 +1,6 @@
 package matchplanner;
 
 import java.awt.EventQueue;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +38,7 @@ public class Main {
 
 		Matchplan mtest = new Matchplan(test1);
 		
-		mtest.teams.add(new Team("Lang", "Kurz", 5 ));
-		mtest.teams.add(new Team("Lang1", "Kurz1", 6 ));
-		
-		mtest.createLeague(mtest.teams.size());
-		mtest.createPlan();
-		
-		
-		ArrayList<LocalDate> datesC = new ArrayList(mtest.createDates(4));
+
 
 	}
 }

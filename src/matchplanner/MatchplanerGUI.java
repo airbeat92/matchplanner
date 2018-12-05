@@ -12,17 +12,12 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.TreeSet;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -53,8 +48,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
 	JTabbedPane outerPane = new JTabbedPane();
-	
-	
+
 	JLabel headlineLabelnew = new JLabel();
 	JTextField teamNameEditField = new JTextField();
 	JTextField teamShortnameEditField = new JTextField();
@@ -109,16 +103,12 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		changeMenu(false);
 		setTeamEditVisible(false);
 
-		// befüllt Dummy Werte
-//		dummyFill();
-
-
 		// MannschaftenTab
 
 		// Liste für Mannschaftsanzeige
 		DefaultListModel teamModel = new DefaultListModel();
 		JList teamList = new JList(teamModel);
-		teamList.addListSelectionListener(l ->{
+		teamList.addListSelectionListener(l -> {
 			setTeamEditVisible(true);
 			teamNameEditField.setText("Teamname");
 			teamNameEditField.setForeground(Color.LIGHT_GRAY);
@@ -127,13 +117,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			teamIDEditField.setText("ID");
 			teamIDEditField.setForeground(Color.LIGHT_GRAY);
 		});
-		
-		
-		
+
 		JPanel teamPanel = new JPanel();
-		
-		
-		
+
 		JPanel addMatchplanPanel = new JPanel();
 		addMatchplanPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -141,197 +127,184 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		// addNew
 
-		
 		headlineLabelnew.setFont(new Font("Helvetica", Font.BOLD, 14));
 		JLabel teamCountLabel = new JLabel("Anzahl Teams");
 		teamCountLabel.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
 		JTextField teamCountField = new JTextField();
 		JButton deleteTeamButton = new JButton("-");
-		deleteTeamButton.addActionListener(l->{
-			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText())-2)));
+		deleteTeamButton.addActionListener(l -> {
+			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) - 2)));
 		});
 		JButton addTeamButton = new JButton("+");
-		addTeamButton.addActionListener(l->{
-			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText())+2)));
+		addTeamButton.addActionListener(l -> {
+			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) + 2)));
 		});
 		JLabel failLabelNew = new JLabel();
-		
+
 		teamCountField.getDocument().addDocumentListener(new DocumentListener() {
-			boolean validData =true;
-			
+			boolean validData = true;
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				boolean validData =true;
-				
-				if(teamCountField.getText().equals(""))
-					validData=false;
-				if(!teamCountField.getText().equals("")) {
-				if (teamCountField.getText().replaceAll("[0-9]", "").length() > 0) {
-					failLabelNew.setText("Sie müssen eine Zahl eingeben!");
-					validData=false;
-					
+				boolean validData = true;
 
-					
-				} else {
-					if (Integer.parseInt(teamCountField.getText()) % 2 != 0) {
-						failLabelNew.setText("Sie müssen eine gerade Anzahl an Teams eingeben!");
-						validData=false;
-						
-					}
+				if (teamCountField.getText().equals(""))
+					validData = false;
+				if (!teamCountField.getText().equals("")) {
+					if (teamCountField.getText().replaceAll("[0-9]", "").length() > 0) {
+						failLabelNew.setText("Sie müssen eine Zahl eingeben!");
+						validData = false;
 
-					if (Integer.parseInt(teamCountField.getText()) < 4) {
-						failLabelNew.setText("Sie müssen mindestens vier Teams erzeugen!");
-						validData=false;
-						
-					}
+					} else {
+						if (Integer.parseInt(teamCountField.getText()) % 2 != 0) {
+							failLabelNew.setText("Sie müssen eine gerade Anzahl an Teams eingeben!");
+							validData = false;
+
+						}
+
+						if (Integer.parseInt(teamCountField.getText()) < 4) {
+							failLabelNew.setText("Sie müssen mindestens vier Teams erzeugen!");
+							validData = false;
+
+						}
 //
+					}
 				}
-				}
-				
+
 				addTeamButton.setEnabled(validData);
 				deleteTeamButton.setEnabled(validData);
-				if(validData) {
-					if(Integer.parseInt(teamCountField.getText())==4)
+				if (validData) {
+					if (Integer.parseInt(teamCountField.getText()) == 4)
 						deleteTeamButton.setEnabled(false);
 					teamModel.removeAllElements();
 					failLabelNew.setText("");
 					for (int i = 0; i < Integer.parseInt(teamCountField.getText()); i++) {
-						
+
 //						mp.addNewTeam(new Team("< " + i + " Bitte ändern>", "", i));
 						teamModel.addElement("< " + i + " Bitte ändern>");
 					}
 				}
-				
+
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 
-				}
-				
+			}
 
-				
-			
-			
 		});
 		teamCountField.getDocument().putProperty("name", "Text Field");
-		
-		
+
 		if (mpIsOpen)
 			headlineLabelnew.setText("Spielplan bearbeiten");
 		else
 			headlineLabelnew.setText("Spielplan erstellen");
 		JButton createMatchplanButton = new JButton("Spielplan erstellen");
-		
-		//teamEdit
-		
+
+		// teamEdit
+
 		headlineLabeledit.setFont(new Font("Helvetica", Font.BOLD, 14));
-		teamNameEditField.addFocusListener(new DefaultTextFocusListener(teamNameEditField,"Teamname"));
-		teamShortnameEditField.addFocusListener(new DefaultTextFocusListener(teamShortnameEditField,"Kürzel"));
-		teamIDEditField.addFocusListener(new DefaultTextFocusListener(teamIDEditField,"ID"));
+		teamNameEditField.addFocusListener(new DefaultTextFocusListener(teamNameEditField, "Teamname"));
+		teamShortnameEditField.addFocusListener(new DefaultTextFocusListener(teamShortnameEditField, "Kürzel"));
+		teamIDEditField.addFocusListener(new DefaultTextFocusListener(teamIDEditField, "ID"));
 		teamIDEditField.setEnabled(false);
-		
-		
-		
+
 		teamNameEditField.getDocument().addDocumentListener(new DocumentListener() {
-			
+
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				if(!teamNameEditField.getText().equals("Teamname")) {
-				int selected =teamList.getSelectedIndex();
-				teamModel.setElementAt(teamNameEditField.getText(), selected);
+				if (!teamNameEditField.getText().equals("Teamname")) {
+					int selected = teamList.getSelectedIndex();
+					teamModel.setElementAt(teamNameEditField.getText(), selected);
 				}
-				
+
 			}
-			
+
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
 
-		
-		c.insets = new Insets(20,0,0,0);
+		c.insets = new Insets(20, 0, 0, 0);
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 3;
 
-	    c.weightx = 0;
-	    c.weighty = 0;		
-		
-		addMatchplanPanel.add(headlineLabelnew,c);
+		c.weightx = 0;
+		c.weighty = 0;
+
+		addMatchplanPanel.add(headlineLabelnew, c);
 		c.gridx = 0;
-		c.gridy=c.gridy+1;;
-		c.weighty = 0.05;	
+		c.gridy = c.gridy + 1;
+		;
+		c.weighty = 0.05;
 		addMatchplanPanel.add(teamCountLabel, c);
 		c.gridx = 0;
-		c.gridy=2;
+		c.gridy = 2;
 		c.gridwidth = 1;
 		c.weightx = 1;
 		c.weighty = 0;
-		c.insets = new Insets(0,10,0,0);
+		c.insets = new Insets(0, 10, 0, 0);
 		c.fill = GridBagConstraints.HORIZONTAL;
-		addMatchplanPanel.add(teamCountField,c);
+		addMatchplanPanel.add(teamCountField, c);
 		c.gridx = 1;
-		
+
 		c.ipadx = 0;
 		c.weightx = 0;
-		c.insets = new Insets(0,0,0,0);
+		c.insets = new Insets(0, 0, 0, 0);
 		addMatchplanPanel.add(deleteTeamButton, c);
 		c.gridx = 2;
-		
-		c.insets = new Insets(0,0,0,10);
-		addMatchplanPanel.add(addTeamButton,c);
+
+		c.insets = new Insets(0, 0, 0, 10);
+		addMatchplanPanel.add(addTeamButton, c);
 		c.gridx = 0;
-		c.gridy=c.gridy+1;
+		c.gridy = c.gridy + 1;
 		c.gridwidth = 3;
 		c.weighty = 0;
 		c.fill = GridBagConstraints.NONE;
-		addMatchplanPanel.add(failLabelNew,c);
+		addMatchplanPanel.add(failLabelNew, c);
 		c.gridx = 0;
-		c.gridy = c.gridy+1;
+		c.gridy = c.gridy + 1;
 		c.weighty = 0.5;
-		c.insets = new Insets(50,0,0,0);
-	    addMatchplanPanel.add(createMatchplanButton, c);
-	    c.gridx = 0;
-		c.gridy = c.gridy+1;
+		c.insets = new Insets(50, 0, 0, 0);
+		addMatchplanPanel.add(createMatchplanButton, c);
+		c.gridx = 0;
+		c.gridy = c.gridy + 1;
 		c.weighty = 0;
-		c.insets = new Insets(0,0,0,0);
-		addMatchplanPanel.add(headlineLabeledit,c);
+		c.insets = new Insets(0, 0, 0, 0);
+		addMatchplanPanel.add(headlineLabeledit, c);
 		c.gridx = 0;
-		c.gridy = c.gridy+1;
+		c.gridy = c.gridy + 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(0,20,0,20);
-		
-		addMatchplanPanel.add(teamNameEditField,c);
+		c.insets = new Insets(0, 20, 0, 20);
+
+		addMatchplanPanel.add(teamNameEditField, c);
 		c.gridx = 0;
-		c.gridy = c.gridy+1;
-		
-		
-		addMatchplanPanel.add(teamShortnameEditField,c);
+		c.gridy = c.gridy + 1;
+
+		addMatchplanPanel.add(teamShortnameEditField, c);
 		c.gridx = 0;
-		c.gridy = c.gridy+1;
-		addMatchplanPanel.add(teamIDEditField,c);
+		c.gridy = c.gridy + 1;
+		addMatchplanPanel.add(teamIDEditField, c);
 		c.gridx = 0;
-		c.gridy = c.gridy+1;
+		c.gridy = c.gridy + 1;
 		c.weighty = 1.0;
-		addMatchplanPanel.add(new JPanel(),c);
+		addMatchplanPanel.add(new JPanel(), c);
 
 		teamPanel.setLayout(new BorderLayout(0, 0));
 		teamPanel.add(teamList, BorderLayout.CENTER);
@@ -412,9 +385,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 					}
 					setDataSave(false);
-					mpIsOpen=true;
+					mpIsOpen = true;
 					changeMenu(true);
-					refreshTabbedPane();
+					refreshTabbedPane(true);
 				}
 
 				// Teams von Hand erzeugen
@@ -443,10 +416,10 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 							break;
 						}
 						if (i == count - 1) {
-							refreshTabbedPane();
+							refreshTabbedPane(true);
 							changeMenu(true);
 							setDataSave(false);
-							mpIsOpen=true;
+							mpIsOpen = true;
 						}
 					}
 
@@ -461,19 +434,17 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		// MenuItem Öffnen
 		mntmOffnen.addActionListener((e) -> {
-			String message = "=> vorhandenen Spielplan öffnen";
+//			String message = "=> vorhandenen Spielplan öffnen";
 
 			// Bedingung später hinfällig, da auf das erfolgreiche Laden geprüft werden muss
 			// Erstellt Spieltag Tabs mit den Begegnungen als Liste
-			if (mp != null) {
 
-				for (LocalDate key : mp.season.keySet()) {
-					JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
-					tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
-				}
-			}
+			openFile();
+			changeMenu(true);
+			setDataSave(false);
 
-			JOptionPane.showMessageDialog(null, message);
+//
+//			JOptionPane.showMessageDialog(null, message);
 		});
 		mnDatei.add(mntmOffnen);
 
@@ -481,7 +452,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmClose.addActionListener((e) -> {
 
 			closeDialog();
-			
 
 		});
 		mnDatei.add(mntmClose);
@@ -588,7 +558,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mntmMannschaften.setEnabled(fileOpen);
 		mntmSpieltage.setEnabled(fileOpen);
 		headlineLabelnew.setText("Spielplan bearbeiten");
-		
 
 	}
 
@@ -611,16 +580,20 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	}
 
 	/*
-	 * Aktualisiert die TabbedPane
+	 * Parameter gibt an ob der Plan refreshed werden soll. Nur bei Änderungen am
+	 * Plan.
 	 */
-	private void refreshTabbedPane() {
-		mp.refreshPlan();
-		tabbedPane.removeAll();
-		TreeSet<LocalDate> keyTree = new TreeSet(mp.season.keySet());
-		for (LocalDate key : keyTree) {
-			JList displayMatches = new JList(mp.season.get(key).toObjectArray(mp));
-			tabbedPane.addTab(key.format(DF), new JScrollPane(displayMatches));
+	private void refreshTabbedPane(boolean refresh) {
+		if (refresh) {
+			mp.refreshPlan();
+
 		}
+		tabbedPane.removeAll();
+		mp.season.forEach(a -> {
+			JList displayMatches = new JList(a.toObjectArray(mp));
+			tabbedPane.addTab(a.getMatchDate().format(DF), new JScrollPane(displayMatches));
+		});
+
 	}
 
 	private void saveData() {
@@ -631,12 +604,27 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		changeMenu(false);
 
 	}
-	
+
 	private void setTeamEditVisible(boolean bool) {
 		headlineLabeledit.setVisible(bool);
 		teamNameEditField.setVisible(bool);
 		teamShortnameEditField.setVisible(bool);
 		teamIDEditField.setVisible(bool);
+	}
+
+	private void openFile() {
+		CSVReader test1 = new CSVReader("/Users/marvin/Downloads/Bundesliga-Wiest.csv");
+		try {
+			mp = test1.importCSV();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		refreshTabbedPane(false);
+
 	}
 
 }
