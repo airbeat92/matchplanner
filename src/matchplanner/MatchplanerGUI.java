@@ -235,10 +235,10 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		createMatchplanButton.setText("Spielplan erstellen");
 		createMatchplanButton.addActionListener(l->{
 			
-			if(mp==null) {
+			
 				mp = new Matchplan();
-			}
-		
+			
+				
 				refreshMpTeams();
 				mp.teams.forEach(System.out::println);
 				setDataSave(false);
@@ -265,13 +265,13 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				int selected = teamList.getSelectedIndex();
-				String[] listElement = teamModel.getElementAt(selected).toString().split(" ");
+				if(mpIsOpen) {
+				String[] listElement = teamModel.getElementAt(teamList.getSelectedIndex()).toString().split(" ");
 				if (!teamNameEditField.getText().equals("Teamname")) {
 					teamModel.setElementAt(listElement[0] + " " + teamNameEditField.getText() + " " + listElement[2],
-							selected);
+							teamList.getSelectedIndex());
 				}
-
+				}
 			}
 
 			@Override
@@ -554,7 +554,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	}
 
 	// Frames
-
+	
 	private void closeDialog() {
 		if (!save) {
 			JFrame closeConfirmFrame = new JFrame();
@@ -562,16 +562,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
 					"Ungespeicherte Änderungen, dennoch beenden?");
 			if (JOptionPane.YES_OPTION == result) {
-				mp = null;
-				tabbedPane.removeAll();
-				refreshJList();
-				setDataSave(true);
-				changeMenu(false);
-				headlineLabelnew.setText("Spielplan erstellen");
-				createMatchplanButton.setText("Spielplan erstellen");
-				createMatchplanButton.setEnabled(false);
-				addTeamButton.setEnabled(false);
-				deleteTeamButton.setEnabled(false);
+				closeMP();
+
 			}
 			if (JOptionPane.NO_OPTION == result) {
 				// Speichern aufrufen
@@ -580,7 +572,24 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	}
 
 	// Methoden
-
+	
+	
+	/*
+	 * schließt den Matchplan
+	 */
+	public void closeMP() {
+		mp = null;
+		mpIsOpen=false;
+		tabbedPane.removeAll();
+		refreshJList();
+		setDataSave(true);
+		changeMenu(false);
+		headlineLabelnew.setText("Spielplan erstellen");
+		createMatchplanButton.setText("Spielplan erstellen");
+		createMatchplanButton.setEnabled(false);
+		addTeamButton.setEnabled(false);
+		deleteTeamButton.setEnabled(false);
+	}
 	/*
 	 * Setzt save auf false und zeigt ein Flag in der GUI.
 	 */
