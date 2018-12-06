@@ -63,8 +63,9 @@ public class CSVReader {
 				if (line.contains("# Teams")) {
 					br.readLine();
 					while ((line = br.readLine()).contains(csvSplitBy)) {
-						line = line.replaceAll(" ", "");
 						String[] team = line.split(csvSplitBy);
+						team [1] = team [1].replaceAll(" ", "");
+						team [0] = team [0].replaceAll(" ", "");
 						mp.addNewTeam(new Team(team[2], team[1], Integer.parseInt(team[0])));
 
 					}
@@ -82,6 +83,12 @@ public class CSVReader {
 					}
 
 				}
+				
+				// set Dates MAMA
+				if (line.contains("#seasonmatchdates")) {
+					while ((!((line = br.readLine()) == null)) && line.replaceAll(" ", "").length() > 0) {
+
+						dates.add(line);
 
 				// set Dates Wiest
 				if (line.contains("# MatchDates")) {
@@ -92,11 +99,7 @@ public class CSVReader {
 					mp.addCSVDateList(dates);
 				}
 
-				// set Dates MAMA
-				if (line.contains("#matchdate")) {
-					while ((!((line = br.readLine()) == null)) && line.replaceAll(" ", "").length() > 0) {
-
-						dates.add(line);
+				
 					}
 					mp.addCSVDateList(dates);
 				}

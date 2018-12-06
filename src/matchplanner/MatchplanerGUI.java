@@ -69,6 +69,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	JLabel infoLabelNew = new JLabel();
 	JLabel teamCountLabel = new JLabel("Anzahl Teams");
 	JTextField teamCountField = new JTextField();
+	JLabel matchplanNameField = new JLabel("Matchplanname");
 	static JButton deleteTeamButton = new JButton("-");
 	static JButton addTeamButton = new JButton("+");
 	static JButton createMatchplanButton = new JButton();
@@ -494,14 +495,22 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			JFrame closeConfirmFrame = new JFrame();
 			closeConfirmFrame.setLocationRelativeTo(null);
 			int result = JOptionPane.showConfirmDialog(closeConfirmFrame,
-					"Ungespeicherte Änderungen, dennoch beenden?");
+					"Ungespeicherte Änderungen! Möchten Sie jetzt speichern?");
 			if (JOptionPane.YES_OPTION == result) {
-				closeMP();
+				try {
+					saveData();
+					closeMP();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 			if (JOptionPane.NO_OPTION == result) {
-				// Speichern aufrufen
+				closeMP();
 			}
+		} else {
+			closeMP();
 		}
 	}
 
@@ -626,7 +635,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 	private void saveData() throws IOException {
 		CSVWriter writer = new CSVWriter();
-		File file = new File("/Users/marvin/Downloads/AppData");
+		File file = new File("AppData");
 		if (!file.exists()) {
 			if (file.mkdir()) {
 				System.out.println("Directory is created!");
@@ -634,10 +643,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				System.out.println("Failed to create directory!");
 			}
 		}
-		writer.writeCsv("/Users/marvin/Downloads/AppData", mp);
+		writer.writeCsv("AppData", mp);
 		mp = null;
 		setDataSave(true);
-		changeMenu(false);
 		infoLabelNew.setText("Erfolgreich gespeichert!");
 
 	}
