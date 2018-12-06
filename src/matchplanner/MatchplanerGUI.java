@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,18 +27,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 
+import design.DarkMenuBar;
 import design.DarkModeTabbedPane;
 import listeners.DefaultTextFocusListener;
 import listeners.EditFieldDocumentListener;
@@ -48,17 +45,16 @@ import listeners.TeamModulListener;
  *
  * @author Marcel, Marvin, Samet
  */
-public class MatchplanerGUI  extends javax.swing.JFrame{
+public class MatchplanerGUI extends javax.swing.JFrame {
 
 	private Matchplan mp;
 	private boolean save = true;
 	private boolean mpIsOpen = false;
+	private boolean dModeOn = false;
 	public static final DateTimeFormatter DF = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
 
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT); // für Spieltage
 	JTabbedPane outerPane = new JTabbedPane(); // für Mannschaften und Spiele
-	
-	
 
 	// Liste für Mannschaftsanzeige
 	DefaultListModel teamModel = new DefaultListModel();
@@ -66,7 +62,7 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 
 	// Components für MatchplanPanel
 	JPanel teamPanel = new JPanel(); // Gesamtes Panel
-	
+
 	JPanel addMatchplanPanel = new JPanel(new GridBagLayout());
 	// new/add Panel
 	JLabel headlineLabelnew = new JLabel();
@@ -84,6 +80,7 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 	JLabel headlineLabeledit = new JLabel("Mannschaft bearbeiten");
 
 	// Menu hinzufügen
+	DarkMenuBar menuBar = new DarkMenuBar();
 	// Datei
 	JMenu mnDatei = new JMenu("Datei");
 	JMenuItem mntmNeu = new JMenuItem("Neu");
@@ -94,31 +91,28 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 	// Extras
 	JMenu mnExtras = new JMenu("Extras");
 	JMenuItem mntmMannschaften = new JMenuItem("Mannschaften bearbeiten");
-	JMenuItem mntmSpieltage = new JMenuItem("Spieltage bearbeiten");
-
+	JMenuItem mntmSpieltage = new JMenuItem("Spieltag bearbeiten");
+	JMenuItem mntmDarkMode = new JMenuItem("DarkMode");
 	// Flag Label
 	JLabel saveFlag = new JLabel();
 
 	public MatchplanerGUI() {
-		
-		
-		
-		
+
 		/*
 		 * frame
 		 */
-		
+
 		this.setTitle("Matchplanner");
 		this.setSize(700, 500);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(new BorderLayout(0, 0));
 		this.setVisible(true);
-		darkModeOn(true);
+		// darkModeOn(true);
+
 		/*
 		 * Menubar with actionlisteners
 		 */
-		JMenuBar menuBar = new JMenuBar();
 		this.getContentPane().add(menuBar, BorderLayout.NORTH);
 
 		// Menuitem File
@@ -146,25 +140,29 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 			teamIDEditField.setForeground(Color.LIGHT_GRAY);
 		});
 		// Panel für bearbeiten und hinzufügen
-		
+
 		GridBagConstraints c = new GridBagConstraints();
 		addMatchplanPanel.setPreferredSize(new Dimension((int) (this.getWidth() * 0.3), this.getHeight()));
 
 		// addNew
 
 		headlineLabelnew.setFont(new Font("Helvetica", Font.BOLD, 14));
-		
+
 		teamCountLabel.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
 		deleteTeamButton.addActionListener(l -> {
 			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) - 2)));
+			
 		});
 
 		addTeamButton.addActionListener(l -> {
 			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) + 2)));
+			setDataSave(false);
+			
 		});
 		enableButtons(false, false);
-		teamCountField.getDocument().addDocumentListener(new TeamCountFieldDocumentListener(teamCountField, infoLabelNew,teamList,teamModel));
+		teamCountField.getDocument().addDocumentListener(
+				new TeamCountFieldDocumentListener(teamCountField, infoLabelNew, teamList, teamModel));
 
 		if (mpIsOpen)
 			headlineLabelnew.setText("Spielplan bearbeiten");
@@ -253,10 +251,13 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 		c.gridx = 0;
 		c.gridy = c.gridy + 1;
 		c.weighty = 1.0;
-		JPanel fill =new JPanel();
-			fill.setBackground(new Color(0,0,0,0));
-		addMatchplanPanel.add(fill, c);
 
+		JPanel fill = new JPanel();
+		fill.setBackground(new Color(0, 0, 0, 0));
+		JLabel dark = new JLabel();
+		dark.setText("DarkMode");
+
+		addMatchplanPanel.add(fill, c);
 		// Listener
 		teamNameEditField.addFocusListener(new DefaultTextFocusListener(teamNameEditField, "Teamname"));
 		teamShortnameEditField.addFocusListener(new DefaultTextFocusListener(teamShortnameEditField, "Kürzel"));
@@ -421,10 +422,12 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 
 		// MenuItem Speichern
 		mntmSpeichern.addActionListener(e -> {
-			String message = "=> Aenderungen am Spielplan speichern";
-			JOptionPane.showMessageDialog(null, message);
-
-			saveData();
+			try {
+				saveData();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 		});
 		mnDatei.add(mntmSpeichern);
@@ -434,7 +437,7 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 			String message = "=> geöffneten Spielplan als neue Datei speichern";
 			JOptionPane.showMessageDialog(null, message);
 
-			saveData();
+			//saveData();
 		});
 		mnDatei.add(mntmSpeichernUnter);
 
@@ -471,6 +474,17 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 		});
 		mnExtras.add(mntmSpieltage);
 
+		mnExtras.addSeparator();
+
+		// MenuItem DarkMode
+		mntmDarkMode.addActionListener((l) -> {
+			darkModeOn(!dModeOn);
+			dModeOn = !dModeOn;
+			this.repaint();
+		});
+
+		mnExtras.add(mntmDarkMode);
+
 	}
 
 	// Frames
@@ -503,7 +517,7 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 	}
 
 	/*
-	 * schließt den Matchplan
+	 * Schließt den Matchplan
 	 */
 	public void closeMP() {
 		mp = null;
@@ -610,12 +624,21 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 
 	}
 
-	private void saveData() {
+	private void saveData() throws IOException {
+		CSVWriter writer = new CSVWriter();
+		File file = new File("/Users/marvin/Downloads/AppData");
+		if (!file.exists()) {
+			if (file.mkdir()) {
+				System.out.println("Directory is created!");
+			} else {
+				System.out.println("Failed to create directory!");
+			}
+		}
+		writer.writeCsv("/Users/marvin/Downloads/AppData", mp);
 		mp = null;
-		tabbedPane.removeAll();
-		dummyFill();
 		setDataSave(true);
 		changeMenu(false);
+		infoLabelNew.setText("Erfolgreich gespeichert!");
 
 	}
 
@@ -641,28 +664,32 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 		}
 		refreshTabbedPane(false);
 	}
-	
-	
-	
+
 	public void darkModeOn(boolean enable) {
-		if(enable) {
-		outerPane.setUI(new DarkModeTabbedPane(outerPane));
-		tabbedPane.setUI(new DarkModeTabbedPane(outerPane));
-		teamPanel.setBackground(Color.GRAY);
-		teamList.setBackground(Color.GRAY);
-		teamList.setForeground(Color.WHITE);
-		addMatchplanPanel.setBackground(Color.BLACK);
-		addMatchplanPanel.setForeground(Color.WHITE);
-		headlineLabelnew.setForeground(Color.WHITE);
-		infoLabelNew.setForeground(Color.WHITE);
-		teamCountLabel.setForeground(Color.WHITE);
+		if (enable) {
+			outerPane.setUI(new DarkModeTabbedPane(outerPane));
+			tabbedPane.setUI(new DarkModeTabbedPane(outerPane));
+			teamPanel.setBackground(Color.GRAY);
+			teamList.setBackground(Color.GRAY);
+			teamList.setForeground(Color.WHITE);
+			addMatchplanPanel.setBackground(Color.DARK_GRAY);
+			addMatchplanPanel.setForeground(Color.WHITE);
+			headlineLabelnew.setForeground(Color.WHITE);
+			infoLabelNew.setForeground(Color.WHITE);
+			teamCountLabel.setForeground(Color.WHITE);
 
+			// edit Panel
+			headlineLabeledit.setForeground(Color.WHITE);
 
-		// edit Panel
+			// edit Menubar
+			menuBar.setColor(Color.DARK_GRAY);
+			mnDatei.setForeground(Color.WHITE);
+			mnExtras.setForeground(Color.WHITE);
 
-		headlineLabeledit.setForeground(Color.WHITE);
-		
+		} else {
+
 		}
+
 	}
 
 }

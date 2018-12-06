@@ -1,6 +1,7 @@
 package matchplanner;
 
 import java.awt.EventQueue;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,21 @@ public class Main {
 		test1.add(new Team("RB Leipzig", "RBL",4));
 
 		Matchplan mtest = new Matchplan(test1);
+		
+		CSVWriter writer = new CSVWriter();
+		try {
+			writer.writeCsv("/Users/marvin/Downloads", mtest);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-
+		CSVReader reader = new CSVReader("/Users/marvin/Downloads/matchplan.csv");
+		try {
+			Matchplan importM = reader.importCSV();
+		} catch (NumberFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -30,44 +30,79 @@ public class CSVReader {
 		br = new BufferedReader(new FileReader(csvFile));
 		while ((line = br.readLine()) != null) {
 
-			// set MatchplanName
+			// set MatchplanName Wiest
 			if (line.contains("@type")) {
 				mp.setMatchplanName(line.substring(9, line.length()));
 			}
 
-			// set and create League
+			// set MatchplanName MAMA
+			if (line.contains("#matchplan")) {
+				mp.setMatchplanName(line.substring(9, line.length()));
+			}
+
+			// set and create League Wiest
 			if (line.contains("@teamCount")) {
 				int numberOfTeams = Integer.parseInt(line.replaceAll("@teamCount = ", ""));
 				mp.createLeague(numberOfTeams);
 				mp.createPlan();
 			}
 
-			// Set LineSeperator
-			if (line.contains("@splitter")) {
-				csvSplitBy = line.substring(line.length() - 1, line.length());
+			// set and create League
+			if (line.contains("#teamsize")) {
+				int numberOfTeams = Integer.parseInt(line.replaceAll("#teamsize ", ""));
+				mp.createLeague(numberOfTeams);
+				mp.createPlan();
 			}
 
-			if (line.contains("# Teams")) {
-				br.readLine();
-				while ((line = br.readLine()).contains(csvSplitBy) ) {
-					line = line.replaceAll(" ", "");
-					String[] team = line.split(csvSplitBy);
-					mp.addNewTeam(new Team(team[2], team[1], Integer.parseInt(team[0])));
-					
+				// Set LineSeperator
+				if (line.contains("@splitter")) {
+					csvSplitBy = line.substring(line.length() - 1, line.length());
 				}
-				
-			}
 
-			if (line.contains("# MatchDates")) {
-				while ((!((line = br.readLine()) == null)) && line.replaceAll(" ", "").length() > 0) {
-					
-					dates.add(line);
+				// set Teams Wiest
+				if (line.contains("# Teams")) {
+					br.readLine();
+					while ((line = br.readLine()).contains(csvSplitBy)) {
+						line = line.replaceAll(" ", "");
+						String[] team = line.split(csvSplitBy);
+						mp.addNewTeam(new Team(team[2], team[1], Integer.parseInt(team[0])));
+
+					}
+
 				}
-				mp.addCSVDateList(dates);
-			}
 
+				// set Teams MAMA
+				if (line.contains("#teamlist")) {
+					br.readLine();
+					while ((line = br.readLine()).contains(csvSplitBy)) {
+						line = line.replaceAll(" ", "");
+						String[] team = line.split(csvSplitBy);
+						mp.addNewTeam(new Team(team[1], team[2], Integer.parseInt(team[0])));
+
+					}
+
+				}
+
+				// set Dates Wiest
+				if (line.contains("# MatchDates")) {
+					while ((!((line = br.readLine()) == null)) && line.replaceAll(" ", "").length() > 0) {
+
+						dates.add(line);
+					}
+					mp.addCSVDateList(dates);
+				}
+
+				// set Dates MAMA
+				if (line.contains("#matchdate")) {
+					while ((!((line = br.readLine()) == null)) && line.replaceAll(" ", "").length() > 0) {
+
+						dates.add(line);
+					}
+					mp.addCSVDateList(dates);
+				}
+
+			}
+			return mp;
 		}
-		return mp;
 	}
 
-}
