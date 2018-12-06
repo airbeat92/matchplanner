@@ -38,6 +38,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import design.DarkModeTabbedPane;
 import listeners.DefaultTextFocusListener;
 import listeners.EditFieldDocumentListener;
 import listeners.TeamCountFieldDocumentListener;
@@ -56,6 +57,8 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT); // für Spieltage
 	JTabbedPane outerPane = new JTabbedPane(); // für Mannschaften und Spiele
+	
+	
 
 	// Liste für Mannschaftsanzeige
 	DefaultListModel teamModel = new DefaultListModel();
@@ -63,9 +66,12 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 
 	// Components für MatchplanPanel
 	JPanel teamPanel = new JPanel(); // Gesamtes Panel
+	
+	JPanel addMatchplanPanel = new JPanel(new GridBagLayout());
 	// new/add Panel
 	JLabel headlineLabelnew = new JLabel();
 	JLabel infoLabelNew = new JLabel();
+	JLabel teamCountLabel = new JLabel("Anzahl Teams");
 	JTextField teamCountField = new JTextField();
 	static JButton deleteTeamButton = new JButton("-");
 	static JButton addTeamButton = new JButton("+");
@@ -96,6 +102,8 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 	public MatchplanerGUI() {
 		
 		
+		
+		
 		/*
 		 * frame
 		 */
@@ -106,7 +114,7 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(new BorderLayout(0, 0));
 		this.setVisible(true);
-
+		darkModeOn(true);
 		/*
 		 * Menubar with actionlisteners
 		 */
@@ -138,14 +146,14 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 			teamIDEditField.setForeground(Color.LIGHT_GRAY);
 		});
 		// Panel für bearbeiten und hinzufügen
-		JPanel addMatchplanPanel = new JPanel(new GridBagLayout());
+		
 		GridBagConstraints c = new GridBagConstraints();
 		addMatchplanPanel.setPreferredSize(new Dimension((int) (this.getWidth() * 0.3), this.getHeight()));
 
 		// addNew
 
 		headlineLabelnew.setFont(new Font("Helvetica", Font.BOLD, 14));
-		JLabel teamCountLabel = new JLabel("Anzahl Teams");
+		
 		teamCountLabel.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
 		deleteTeamButton.addActionListener(l -> {
@@ -245,7 +253,9 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 		c.gridx = 0;
 		c.gridy = c.gridy + 1;
 		c.weighty = 1.0;
-		addMatchplanPanel.add(new JPanel(), c);
+		JPanel fill =new JPanel();
+			fill.setBackground(new Color(0,0,0,0));
+		addMatchplanPanel.add(fill, c);
 
 		// Listener
 		teamNameEditField.addFocusListener(new DefaultTextFocusListener(teamNameEditField, "Teamname"));
@@ -630,6 +640,29 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 			e.printStackTrace();
 		}
 		refreshTabbedPane(false);
+	}
+	
+	
+	
+	public void darkModeOn(boolean enable) {
+		if(enable) {
+		outerPane.setUI(new DarkModeTabbedPane(outerPane));
+		tabbedPane.setUI(new DarkModeTabbedPane(outerPane));
+		teamPanel.setBackground(Color.GRAY);
+		teamList.setBackground(Color.GRAY);
+		teamList.setForeground(Color.WHITE);
+		addMatchplanPanel.setBackground(Color.BLACK);
+		addMatchplanPanel.setForeground(Color.WHITE);
+		headlineLabelnew.setForeground(Color.WHITE);
+		infoLabelNew.setForeground(Color.WHITE);
+		teamCountLabel.setForeground(Color.WHITE);
+
+
+		// edit Panel
+
+		headlineLabeledit.setForeground(Color.WHITE);
+		
+		}
 	}
 
 }
