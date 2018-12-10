@@ -10,7 +10,10 @@ import java.util.List;
 
 
 public class CSVWriter {
-
+	
+	/*
+	 * Schreibt in eine CSV Dateoi.
+	 */
 public static void writeCsv(String filePath, Matchplan mp) throws IOException {
 List <Team> teamList = new ArrayList(mp.teams);
 List <LocalDate> dateList = new ArrayList();
