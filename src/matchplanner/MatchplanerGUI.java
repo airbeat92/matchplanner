@@ -125,6 +125,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		// Menu und Flag auf korrekten Wert setzen
 		setDataSave(true);
+		saveFlag.setVisible(false);
 		changeMenu(false);
 		setTeamEditVisible(false);
 
@@ -545,9 +546,14 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	 * Setzt save auf false und zeigt ein Flag in der GUI.
 	 */
 	private void setDataSave(boolean save) {
-		saveFlag.setVisible(!save);
-		saveFlag.setForeground(Color.RED);
-		saveFlag.setText("Ungespeicherte Änderungen!");
+		if(!save) {
+			saveFlag.setVisible(true);
+			saveFlag.setForeground(Color.RED);
+			saveFlag.setText("Ungespeicherte Änderungen!");
+		} else {
+			saveFlag.setForeground(Color.GREEN);
+			saveFlag.setText("Erfolgreich gespeichert!");
+		}
 		this.save = (save);
 	}
 
@@ -646,7 +652,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		writer.writeCsv("AppData", mp);
 		mp = null;
 		setDataSave(true);
-		infoLabelNew.setText("Erfolgreich gespeichert!");
+		//infoLabelNew.setText("Erfolgreich gespeichert!");
 
 	}
 
