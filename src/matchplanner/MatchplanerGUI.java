@@ -551,7 +551,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			saveFlag.setForeground(Color.RED);
 			saveFlag.setText("Ungespeicherte Änderungen!");
 		} else {
-			saveFlag.setForeground(Color.GREEN);
+			saveFlag.setForeground(new Color(0, 153, 51));
 			saveFlag.setText("Erfolgreich gespeichert!");
 		}
 		this.save = (save);
