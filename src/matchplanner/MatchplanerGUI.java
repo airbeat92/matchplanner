@@ -611,13 +611,7 @@ public class MatchplanerGUI  extends javax.swing.JFrame{
 	}
 
 	private void saveData() {
-		mp = null;
-		tabbedPane.removeAll();
-		dummyFill();
-		setDataSave(true);
-		changeMenu(false);
-
-	}
+		}
 
 	private void setTeamEditVisible(boolean bool) {
 		headlineLabeledit.setVisible(bool);
