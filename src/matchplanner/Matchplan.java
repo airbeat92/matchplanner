@@ -17,6 +17,7 @@ public class Matchplan {
 	List<Team> teams = new ArrayList();
 	private League mLeague;
 	private String matchplanName;
+	public String filename;
 
 	/*
 	 * StandardKonsrtuktor
@@ -71,7 +72,7 @@ public class Matchplan {
 				Match m = mLeague.getMatch(j);
 				tempM.add(m);
 			}
-			
+
 			season.add(new Matchday(tempM, defaultDate));
 			defaultDate = defaultDate.plusDays(1);
 			mLeague.shift();
@@ -98,13 +99,13 @@ public class Matchplan {
 	 * 
 	 */
 	public void addCSVDateList(List<String> sa) {
-		
+
 		for (int i = 0; i < season.size(); i++) {
 			String[] temp = sa.get(i).split("-");
 			LocalDate tempD = LocalDate.of(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]),
 					Integer.parseInt(temp[2]));
 			season.get(i).setMatchDate(tempD);
-			
+
 		}
 	}
 
