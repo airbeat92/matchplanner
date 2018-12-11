@@ -40,20 +40,20 @@ public class Main {
 
 		Matchplan mtest = new Matchplan(test1);
 		
-		CSVWriter writer = new CSVWriter();
-		try {
-			writer.writeCsv("/Users/marvin/Downloads", mtest);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		CSVReader reader = new CSVReader("/Users/marvin/Downloads/matchplan.csv");
-		try {
-			Matchplan importM = reader.importCSV();
-		} catch (NumberFormatException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		CSVWriter writer = new CSVWriter();
+//		try {
+//			writer.writeCsv("/Users/marvin/Downloads", mtest);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		CSVReader reader = new CSVReader("/Users/marvin/Downloads/matchplan.csv");
+//		try {
+//			Matchplan importM = reader.importCSV();
+//		} catch (NumberFormatException | IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 }
