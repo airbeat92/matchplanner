@@ -15,6 +15,7 @@ import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
@@ -407,12 +408,10 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			int select = chooser.showDialog(null, "Öffnen");
 			if (select == JFileChooser.APPROVE_OPTION) {
 				savePath = chooser.getCurrentDirectory().getAbsolutePath();
-				String filePath = chooser.getSelectedFile().getAbsolutePath();
-				openFile(filePath);
-				mp.filename = chooser.getName(chooser.getSelectedFile()) ;
+				openFile(chooser.getSelectedFile().getAbsolutePath());
+				// mp.filename = chooser.getName(chooser.getSelectedFile());
+				mp.filename = chooser.getSelectedFile().getName();
 				changeMenu(true);
-//				setDataSave(false);
-
 			}
 
 		});
@@ -443,12 +442,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		// MenuItem Speichern unter
 		mntmSpeichernUnter.addActionListener((e) -> {
 
-			try {
-				saveAs();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			saveAs();
+
 		});
 
 		mnDatei.add(mntmSpeichernUnter);
@@ -517,10 +512,12 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				try {
 					if (savePath.length() > 0) {
 						saveData();
+						closeMP();
 					} else {
-
+						saveAs();
+						closeMP();
 					}
-					closeMP();
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -533,6 +530,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		} else {
 			closeMP();
 		}
+
 	}
 
 	// Methoden
@@ -555,7 +553,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		mpIsOpen = false;
 		tabbedPane.removeAll();
 		refreshJList();
-		setDataSave(true);
 		changeMenu(false);
 		setTeamEditVisible(false);
 		headlineLabelnew.setText("Spielplan erstellen");
@@ -662,24 +659,28 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	}
 
 	private void saveData() throws IOException {
-		CSVWriter writer = new CSVWriter();
 		if (savePath.length() > 0) {
-			writer.writeCsv(savePath, mp);
+			CSVWriter.writeCsv(savePath, mp);
 			setDataSave(true);
 		} else {
 			saveAs();
 		}
 	}
 
-	public void saveAs() throws IOException {
+	public void saveAs() {
 		// JFileChooser-Objekt erstellen
 		JFileChooser chooser = new JFileChooser();
 		// Dialog zum Oeffnen von Dateien anzeigen
 		int select = chooser.showDialog(null, "Speichern unter");
 		if (select == JFileChooser.APPROVE_OPTION) {
 			savePath = chooser.getCurrentDirectory().getAbsolutePath();
-			CSVWriter.writeCsv(savePath, mp);
-			setDataSave(true);
+			try {
+				CSVWriter.writeCsv(savePath, mp);
+				setDataSave(true);
+			} catch (IOException e) {
+				System.out.println("Speichern nicht erfolgreich: " + LocalTime.now() + " " + LocalDate.now());
+				e.printStackTrace();
+			}
 
 		}
 	}
@@ -698,10 +699,10 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			refreshJList();
 
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Öffnen nicht erfolgreich: " + LocalTime.now() + " " + LocalDate.now());
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Öffnen nicht erfolgreich: " + LocalTime.now() + " " + LocalDate.now());
 			e.printStackTrace();
 		}
 		refreshTabbedPane(false);

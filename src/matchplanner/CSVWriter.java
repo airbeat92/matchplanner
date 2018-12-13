@@ -18,11 +18,12 @@ public class CSVWriter {
 		for (Matchday s : mp.season) {
 			dateList.add(s.getMatchDate());
 		}
-		FileWriter fileWriter = null;
-		File f = new File(filePath + "/" + mp.filename);
+
+		
+		File f = new File(filePath + "/" + mp.filename + ".csv");
 		f.createNewFile();
 
-		fileWriter = new FileWriter(filePath + "/" +  mp.filename);
+		FileWriter fileWriter = new FileWriter(filePath + "/" +  mp.filename + ".csv");
 
 		fileWriter.append("#matchplan " + mp.getMatchplanName());
 		fileWriter.append("\n");
