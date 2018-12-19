@@ -5,6 +5,7 @@
  */
 package matchplanner;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,15 +13,16 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.File;
+import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Date;
-import com.toedter.calendar.JDateChooser;
 
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
@@ -37,12 +39,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
+
+import com.toedter.calendar.JDateChooser;
 
 import design.DarkMenuBar;
 import design.DarkModeTabbedPane;
-
+import gameOfLife.ConwaysGameOfLife;
 import listeners.DefaultTextFocusListener;
 import listeners.EditFieldDocumentListener;
 import listeners.TeamCountFieldDocumentListener;
@@ -52,7 +56,7 @@ import listeners.TeamModulListener;
  *
  * @author Marcel, Marvin, Samet
  */
-public class MatchplanerGUI extends javax.swing.JFrame {
+public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListener {
 
 	private Matchplan mp;
 	private boolean save = true;
@@ -107,15 +111,22 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	JMenuItem mntmDarkMode = new JMenuItem("DarkMode");
 	// Flag Label
 	JLabel saveFlag = new JLabel();
-	
-	//Components für SpieleTab
+
+	// Components für SpieleTab
 	JButton gameDateEditButton;
 	JPanel gameDatePanel;
 	JPanel gameDateNorthPanel;
 	JLabel gameDateLabel;
 
+	// GameOfLife initialisieren
+	JFrame game = new ConwaysGameOfLife();
+
 	public MatchplanerGUI() {
 
+		// GameOfLife verstecken
+		Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.KEY_EVENT_MASK);
+
+		game.setVisible(false);
 		/*
 		 * frame
 		 */
@@ -277,9 +288,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		dark.setText("DarkMode");
 
 		addMatchplanPanel.add(fill, c);
-		
+
 		// Listener
-		//Manschaften
+		// Manschaften
 		teamNameEditField.addFocusListener(new DefaultTextFocusListener(teamNameEditField, "Teamname"));
 		teamShortnameEditField.addFocusListener(new DefaultTextFocusListener(teamShortnameEditField, "Kürzel"));
 		teamIDEditField.addFocusListener(new DefaultTextFocusListener(teamIDEditField, "ID"));
@@ -467,13 +478,11 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 		mnDatei.add(mntmSpeichernUnter);
 
-		
 		mnDatei.addSeparator();
-		//MenuItem Export
+		// MenuItem Export
 		mnDatei.add(mntmExportieren);
-		mntmExportieren.addActionListener(e->{
-			
-			
+		mntmExportieren.addActionListener(e -> {
+
 		});
 
 		mnDatei.addSeparator();
@@ -648,22 +657,24 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		tabbedPane.removeAll();
 		mp.season.forEach(a -> {
 
-			gameDatePanel=new JPanel(new BorderLayout());
+			gameDatePanel = new JPanel(new BorderLayout());
 			gameDateNorthPanel = new JPanel(new BorderLayout());
-			gameDateLabel = new JLabel("",SwingConstants.CENTER);
-			
+			gameDateLabel = new JLabel("", SwingConstants.CENTER);
+
 			JDateChooser dateChooser = new JDateChooser();
-		    dateChooser.setBounds(20, 20, 200, 20);
+			dateChooser.setBounds(20, 20, 200, 20);
 			gameDateNorthPanel.add(dateChooser, BorderLayout.CENTER);
 			JList displayMatches = new JList(a.toObjectArray(mp));
 			String gameDate = a.getMatchDate().format(DF);
 			dateChooser.setDate(Date.from(a.getMatchDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 			tabbedPane.setSelectedIndex(-1);
-			dateChooser.getDateEditor().addPropertyChangeListener(listener->{
-			
-				if(tabbedPane.getSelectedIndex()!=-1) {
-				mp.season.get(tabbedPane.getSelectedIndex()).setMatchDate(dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-				tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(), mp.season.get(tabbedPane.getSelectedIndex()).getMatchDate().format(DF));
+			dateChooser.getDateEditor().addPropertyChangeListener(listener -> {
+
+				if (tabbedPane.getSelectedIndex() != -1) {
+					mp.season.get(tabbedPane.getSelectedIndex()).setMatchDate(
+							dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+					tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(),
+							mp.season.get(tabbedPane.getSelectedIndex()).getMatchDate().format(DF));
 				}
 			});
 			gameDateLabel.setText(gameDate);
@@ -706,7 +717,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 	private void saveData() throws IOException {
 		if (savePath.length() > 0) {
-			CSVWriter.writeCsv(savePath,mpName, mp);
+			CSVWriter.writeCsv(savePath, mpName, mp);
 			setDataSave(true);
 		} else {
 			saveAs();
@@ -788,13 +799,26 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 	}
 
-/*
- * Setzt den Namen des Matchplans.
- */
+	/*
+	 * Setzt den Namen des Matchplans.
+	 */
 	public static void setMpName(String mpName) {
 		mpName = mpName;
 	}
-	
-	
+
+	public void eventDispatched(AWTEvent event) {
+        if (event instanceof KeyEvent) {
+            KeyEvent ke = (KeyEvent) event;
+            if (ke.getKeyCode() == KeyEvent.VK_G && ke.isControlDown()) {
+            		game.setVisible(true);
+
+            }
+            if (ke.getKeyCode() == KeyEvent.VK_C && ke.isControlDown()) {
+        		game.setVisible(false);
+
+        }
+            
+        }
+    }
 
 }
