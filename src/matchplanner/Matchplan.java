@@ -16,8 +16,7 @@ public class Matchplan {
 	ArrayList<Matchday> season = new ArrayList();
 	List<Team> teams = new ArrayList();
 	private League mLeague;
-	private String matchplanName;
-	public String filename;
+	
 
 	/*
 	 * StandardKonsrtuktor
@@ -138,14 +137,6 @@ public class Matchplan {
 
 	public void setmLeague(League mLeague) {
 		this.mLeague = mLeague;
-	}
-
-	public String getMatchplanName() {
-		return matchplanName;
-	}
-
-	public void setMatchplanName(String matchplanName) {
-		this.matchplanName = matchplanName;
 	}
 
 }

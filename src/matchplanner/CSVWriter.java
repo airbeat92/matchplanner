@@ -12,7 +12,7 @@ public class CSVWriter {
 	/*
 	 * Schreibt in eine CSV Dateoi.
 	 */
-	public static void writeCsv(String filePath, Matchplan mp) throws IOException {
+	public static void writeCsv(String filePath, String name, Matchplan mp) throws IOException {
 		List<Team> teamList = new ArrayList(mp.teams);
 		List<LocalDate> dateList = new ArrayList();
 		for (Matchday s : mp.season) {
@@ -20,12 +20,12 @@ public class CSVWriter {
 		}
 
 		
-		File f = new File(filePath + "/" + mp.filename + ".csv");
+		File f = new File(filePath + name + ".csv");
 		f.createNewFile();
 
-		FileWriter fileWriter = new FileWriter(filePath + "/" +  mp.filename + ".csv");
+		FileWriter fileWriter = new FileWriter(filePath + "/" +  name + ".csv");
 
-		fileWriter.append("#matchplan " + mp.getMatchplanName());
+		fileWriter.append("#matchplan " + name);
 		fileWriter.append("\n");
 		fileWriter.append("#teamsize " + mp.teams.size());
 		fileWriter.append("\n");

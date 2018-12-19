@@ -32,12 +32,12 @@ public class CSVReader {
 
 			// set MatchplanName Wiest
 			if (line.contains("@type")) {
-				mp.setMatchplanName(line.substring(9, line.length()));
+				MatchplanerGUI.setMpName(line.substring(9, line.length()));
 			}
 
 			// set MatchplanName MAMA
 			if (line.contains("#matchplan")) {
-				mp.setMatchplanName(line.substring(9, line.length()));
+				MatchplanerGUI.setMpName(line.substring(9, line.length()));
 			}
 
 			// set and create League Wiest

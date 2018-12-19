@@ -57,6 +57,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	private boolean dModeOn = false;
 	public static final DateTimeFormatter DF = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
 	private String savePath = "";
+	private String mpName;
 
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT); // für Spieltage
 	JTabbedPane outerPane = new JTabbedPane(); // für Mannschaften und Spiele
@@ -418,8 +419,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			if (select == JFileChooser.APPROVE_OPTION) {
 				savePath = chooser.getCurrentDirectory().getAbsolutePath();
 				openFile(chooser.getSelectedFile().getAbsolutePath());
-				// mp.filename = chooser.getName(chooser.getSelectedFile());
-				mp.filename = chooser.getSelectedFile().getName();
 				changeMenu(true);
 			}
 
@@ -561,7 +560,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	public void closeMP() {
 		mp = null;
 		savePath = "";
+		mpName = "";
 		mpIsOpen = false;
+		saveFlag.setText("");
 		tabbedPane.removeAll();
 		refreshJList();
 		changeMenu(false);
@@ -680,7 +681,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 
 	private void saveData() throws IOException {
 		if (savePath.length() > 0) {
-			CSVWriter.writeCsv(savePath, mp);
+			CSVWriter.writeCsv(savePath,mpName, mp);
 			setDataSave(true);
 		} else {
 			saveAs();
@@ -690,12 +691,14 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	public void saveAs() {
 		// JFileChooser-Objekt erstellen
 		JFileChooser chooser = new JFileChooser();
+//		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		// Dialog zum Oeffnen von Dateien anzeigen
 		int select = chooser.showDialog(null, "Speichern unter");
 		if (select == JFileChooser.APPROVE_OPTION) {
 			savePath = chooser.getCurrentDirectory().getAbsolutePath();
+			mpName = chooser.getSelectedFile().getName();
 			try {
-				CSVWriter.writeCsv(savePath, mp);
+				CSVWriter.writeCsv(savePath, mpName, mp);
 				setDataSave(true);
 			} catch (IOException e) {
 				System.out.println("Speichern nicht erfolgreich: " + LocalTime.now() + " " + LocalDate.now());
@@ -759,5 +762,14 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		}
 
 	}
+
+/*
+ * Setzt den Namen des Matchplans.
+ */
+	public static void setMpName(String mpName) {
+		mpName = mpName;
+	}
+	
+	
 
 }
