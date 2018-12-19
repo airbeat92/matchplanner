@@ -57,7 +57,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	private boolean dModeOn = false;
 	public static final DateTimeFormatter DF = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
 	private String savePath = "";
-	private String mpName;
+	private String mpName = "";
 
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.RIGHT); // für Spieltage
 	JTabbedPane outerPane = new JTabbedPane(); // für Mannschaften und Spiele
@@ -691,7 +691,6 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	public void saveAs() {
 		// JFileChooser-Objekt erstellen
 		JFileChooser chooser = new JFileChooser();
-//		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		// Dialog zum Oeffnen von Dateien anzeigen
 		int select = chooser.showDialog(null, "Speichern unter");
 		if (select == JFileChooser.APPROVE_OPTION) {
