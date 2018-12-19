@@ -40,8 +40,10 @@ public class Main {
 		test1.add(new Team("RB Leipzig", "RBL",4));
 
 		Matchplan mtest = new Matchplan(test1);
+
 	
 //		PDFPrint test = new PDFPrint();
 //		test.exportToPdf();
+
 	}
 }
