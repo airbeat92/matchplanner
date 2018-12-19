@@ -15,8 +15,12 @@ import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Date;
+
+import com.toedter.calendar.JDateChooser;
 
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
@@ -98,6 +102,12 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	JMenuItem mntmDarkMode = new JMenuItem("DarkMode");
 	// Flag Label
 	JLabel saveFlag = new JLabel();
+	
+	//Components für SpieleTab
+	JButton gameDateEditButton;
+	JPanel gameDatePanel;
+	JPanel gameDateNorthPanel;
+	JLabel gameDateLabel;
 
 	public MatchplanerGUI() {
 
@@ -262,7 +272,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		dark.setText("DarkMode");
 
 		addMatchplanPanel.add(fill, c);
+		
 		// Listener
+		//Manschaften
 		teamNameEditField.addFocusListener(new DefaultTextFocusListener(teamNameEditField, "Teamname"));
 		teamShortnameEditField.addFocusListener(new DefaultTextFocusListener(teamShortnameEditField, "Kürzel"));
 		teamIDEditField.addFocusListener(new DefaultTextFocusListener(teamIDEditField, "ID"));
@@ -611,14 +623,24 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		}
 		tabbedPane.removeAll();
 		mp.season.forEach(a -> {
-			JPanel gameDatePanel=new JPanel(new BorderLayout());
-			JPanel gameDateNorthPanel = new JPanel();
-			JLabel gameDateLabel = new JLabel("",SwingConstants.CENTER);
-			JButton gameDateEdit = new JButton("Bearbeiten");
-			gameDateNorthPanel.add(gameDateLabel);
-			gameDateNorthPanel.add(gameDateEdit);
+			gameDatePanel=new JPanel(new BorderLayout());
+			gameDateNorthPanel = new JPanel(new BorderLayout());
+			gameDateLabel = new JLabel("",SwingConstants.CENTER);
+			
+			JDateChooser dateChooser = new JDateChooser();
+		    dateChooser.setBounds(20, 20, 200, 20);
+			gameDateNorthPanel.add(dateChooser, BorderLayout.CENTER);
 			JList displayMatches = new JList(a.toObjectArray(mp));
 			String gameDate = a.getMatchDate().format(DF);
+			dateChooser.setDate(Date.from(a.getMatchDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+			tabbedPane.setSelectedIndex(-1);
+			dateChooser.getDateEditor().addPropertyChangeListener(listener->{
+			
+				if(tabbedPane.getSelectedIndex()!=-1) {
+				mp.season.get(tabbedPane.getSelectedIndex()).setMatchDate(dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+				tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(), mp.season.get(tabbedPane.getSelectedIndex()).getMatchDate().format(DF));
+				}
+			});
 			gameDateLabel.setText(gameDate);
 			gameDatePanel.add(gameDateNorthPanel,BorderLayout.NORTH);
 			gameDatePanel.add(new JScrollPane(displayMatches),BorderLayout.CENTER);
