@@ -373,6 +373,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					mpIsOpen = true;
 					changeMenu(true);
 					refreshTabbedPane(true);
+					refreshJList();
 				}
 
 				// Teams von Hand erzeugen
