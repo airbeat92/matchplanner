@@ -37,7 +37,6 @@ import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.SwingConstants;
 
-
 import design.DarkMenuBar;
 import design.DarkModeTabbedPane;
 
@@ -282,14 +281,13 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		teamPanel.setLayout(new BorderLayout(0, 0));
 		teamPanel.add(new JScrollPane(teamList), BorderLayout.CENTER);
 		teamPanel.add(addMatchplanPanel, BorderLayout.EAST);
-		
-		//Spiele Tab
+
+		// Spiele Tab
 		JPanel gamePanel = new JPanel(new BorderLayout());
 		JLabel gameDateLabel = new JLabel();
-		gamePanel.add(gameDateLabel,BorderLayout.NORTH);
-		gamePanel.add(tabbedPane,BorderLayout.CENTER);
-		
-		
+		gamePanel.add(gameDateLabel, BorderLayout.NORTH);
+		gamePanel.add(tabbedPane, BorderLayout.CENTER);
+
 		// JTabbedPane
 		outerPane.addTab("Mannschaften", teamPanel);
 		outerPane.addTab("Spiele", gamePanel);
@@ -431,7 +429,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		// MenuItem Schließen
 		mntmClose.addActionListener((e) -> {
 
-			closeDialog();
+			closeDialog(false);
 
 		});
 		mnDatei.add(mntmClose);
@@ -473,7 +471,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		JMenuItem mntmBeenden = new JMenuItem("Beenden");
 		mntmBeenden.addActionListener((a) -> {
 			if (!save) {
-				closeDialog();
+				closeDialog(true);
 			}
 			if (save) {
 				System.exit(0);
@@ -512,8 +510,13 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	}
 
 	// Frames
-
-	private void closeDialog() {
+	/*
+	 * Schließt den Matchplan, speichert bei Bedarf. Wenn exit true wird das
+	 * Programm geschlossen.
+	 * 
+	 * @param exit
+	 */
+	private void closeDialog(boolean exit) {
 		if (!save) {
 			JFrame closeConfirmFrame = new JFrame();
 			closeConfirmFrame.setLocationRelativeTo(null);
@@ -521,11 +524,8 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 					"Ungespeicherte Änderungen! Möchten Sie jetzt speichern?");
 			if (JOptionPane.YES_OPTION == result) {
 				try {
-					if (savePath.length() > 0) {
-						saveData();
-						closeMP();
-					} else {
-						saveAs();
+					saveData();
+					if (save) {
 						closeMP();
 					}
 
@@ -632,17 +632,17 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		}
 		tabbedPane.removeAll();
 		mp.season.forEach(a -> {
-			JPanel gameDatePanel=new JPanel(new BorderLayout());
+			JPanel gameDatePanel = new JPanel(new BorderLayout());
 			JPanel gameDateNorthPanel = new JPanel();
-			JLabel gameDateLabel = new JLabel("",SwingConstants.CENTER);
+			JLabel gameDateLabel = new JLabel("", SwingConstants.CENTER);
 			JButton gameDateEdit = new JButton("Bearbeiten");
 			gameDateNorthPanel.add(gameDateLabel);
 			gameDateNorthPanel.add(gameDateEdit);
 			JList displayMatches = new JList(a.toObjectArray(mp));
 			String gameDate = a.getMatchDate().format(DF);
 			gameDateLabel.setText(gameDate);
-			gameDatePanel.add(gameDateNorthPanel,BorderLayout.NORTH);
-			gameDatePanel.add(new JScrollPane(displayMatches),BorderLayout.CENTER);
+			gameDatePanel.add(gameDateNorthPanel, BorderLayout.NORTH);
+			gameDatePanel.add(new JScrollPane(displayMatches), BorderLayout.CENTER);
 			tabbedPane.addTab(gameDate, gameDatePanel);
 		});
 
@@ -701,6 +701,9 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 				System.out.println("Speichern nicht erfolgreich: " + LocalTime.now() + " " + LocalDate.now());
 				e.printStackTrace();
 			}
+
+		}
+		if (select == JFileChooser.CANCEL_OPTION) {
 
 		}
 	}
