@@ -95,6 +95,7 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 	JMenuItem mntmClose = new JMenuItem("Schließen");
 	JMenuItem mntmSpeichern = new JMenuItem("Speichern");
 	JMenuItem mntmSpeichernUnter = new JMenuItem("Speichern unter");
+	JMenuItem mntmExportieren = new JMenuItem("als PDF exportieren");
 	// Extras
 	JMenu mnExtras = new JMenu("Extras");
 	JMenuItem mntmMannschaften = new JMenuItem("Mannschaften bearbeiten");
@@ -464,7 +465,14 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 			//saveData();
 		});
 		mnDatei.add(mntmSpeichernUnter);
-
+		
+		mnDatei.addSeparator();
+		//MenuItem Export
+		mnDatei.add(mntmExportieren);
+		mntmExportieren.addActionListener(e->{
+			
+			
+		});
 		mnDatei.addSeparator();
 
 		/*
