@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import design.DarkMenuBar;
 import design.DarkModeTabbedPane;
@@ -275,10 +276,17 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		teamPanel.setLayout(new BorderLayout(0, 0));
 		teamPanel.add(new JScrollPane(teamList), BorderLayout.CENTER);
 		teamPanel.add(addMatchplanPanel, BorderLayout.EAST);
-
+		
+		//Spiele Tab
+		JPanel gamePanel = new JPanel(new BorderLayout());
+		JLabel gameDateLabel = new JLabel();
+		gamePanel.add(gameDateLabel,BorderLayout.NORTH);
+		gamePanel.add(tabbedPane,BorderLayout.CENTER);
+		
+		
 		// JTabbedPane
 		outerPane.addTab("Mannschaften", teamPanel);
-		outerPane.addTab("Spiele", tabbedPane);
+		outerPane.addTab("Spiele", gamePanel);
 		this.getContentPane().add(outerPane, BorderLayout.CENTER);
 
 		// Menu Datei
@@ -603,9 +611,18 @@ public class MatchplanerGUI extends javax.swing.JFrame {
 		}
 		tabbedPane.removeAll();
 		mp.season.forEach(a -> {
+			JPanel gameDatePanel=new JPanel(new BorderLayout());
+			JPanel gameDateNorthPanel = new JPanel();
+			JLabel gameDateLabel = new JLabel("",SwingConstants.CENTER);
+			JButton gameDateEdit = new JButton("Bearbeiten");
+			gameDateNorthPanel.add(gameDateLabel);
+			gameDateNorthPanel.add(gameDateEdit);
 			JList displayMatches = new JList(a.toObjectArray(mp));
-
-			tabbedPane.addTab(a.getMatchDate().format(DF), new JScrollPane(displayMatches));
+			String gameDate = a.getMatchDate().format(DF);
+			gameDateLabel.setText(gameDate);
+			gameDatePanel.add(gameDateNorthPanel,BorderLayout.NORTH);
+			gameDatePanel.add(new JScrollPane(displayMatches),BorderLayout.CENTER);
+			tabbedPane.addTab(gameDate, gameDatePanel);
 		});
 
 	}
