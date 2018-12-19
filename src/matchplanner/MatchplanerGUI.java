@@ -813,7 +813,7 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
             		game.setVisible(true);
 
             }
-            if (ke.getKeyCode() == KeyEvent.VK_C && ke.isControlDown()) {
+            if (ke.getKeyCode() == KeyEvent.VK_H && ke.isControlDown()) {
         		game.setVisible(false);
 
         }
