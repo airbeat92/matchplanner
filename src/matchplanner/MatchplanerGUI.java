@@ -25,6 +25,7 @@ import java.time.format.FormatStyle;
 import java.util.Date;
 
 import javax.swing.Box;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -41,6 +42,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -665,6 +668,8 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 			dateChooser.setBounds(20, 20, 200, 20);
 			gameDateNorthPanel.add(dateChooser, BorderLayout.CENTER);
 			JList displayMatches = new JList(a.toObjectArray(mp));
+			DefaultListCellRenderer renderer = (DefaultListCellRenderer) displayMatches.getCellRenderer();
+			renderer.setHorizontalAlignment(SwingConstants.CENTER);
 			String gameDate = a.getMatchDate().format(DF);
 			dateChooser.setDate(Date.from(a.getMatchDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 			tabbedPane.setSelectedIndex(-1);
@@ -754,9 +759,11 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 	}
 
 	private void openFile(String path) {
-		CSVReader reader = new CSVReader(path);
+//		CSVReader reader = new CSVReader(path);
 		try {
-			mp = reader.importCSV();
+			ExcelReader excel = new ExcelReader(path);
+			mp = excel.importExcel();
+//			mp = reader.importCSV();
 			refreshJList();
 
 		} catch (NumberFormatException e) {
@@ -764,6 +771,9 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 			e.printStackTrace();
 		} catch (IOException e) {
 			System.out.println("Öffnen nicht erfolgreich: " + LocalTime.now() + " " + LocalDate.now());
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		refreshTabbedPane(false);

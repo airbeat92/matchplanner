@@ -96,11 +96,11 @@ public class CSVReader {
 
 							dates.add(line);
 						}
-						mp.addCSVDateList(dates);
+						mp.addimportDateList(dates,"CSV");
 					}
 
 				}
-				mp.addCSVDateList(dates);
+				mp.addimportDateList(dates,"CSV");
 			}
 
 		}

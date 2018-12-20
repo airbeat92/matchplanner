@@ -16,7 +16,6 @@ public class Matchplan {
 	ArrayList<Matchday> season = new ArrayList();
 	List<Team> teams = new ArrayList();
 	private League mLeague;
-	
 
 	/*
 	 * StandardKonsrtuktor
@@ -44,7 +43,7 @@ public class Matchplan {
 	}
 
 	/*
-	 * Wenn neue Teams hizugefüt wurden muss zum Abschluss der Plan aktualisiert
+	 * Wenn neue Teams hizugefügt wurden muss zum Abschluss der Plan aktualisiert
 	 * werden!
 	 */
 	public void refreshPlan() {
@@ -97,14 +96,24 @@ public class Matchplan {
 	/*
 	 * 
 	 */
-	public void addCSVDateList(List<String> sa) {
+	public void addimportDateList(List<String> sa, String inputFormat) {
+		if (inputFormat.equals("CSV")) {
+			for (int i = 0; i < season.size(); i++) {
+				String[] temp = sa.get(i).split("-");
+				LocalDate tempD = LocalDate.of(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]),
+						Integer.parseInt(temp[2]));
+				season.get(i).setMatchDate(tempD);
 
-		for (int i = 0; i < season.size(); i++) {
-			String[] temp = sa.get(i).split("-");
-			LocalDate tempD = LocalDate.of(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]),
-					Integer.parseInt(temp[2]));
-			season.get(i).setMatchDate(tempD);
+			}
+		}
+		if (inputFormat.equals("EXCEL")) {
+			for (int i = 0; i < season.size(); i++) {
+				String[] temp = sa.get(i).split("/");
+				LocalDate tempD = LocalDate.of(Integer.parseInt(temp[2])+2000, Integer.parseInt(temp[0]),
+						Integer.parseInt(temp[1]));
+				season.get(i).setMatchDate(tempD);
 
+			}
 		}
 	}
 
