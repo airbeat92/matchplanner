@@ -1,0 +1,60 @@
+@type = swp1 ws1819 matchplan
+@teamCount = 18
+@splitter = ;
+
+# Teams
+# ID ; Kürzel ; Voller Name
+  1;  BVB;Borussia Dortmund
+  2;  BMG;Borussia Mönchengladbach
+  3;  RBL;RB Leipzig
+  4;  SGE;Eintracht Frankfurt
+  5;  FCB;FC Bayern München
+  6;  TSG;TSG 1899 Hoffenheim
+  7;  SVW;SV Werder Bremen
+  8;  BSC;Hertha BSC
+  9;  FSV;1. FSV Mainz 05
+ 10;  FCA;FC Augsburg
+ 11;  SCF;Sport-Club Freiburg
+ 12;  VFL;VfL Wolfsburg
+ 13;  LEV;Bayer 04 Leverkusen
+ 14;  S04;FC Schalke 04
+ 15;  FCN;1. FC Nürnberg
+ 16;  H96;Hannover 96
+ 17;  F95;Fortuna Düsseldorf 1895 e.V.
+ 18;  VFB;VfB Stuttgart
+
+# MatchDates
+2018-08-25
+2018-09-01
+2018-09-15
+2018-09-22
+2018-09-25
+2018-09-29
+2018-10-06
+2018-10-20
+2018-10-27
+2018-11-03
+2018-11-10
+2018-11-24
+2018-12-01
+2018-12-08
+2018-12-15
+2018-12-18
+2018-12-22
+2019-01-19
+2019-01-26
+2019-02-02
+2019-02-16
+2019-02-23
+2019-03-02
+2019-03-09
+2019-03-16
+2019-03-30
+2019-04-06
+2019-04-13
+2019-04-20
+2019-04-27
+2019-05-04
+2019-05-11
+2019-05-18
+2019-11-09
