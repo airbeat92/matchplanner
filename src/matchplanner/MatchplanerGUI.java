@@ -443,8 +443,12 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 			int select = chooser.showDialog(null, "Öffnen");
 			if (select == JFileChooser.APPROVE_OPTION) {
 				savePath = chooser.getCurrentDirectory().getAbsolutePath();
-				openFile(chooser.getSelectedFile().getAbsolutePath());
+				int lastIndexOf = chooser.getSelectedFile().getName().lastIndexOf(".");
+				String extension=chooser.getSelectedFile().getName().substring(lastIndexOf);
+				openFile(chooser.getSelectedFile().getAbsolutePath(),extension);
 				changeMenu(true);
+				
+				System.out.println();
 			}
 
 		});
@@ -758,12 +762,17 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 		teamIDEditField.setVisible(bool);
 	}
 
-	private void openFile(String path) {
+	private void openFile(String path,String extension) {
 //		CSVReader reader = new CSVReader(path);
 		try {
-			ExcelReader excel = new ExcelReader(path);
-			mp = excel.importExcel();
-//			mp = reader.importCSV();
+			if(extension.equals(".csv")) {
+			CSVReader reader = new CSVReader(path);
+			mp = reader.importCSV();
+			}
+			if(extension.equals(".xlsx")||extension.equals(".xls")) {
+			ExcelReader reader = new ExcelReader(path);
+			mp = reader.importExcel();
+			}
 			refreshJList();
 
 		} catch (NumberFormatException e) {

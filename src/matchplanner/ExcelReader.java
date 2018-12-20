@@ -3,7 +3,6 @@ package matchplanner;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -39,42 +38,7 @@ public class ExcelReader {
 		setNumberOfTeams();
 		setTeams();
 		setDates();
-		
-//		while (rowIterator.hasNext()) {
-//			Row row = rowIterator.next();
-//
-//			// Now let's iterate over the columns of the current row
-//			Iterator<Cell> cellIterator = row.cellIterator();
-//
-//			while (cellIterator.hasNext()) {
-//				Cell cell = cellIterator.next();
-//				String cellValue = dataFormatter.formatCellValue(cell);
-//				System.out.print(cellValue + "\t");
-//			}
-//			System.out.println();
-//		}
 
-//        // 2. Or you can use a for-each loop to iterate over the rows and columns
-//        System.out.println("\n\nIterating over Rows and Columns using for-each loop\n");
-//        for (Row row: sheet) {
-//            for(Cell cell: row) {
-//                String cellValue = dataFormatter.formatCellValue(cell);
-//                System.out.print(cellValue + "\t");
-//            }
-//            System.out.println();
-//        }
-//
-//        // 3. Or you can use Java 8 forEach loop with lambda
-//        System.out.println("\n\nIterating over Rows and Columns using Java 8 forEach with lambda\n");
-//        sheet.forEach(row -> {
-//            row.forEach(cell -> {
-//                String cellValue = dataFormatter.formatCellValue(cell);
-//                System.out.print(cellValue + "\t");
-//            });
-//            System.out.println();
-//        });
-
-		// Closing the workbook
 		workbook.close();
 	}
 	/*
@@ -85,6 +49,7 @@ public class ExcelReader {
 		Row row = sheet.getRow(0);
 		Cell cell = row.getCell(0);
 		planName = dataFormatter.formatCellValue(cell);
+		MatchplanerGUI.setMpName(planName);
 
 	}
 	/*
