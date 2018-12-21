@@ -109,8 +109,16 @@ public class Matchplan {
 		if (inputFormat.equals("EXCEL")) {
 			for (int i = 0; i < season.size(); i++) {
 				String[] temp = sa.get(i).split("/");
-				LocalDate tempD = LocalDate.of(Integer.parseInt(temp[2])+2000, Integer.parseInt(temp[0]),
-						Integer.parseInt(temp[1]));
+				LocalDate tempD;
+				if (temp[2].length() < 4) {
+					tempD = LocalDate.of(Integer.parseInt(temp[2]) + 2000, Integer.parseInt(temp[0]),
+							Integer.parseInt(temp[1]));
+				} else {
+
+					tempD = LocalDate.of(Integer.parseInt(temp[2]), Integer.parseInt(temp[1]),
+							Integer.parseInt(temp[0]));
+				}
+
 				season.get(i).setMatchDate(tempD);
 
 			}

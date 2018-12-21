@@ -16,6 +16,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -42,8 +43,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
+import org.apache.log4j.spi.Filter;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import com.toedter.calendar.JDateChooser;
@@ -439,6 +443,12 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 
 			// JFileChooser-Objekt erstellen
 			JFileChooser chooser = new JFileChooser();
+			FileNameExtensionFilter filterCsv = new FileNameExtensionFilter("CSV", "csv");
+			FileNameExtensionFilter filterExcel = new FileNameExtensionFilter("Excel", "xls", "xlsx");
+			FileNameExtensionFilter filterDefault = new FileNameExtensionFilter("Excel und Csv", "xls", "xlsx", "csv");
+			chooser.addChoosableFileFilter(filterCsv);
+			chooser.addChoosableFileFilter(filterExcel);
+			chooser.setFileFilter(filterDefault);
 			// Dialog zum Oeffnen von Dateien anzeigen
 			int select = chooser.showDialog(null, "Öffnen");
 			if (select == JFileChooser.APPROVE_OPTION) {
@@ -744,7 +754,14 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 			savePath = chooser.getCurrentDirectory().getAbsolutePath();
 			mpName = chooser.getSelectedFile().getName();
 			try {
-				CSVWriter.writeCsv(savePath, mpName, mp);
+				ExcelWriter ex = new ExcelWriter();
+				try {
+					ex.writeExcel(mp, mpName, savePath);
+				} catch (InvalidFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+//				CSVWriter.writeCsv(savePath, mpName, mp);
 				setDataSave(true);
 			} catch (IOException e) {
 				System.out.println("Speichern nicht erfolgreich: " + LocalTime.now() + " " + LocalDate.now());
