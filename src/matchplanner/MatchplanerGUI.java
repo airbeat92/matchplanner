@@ -8,6 +8,7 @@ package matchplanner;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -16,8 +17,6 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -43,11 +42,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
-import org.apache.log4j.spi.Filter;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import com.toedter.calendar.JDateChooser;
@@ -70,6 +67,7 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 	private boolean save = true;
 	private boolean mpIsOpen = false;
 	private boolean dModeOn = false;
+	private boolean csv;
 	public static final DateTimeFormatter DF = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
 	private String savePath = "";
 	private String mpName = "";
@@ -194,7 +192,6 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 
 		addTeamButton.addActionListener(l -> {
 			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) + 2)));
-			
 
 		});
 		enableButtons(false, false);
@@ -454,10 +451,10 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 			if (select == JFileChooser.APPROVE_OPTION) {
 				savePath = chooser.getCurrentDirectory().getAbsolutePath();
 				int lastIndexOf = chooser.getSelectedFile().getName().lastIndexOf(".");
-				String extension=chooser.getSelectedFile().getName().substring(lastIndexOf);
-				openFile(chooser.getSelectedFile().getAbsolutePath(),extension);
+				String extension = chooser.getSelectedFile().getName().substring(lastIndexOf);
+				openFile(chooser.getSelectedFile().getAbsolutePath(), extension);
 				changeMenu(true);
-				
+
 				System.out.println();
 			}
 
@@ -477,9 +474,14 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 		// MenuItem Speichern
 		mntmSpeichern.addActionListener(e -> {
 			try {
-				saveData();
+				try {
+					saveData();
+				} catch (InvalidFormatException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			} catch (IOException e1) {
-				
+
 				e1.printStackTrace();
 			}
 
@@ -499,8 +501,8 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 		// MenuItem Export
 		mnDatei.add(mntmExportieren);
 		mntmExportieren.addActionListener(e -> {
-			
-		new PDFPrint(mp);
+
+			new PDFPrint(mp);
 
 		});
 
@@ -525,14 +527,16 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 
 		// MenuItem Mannschaften bearbeiten
 		mntmMannschaften.addActionListener((e) -> {
-			String message = "=> Mannschaften verändern";
+			String message = "Klicke doch mal auf eine Mannschaft in der Liste.\n"
+					+ "Aber nicht vergessen den Spielplan zu erneuern!";
 			JOptionPane.showMessageDialog(null, message);
 		});
 		mnExtras.add(mntmMannschaften);
 
 		// MenuItem Spieltag bearbeiten
 		mntmSpieltage.addActionListener((e) -> {
-			String message = "=> Spieltage festlegen/verändern";
+			String message = "Schau doch mal unter Spiele vorbei.\n"
+					+ "Ein Klick rechts vom Datum und schon kannst du es ändern.";
 			JOptionPane.showMessageDialog(null, message);
 		});
 		mnExtras.add(mntmSpieltage);
@@ -570,7 +574,7 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 						closeMP();
 					}
 
-				} catch (IOException e) {
+				} catch (IOException | InvalidFormatException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -707,7 +711,7 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 	}
 
 	/*
-	 * Füllt die Matchplan teams neu mit den Werten aus der JList Teams
+	 * Füllt die Matchplan teams neu mit den Werten aus der JList Teams.
 	 */
 	private void refreshMpTeams() {
 		mp.teams.clear();
@@ -736,10 +740,19 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 
 	}
 
-	private void saveData() throws IOException {
+	/*
+	 * Speichert am letzten Speicherort. Wenn keiner vorhanden ist wird ein Dialog
+	 * zum wählen des Pfades aufgerufen.
+	 */
+	private void saveData() throws IOException, InvalidFormatException {
 		if (savePath.length() > 0) {
-			CSVWriter.writeCsv(savePath, mpName, mp);
-			setDataSave(true);
+			if (csv) {
+				CSVWriter.writeCsv(savePath, mpName, mp);
+				setDataSave(true);
+			} else {
+				ExcelWriter ex = new ExcelWriter();
+				ex.writeExcel(mp, mpName, savePath);
+			}
 		} else {
 			saveAs();
 		}
@@ -753,21 +766,35 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 		if (select == JFileChooser.APPROVE_OPTION) {
 			savePath = chooser.getCurrentDirectory().getAbsolutePath();
 			mpName = chooser.getSelectedFile().getName();
-			try {
+			Object[] options = { "CSV", "XLSX" };
+
+			int n = JOptionPane.showOptionDialog(null, "CSV oder Excel, dass ist hier die Frage?", "Die Frage",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+			
+			System.out.println(n);
+
+			if (n == 1) {
 				ExcelWriter ex = new ExcelWriter();
 				try {
 					ex.writeExcel(mp, mpName, savePath);
-				} catch (InvalidFormatException e) {
-					// TODO Auto-generated catch block
+					setDataSave(true);
+					csv = false;
+				} catch (InvalidFormatException | IOException e) {
+					System.out.println("Speichern nicht erfolgreich: " + LocalTime.now() + " " + LocalDate.now());
 					e.printStackTrace();
 				}
-//				CSVWriter.writeCsv(savePath, mpName, mp);
-				setDataSave(true);
-			} catch (IOException e) {
-				System.out.println("Speichern nicht erfolgreich: " + LocalTime.now() + " " + LocalDate.now());
-				e.printStackTrace();
 			}
+			if (n == 0) {
+				try {
+					CSVWriter.writeCsv(savePath, mpName, mp);
+					setDataSave(true);
+					csv = true;
+				} catch (IOException e) {
+					System.out.println("Speichern nicht erfolgreich: " + LocalTime.now() + " " + LocalDate.now());
+					e.printStackTrace();
+				}
 
+			}
 		}
 		if (select == JFileChooser.CANCEL_OPTION) {
 
@@ -781,16 +808,16 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 		teamIDEditField.setVisible(bool);
 	}
 
-	private void openFile(String path,String extension) {
+	private void openFile(String path, String extension) {
 //		CSVReader reader = new CSVReader(path);
 		try {
-			if(extension.equals(".csv")) {
-			CSVReader reader = new CSVReader(path);
-			mp = reader.importCSV();
+			if (extension.equals(".csv")) {
+				CSVReader reader = new CSVReader(path);
+				mp = reader.importCSV();
 			}
-			if(extension.equals(".xlsx")||extension.equals(".xls")) {
-			ExcelReader reader = new ExcelReader(path);
-			mp = reader.importExcel();
+			if (extension.equals(".xlsx") || extension.equals(".xls")) {
+				ExcelReader reader = new ExcelReader(path);
+				mp = reader.importExcel();
 			}
 			refreshJList();
 
@@ -806,8 +833,6 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 		}
 		refreshTabbedPane(false);
 	}
-	
-	
 
 	public void darkModeOn(boolean enable) {
 		if (enable) {
@@ -846,18 +871,18 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 	}
 
 	public void eventDispatched(AWTEvent event) {
-        if (event instanceof KeyEvent) {
-            KeyEvent ke = (KeyEvent) event;
-            if (ke.getKeyCode() == KeyEvent.VK_G && ke.isControlDown()) {
-            		game.setVisible(true);
+		if (event instanceof KeyEvent) {
+			KeyEvent ke = (KeyEvent) event;
+			if (ke.getKeyCode() == KeyEvent.VK_G && ke.isControlDown()) {
+				game.setVisible(true);
 
-            }
-            if (ke.getKeyCode() == KeyEvent.VK_H && ke.isControlDown()) {
-        		game.setVisible(false);
+			}
+			if (ke.getKeyCode() == KeyEvent.VK_H && ke.isControlDown()) {
+				game.setVisible(false);
 
-        }
-            
-        }
-    }
+			}
+
+		}
+	}
 
 }

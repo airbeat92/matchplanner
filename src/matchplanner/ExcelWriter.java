@@ -1,12 +1,9 @@
 package matchplanner;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +26,8 @@ public class ExcelWriter {
 
     // Create a blank sheet 
     XSSFSheet sheet = workbook.createSheet(); 
+    
+    
     
     private void setMp(Matchplan mp) {
     	this.mp=mp;
@@ -96,11 +95,11 @@ public class ExcelWriter {
     	writeTeams();
     	writeDates();
     	
+    	
     	FileOutputStream out = 
 				new FileOutputStream(new File(path + "/" + planname + ".xlsx" ));
 		workbook.write(out);
 		out.close();
-		System.out.println("Excel written successfully..");
     	
     }
 
