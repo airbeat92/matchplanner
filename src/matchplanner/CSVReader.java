@@ -76,8 +76,9 @@ public class CSVReader {
 			if (line.contains("#teamlist")) {
 				br.readLine();
 				while ((line = br.readLine()).contains(csvSplitBy)) {
-					line = line.replaceAll(" ", "");
+//					line = line.replaceAll(" ", "");
 					String[] team = line.split(csvSplitBy);
+					team[0] = team[0].replaceAll(" ", "");
 					mp.addNewTeam(new Team(team[1], team[2], Integer.parseInt(team[0])));
 
 				}

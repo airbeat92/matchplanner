@@ -16,6 +16,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -102,7 +103,7 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 	JMenuItem mntmClose = new JMenuItem("Schließen");
 	JMenuItem mntmSpeichern = new JMenuItem("Speichern");
 	JMenuItem mntmSpeichernUnter = new JMenuItem("Speichern unter");
-	JMenuItem mntmExportieren = new JMenuItem("als PDF exportieren");
+	JMenuItem mntmExportieren = new JMenuItem("Als PDF exportieren");
 
 	// Extras
 	JMenu mnExtras = new JMenu("Extras");
@@ -462,7 +463,7 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 			try {
 				saveData();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			}
 
@@ -482,6 +483,8 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 		// MenuItem Export
 		mnDatei.add(mntmExportieren);
 		mntmExportieren.addActionListener(e -> {
+			
+		new PDFPrint(mp);
 
 		});
 
@@ -768,6 +771,8 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 		}
 		refreshTabbedPane(false);
 	}
+	
+	
 
 	public void darkModeOn(boolean enable) {
 		if (enable) {
