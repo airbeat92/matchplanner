@@ -21,7 +21,7 @@ public class ExcelReader {
 	private String planName;
 	private int numberOfTeams;
 	private List<String> dates = new ArrayList<String>();
-	private List<Team> teams=new ArrayList();
+	private List<Team> teams=new ArrayList<>();
 
 	public ExcelReader(String Path) throws IOException, InvalidFormatException {
 		this.XLSX_FILE_PATH=Path;
@@ -45,7 +45,7 @@ public class ExcelReader {
 	 * Liest den Namen aus der ersten Zelle der ersten Reihe des Sheets aus und speichert ihn in das Feld planName
 	 * 
 	 */
-	public void setPlanName() {
+	private void setPlanName() {
 		Row row = sheet.getRow(0);
 		Cell cell = row.getCell(0);
 		planName = dataFormatter.formatCellValue(cell);
@@ -55,7 +55,7 @@ public class ExcelReader {
 	/*
 	 * Liest die Anzahl der Teams aus der ersten Zelle der zweiten Reihe aus und speichert sie in das Feld numberOfTeams
 	 */
-	public void setNumberOfTeams() {
+	private void setNumberOfTeams() {
 		Row row = sheet.getRow(1);
 		Cell cell = row.getCell(0);
 		numberOfTeams = Integer.valueOf(dataFormatter.formatCellValue(cell).replaceAll("@teamCount=", ""));
@@ -65,7 +65,7 @@ public class ExcelReader {
 	 * Der erste name beginnt in Reihe 6.
 	 * Die Liste wird mit Objekten des Typs Team gefüllt.
 	 */
-	public void setTeams() {
+	private void setTeams() {
 		int rowIndex = 5;
 		for (int i = 0; i < numberOfTeams; i++) {
 			Row row = sheet.getRow(rowIndex+i);
@@ -80,7 +80,7 @@ public class ExcelReader {
 	 * Liest die Matchdates aus der Excel Datei
 	 * Das erste Datum steht in der 3. Reihe nach dem letzem Team
 	 */
-	public void setDates() {
+	private void setDates() {
 		int rowIndex = (5+numberOfTeams+2);
 		for (int i = rowIndex; i < sheet.getLastRowNum()+1; i++) {
 			Row row = sheet.getRow(i);
