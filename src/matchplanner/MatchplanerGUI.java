@@ -186,12 +186,11 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 
 		deleteTeamButton.addActionListener(l -> {
 			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) - 2)));
-
 		});
 
 		addTeamButton.addActionListener(l -> {
 			teamCountField.setText(String.valueOf((Integer.parseInt(teamCountField.getText()) + 2)));
-			setDataSave(false);
+			
 
 		});
 		enableButtons(false, false);
@@ -385,7 +384,7 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 				if (selectedValue.equals(options[1]) && defaultValues.isSelected() && validData) {
 					for (int i = 0; i < Integer.parseInt(inputField.getText()); i++) {
 
-						mp.addNewTeam(new Team("< Bitte ändern>", "", i));
+						mp.addNewTeam(new Team("< Bitte_ändern>", "", i));
 
 					}
 					setDataSave(false);
@@ -698,7 +697,7 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 	}
 
 	/*
-	 * füllt die Matchplan teams neu mit den Werten aus der JList Teams
+	 * Füllt die Matchplan teams neu mit den Werten aus der JList Teams
 	 */
 	private void refreshMpTeams() {
 		mp.teams.clear();
