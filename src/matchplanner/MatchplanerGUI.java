@@ -768,7 +768,7 @@ public class MatchplanerGUI extends javax.swing.JFrame implements AWTEventListen
 			mpName = chooser.getSelectedFile().getName();
 			Object[] options = { "CSV", "XLSX" };
 
-			int n = JOptionPane.showOptionDialog(null, "CSV oder Excel, dass ist hier die Frage?", "Die Frage",
+			int n = JOptionPane.showOptionDialog(null, "CSV oder Excel, das ist hier die Frage?", "Die Frage",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
 			
 			System.out.println(n);
