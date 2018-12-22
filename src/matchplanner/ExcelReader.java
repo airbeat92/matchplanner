@@ -78,7 +78,7 @@ public class ExcelReader {
 	}
 	/*
 	 * Liest die Matchdates aus der Excel Datei
-	 * Das erste Datum steht in der 3. Reihe nach dem letzem Team
+	 * Das erste Datum steht in der 3. Reihe nach dem letztem Team
 	 */
 	public void setDates() {
 		int rowIndex = (5+numberOfTeams+2);
